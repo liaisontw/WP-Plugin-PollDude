@@ -30,16 +30,29 @@ if(!defined('ABSPATH')){
     exit;
 }
  
-// Exit If Accessed Directly
-if(!defined('ABSPATH')){
-    exit;
-}
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'PLUGIN_NAME_VERSION', '1.0.0' );
+
+// Load Shortcodes
+require_once(plugin_dir_path(__FILE__) . '/includes/class-plugin-name-shortcodes.php');
+
+// Check if admin and include admin scripts
+if ( is_admin() ) {
+	// Load Custom Post Type
+	require_once(plugin_dir_path(__FILE__) . '/includes/class-plugin-name-custom-post-type.php');
+
+	// Load Settings
+	require_once(plugin_dir_path(__FILE__) . '/includes/class-plugin-name-settings.php');
+	
+	// Load Post Fields
+	require_once(plugin_dir_path(__FILE__) . '/includes/class-plugin-name-fields.php');
+}
+	
 
 /**
  * The code that runs during plugin activation.
