@@ -60,52 +60,91 @@ global $wpdb;
 
 add_action( 'admin_menu', 'polldude_menu' );
 function polldude_menu() {
-	//$hook = add_menu_page(
+	
+	/*
+	//create custom top-level menu
+    add_menu_page( 
+		__( 'Poll Dude', 'poll-dude-domain' ), 
+		__( 'Poll Dude', 'poll-dude-domain' ),
+		'manage_options',
+		'poll-dude-options', 
+		'',
+		'dashicons-chart-bar'
+	);
 
-	$capability = 'edit_posts';
+    //create submenu items
+    add_submenu_page( 
+		'poll-dude-options', 
+		__( 'Add Poll', 'poll-dude-domain' ), 
+		__( 'Add Poll', 'poll-dude-domain' ), 
+		'manage_options',
+		'add-polls'
+	);
+	*/
+
+	/*
+
+	add_submenu_page( 
+		'poll_dude_manager', 
+		__( 'Add Poll', 'poll-dude-domain' ), 
+		__( 'Add Poll', 'poll-dude-domain' ), 
+		'add_polls', 
+		'add-polls'
+	);
+	*/
+
+	
+	$page_title = __( 'Poll Dude', 'poll-dude-domain' );
+	$menu_title = __( 'Poll Dude', 'poll-dude-domain' );
+	$capability = 'manage_options';
+	$menu_slug  = 'poll_dude_manager';
 	//$function   = '';
 
 	//$icon_encoded = 'PHN2ZyBpZD0iY29udGVudCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjg4IDIyMCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNGRkZGRkY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5pY29uLWJsdWU8L3RpdGxlPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2Mi40MSw4MC4xYy04LjQ3LTIyLjU1LTE5LjA1LTQyLjgzLTI5Ljc5LTU3LjFDMjIwLjc0LDcuMjQsMjEwLC41NywyMDEuNDcsMy43OWExMi4zMiwxMi4zMiwwLDAsMC0zLjcyLDIuM2wtLjA1LS4xNUwxNiwxNzMuOTRsOC4yLDE5LjEyLDMwLjU2LTEuOTJ2MTMuMDVhMTIuNTcsMTIuNTcsMCwwLDAsMTIuNTgsMTIuNTZjLjMzLDAsLjY3LDAsMSwwbDU4Ljg1LTQuNzdhMTIuNjUsMTIuNjUsMCwwLDAsMTEuNTYtMTIuNTNWMTg1Ljg2bDEyMS40NS03LjY0YTEzLjg4LDEzLjg4LDAsMCwwLDIuMDkuMjYsMTIuMywxMi4zLDAsMCwwLDQuNDEtLjhDMjg1LjMzLDE3MC43LDI3OC42MywxMjMuMzEsMjYyLjQxLDgwLjFabS0yLjI2LDg5Ljc3Yy0xMC40OC0zLjI1LTMwLjQ0LTI4LjE1LTQ2LjY4LTcxLjM5LTE1LjcyLTQxLjktMTcuNS03My4yMS0xMi4zNC04My41NGE2LjUyLDYuNTIsMCwwLDEsMy4yMi0zLjQ4LDMuODIsMy44MiwwLDAsMSwxLjQxLS4yNGMzLjg1LDAsMTAuOTQsNC4yNiwyMC4zMSwxNi43MUMyMzYuMzYsNDEuNTksMjQ2LjU0LDYxLjE1LDI1NC43NCw4M2MxOC40NCw0OS4xMiwxNy43NCw4My43OSw5LjEzLDg3QTUuOTMsNS45MywwLDAsMSwyNjAuMTUsMTY5Ljg3Wk0xMzAuNiwxOTkuNDFhNC40LDQuNCwwLDAsMS00LDQuMzdsLTU4Ljg1LDQuNzdBNC4zOSw0LjM5LDAsMCwxLDYzLDIwNC4xOVYxOTAuNjJsNjcuNjEtNC4yNVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik02LDE4NS4yNmExMC4yNSwxMC4yNSwwLDAsMCwxMC4yNSwxMC4yNSwxMC4wNSwxMC4wNSwwLDAsMCw0LjM0LTFsLTcuOTQtMTguNzNBMTAuMiwxMC4yLDAsMCwwLDYsMTg1LjI2WiIvPjwvc3ZnPgo=';
 	add_menu_page(
-		__( 'Poll Dude', 'poll-dude-domain' ),
-		__( 'Poll Dude', 'poll-dude-domain' ),
+		$page_title,
+		$menu_title,
 		$capability,
-		'poll-dude-options',
+		$menu_slug,
 		'',
 		'dashicons-chart-bar'
 	);
+
+	$parent_slug = 'poll_dude_manager';
+	$page_title  = __( 'Add Poll', 'poll-dude-domain' );
+	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
+	$capability  = 'manage_options';
+	$menu_slug   = 'add-polls';
+
 	
-}
-//add_action( "admin_menu", array( &$this, 'management_page_load' ) );
-
-
-/*
-add_action( 'admin_menu', 'polldude_menu' );
-function polldude_menu() {
-	add_menu_page( 
-		__( 'Poll Dude', 'poll-dude' ), 
-		__( 'Polls', 'poll dude' ), 
-		'manage_polls', 
-		'wp-polls/polls-manager.php', 
-		'', 
-		'dashicons-chart-bar' );
-
 	add_submenu_page( 
-		'feedback', 
+		$parent_slug, 
 		$page_title, 
-		$page_title, 
+		$menu_title, 
 		$capability, 
-		$menu_slug, 
-		$function );
+		$menu_slug 
+	);
+
+	$parent_slug = 'poll_dude_manager';
+	$page_title  = __( 'Poll Setting', 'poll-dude-domain' );
+	$menu_title  = __( 'Poll Setting', 'poll-dude-domain' );
+	$capability  = 'manage_options';
+	$menu_slug   = 'setting_polls';
 
 	add_submenu_page( 
-		plugin_dir_path( __FILE__ ) . '/includes/polls-manager.php', 
-		__( 'Manage Polls', 'poll-dude'), 
-		__( 'Manage Polls', 'poll-dude' ), 
-		'manage_polls', 
-		'/includes/polls-manager.php' );
+		$parent_slug, 
+		$page_title, 
+		$menu_title, 
+		$capability, 
+		$menu_slug 
+	);
+	
+
 }
-*/
+
+
+
+
 // Load Shortcodes
 require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
 
