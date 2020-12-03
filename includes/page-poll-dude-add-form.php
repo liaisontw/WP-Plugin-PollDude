@@ -9,8 +9,23 @@ $base_name = $poll_dude_base;
 $base_page = 'admin.php?page='.$base_name;
 
 /*
+$wpdb->pollsq,
+array(
+	'pollq_question'    => $pollq_question,
+	'pollq_timestamp'   => $pollq_timestamp,
+	'pollq_totalvotes'  => 0,
+	'pollq_active'      => $pollq_active,
+	'pollq_expiry'      => $pollq_expiry,
+	'pollq_multiple'    => $pollq_multiple,
+	'pollq_totalvoters' => 0
+),
+
 	$_POST['do']
+
+	'pollq_question'    => $pollq_question,
 	$_POST['pollq_question']
+
+	'pollq_timestamp'   => $pollq_timestamp,
 	$_POST['pollq_timestamp_day']
 	$_POST['pollq_timestamp_month']
 	$_POST['pollq_timestamp_year']
@@ -18,6 +33,8 @@ $base_page = 'admin.php?page='.$base_name;
 	$_POST['pollq_timestamp_minute']
 	$_POST['pollq_timestamp_second']
 	$_POST['pollq_expiry_no']
+	
+	'pollq_expiry'      => $pollq_expiry,
 	$_POST['pollq_expiry_day'] 
 	$_POST['pollq_expiry_month']
 	$_POST['pollq_expiry_year']
@@ -154,6 +171,82 @@ if ( ! empty($_POST['do'] ) ) {
 ### Add Poll Form
 $poll_noquestion = 2;
 $count = 0;
+
+// Edit Timestamp Options
+function poll_timestamp($poll_timestamp, $fieldname = 'pollq_timestamp', $display = 'block') {
+	global $month;
+	echo '<div id="'.$fieldname.'" style="display: '.$display.'">'."\n";
+	$day = (int) gmdate('j', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_day" size="1">'."\n";
+	for($i = 1; $i <=31; $i++) {
+		if($day === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+		} else {
+			echo "<option value=\"$i\">$i</option>\n";
+		}
+	}
+	echo '</select>&nbsp;&nbsp;'."\n";
+	$month2 = (int) gmdate('n', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_month" size="1">'."\n";
+	for($i = 1; $i <= 12; $i++) {
+		if ($i < 10) {
+			$ii = '0'.$i;
+		} else {
+			$ii = $i;
+		}
+		if($month2 === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$month[$ii]</option>\n";
+		} else {
+			echo "<option value=\"$i\">$month[$ii]</option>\n";
+		}
+	}
+	echo '</select>&nbsp;&nbsp;'."\n";
+	$year = (int) gmdate('Y', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_year" size="1">'."\n";
+	for($i = 2000; $i <= ($year+10); $i++) {
+		if($year === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+		} else {
+			echo "<option value=\"$i\">$i</option>\n";
+		}
+	}
+	echo '</select>&nbsp;@'."\n";
+	echo '<span dir="ltr">'."\n";
+	$hour = (int) gmdate('H', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_hour" size="1">'."\n";
+	for($i = 0; $i < 24; $i++) {
+		if($hour === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+		} else {
+			echo "<option value=\"$i\">$i</option>\n";
+		}
+	}
+	echo '</select>&nbsp;:'."\n";
+	$minute = (int) gmdate('i', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_minute" size="1">'."\n";
+	for($i = 0; $i < 60; $i++) {
+		if($minute === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+		} else {
+			echo "<option value=\"$i\">$i</option>\n";
+		}
+	}
+
+	echo '</select>&nbsp;:'."\n";
+	$second = (int) gmdate('s', $poll_timestamp);
+	echo '<select name="'.$fieldname.'_second" size="1">'."\n";
+	for($i = 0; $i <= 60; $i++) {
+		if($second === $i) {
+			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+		} else {
+			echo "<option value=\"$i\">$i</option>\n";
+		}
+	}
+	echo '</select>'."\n";
+	echo '</span>'."\n";
+	echo '</div>'."\n";
+}
+
 ?>
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.removeslashes($text).'</div>'; } ?>
 <form method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
