@@ -48,6 +48,8 @@ function polldude_textdomain() {
 
 // polldude Table Name
 global $wpdb;
+global $poll_dude_base;
+$poll_dude_base = plugin_basename(__FILE__);
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -114,7 +116,8 @@ function polldude_menu() {
 	$page_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$capability  = 'manage_options';
-	$menu_slug   = 'add-polls';
+	//$menu_slug   = 'add-polls';
+	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php';
 
 	
 	add_submenu_page( 
