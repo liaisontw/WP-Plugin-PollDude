@@ -169,84 +169,43 @@ if ( ! empty($_POST['do'] ) ) {
 }
 
 
-// Edit Timestamp Options
-function poll_dude_time($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
-	//global $month;
+// poll_dude_time_display
+function poll_dude_time_display($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
+	
+	$poll_dude_time_table = array(
+		//array("time unit", 'unit in gmdate',min, max, "padding"),
+		array('_hour', 'H',0, 24, ":"),
+		array('_minute', 'i',0, 61, ":"),
+		array('_second', 's',0, 61, "@"),
+		array('_day', 'j',0, 32, "&nbsp;"),
+		array('_month', 'n',0, 13, "&nbsp;"),
+		array('_year', 'Y',2010, 2030, ""),
+	);
+
 	echo '<div id="'.$fieldname.'" style="display: '.$display.'">'."\n";
-	$day = (int) gmdate('j', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_day" size="1">'."\n";
-	for($i = 1; $i <=31; $i++) {
-		if($day === $i) {
-			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
-		} else {
-			echo "<option value=\"$i\">$i</option>\n";
-		}
-	}
-	echo '</select>&nbsp;&nbsp;'."\n";
-	$month2 = (int) gmdate('n', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_month" size="1">'."\n";
-	for($i = 1; $i <= 12; $i++) {
-		/*
-		if ($i < 10) {
-			$ii = '0'.$i;
-		} else {
-			$ii = $i;
-		}
-		*/
-		if($month2 === $i) {
-			//echo "<option value=\"$i\" selected=\"selected\">$month[$ii]</option>\n";
-			echo "<option value=\"$i\" selected=\"selected\">$month2</option>\n";
-		} else {
-			//echo "<option value=\"$i\">$month[$ii]</option>\n";
-			echo "<option value=\"$i\">$i</option>\n";
-		}
-	}
-	echo '</select>&nbsp;&nbsp;'."\n";
-	$year = (int) gmdate('Y', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_year" size="1">'."\n";
-	for($i = 2000; $i <= ($year+10); $i++) {
-		if($year === $i) {
-			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
-		} else {
-			echo "<option value=\"$i\">$i</option>\n";
-		}
-	}
-	echo '</select>&nbsp;@'."\n";
 	echo '<span dir="ltr">'."\n";
-	$hour = (int) gmdate('H', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_hour" size="1">'."\n";
-	for($i = 0; $i < 24; $i++) {
-		if($hour === $i) {
-			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
-		} else {
-			echo "<option value=\"$i\">$i</option>\n";
+
+	for($k = 0; $k <sizeof($poll_dude_time_table); $k++) {
+	//for($k = 0; $k <6; $k++) {
+		$unit = (int) gmdate($poll_dude_time_table[$k][1], $poll_dude_time);
+		$time_stamp = $fieldname.$poll_dude_time_table[$k][0];
+		echo '<select name="$time_stamp" size="1">'."\n";
+		//echo '<select name="$fieldname.$poll_dude_time_table[$k][0]" size="1">'."\n";
+		for($i = $poll_dude_time_table[$k][2]; $i <$poll_dude_time_table[$k][3]; $i++) {
+			if($unit === $i) {
+				echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+			} else {
+				echo "<option value=\"$i\">$i</option>\n";
+			}
 		}
-	}
-	echo '</select>&nbsp;:'."\n";
-	$minute = (int) gmdate('i', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_minute" size="1">'."\n";
-	for($i = 0; $i < 60; $i++) {
-		if($minute === $i) {
-			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
-		} else {
-			echo "<option value=\"$i\">$i</option>\n";
-		}
+		echo '</select>&nbsp;'.$poll_dude_time_table[$k][4]."\n";
 	}
 
-	echo '</select>&nbsp;:'."\n";
-	$second = (int) gmdate('s', $poll_dude_time);
-	echo '<select name="'.$fieldname.'_second" size="1">'."\n";
-	for($i = 0; $i <= 60; $i++) {
-		if($second === $i) {
-			echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
-		} else {
-			echo "<option value=\"$i\">$i</option>\n";
-		}
-	}
-	echo '</select>'."\n";
+
 	echo '</span>'."\n";
 	echo '</div>'."\n";
 }
+
 
 ### Add Poll Form
 $poll_noquestion = 2;
@@ -316,11 +275,11 @@ $count = 0;
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Start Date/Time', 'wp-polls') ?></th>
-			<td width="80%"><?php poll_dude_time(current_time('timestamp')); ?></td>
+			<td width="80%"><?php poll_dude_time_display(current_time('timestamp')); ?></td>
 		</tr>
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('End Date/Time', 'wp-polls') ?></th>
-			<td width="80%"><input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" checked="checked" onclick="check_pollexpiry();" />&nbsp;&nbsp;<label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label><?php poll_dude_time(current_time('timestamp'), 'pollq_expiry', 'none'); ?></td>
+			<td width="80%"><input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" checked="checked" onclick="check_pollexpiry();" />&nbsp;&nbsp;<label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label><?php poll_dude_time_display(current_time('timestamp'), 'pollq_expiry', 'none'); ?></td>
 		</tr>
 	</table>
 	<p style="text-align: center;"><input type="submit" name="do" value="<?php _e('Add Poll', 'wp-polls'); ?>"  class="button-primary" />&nbsp;&nbsp;<input type="button" name="cancel" value="<?php _e('Cancel', 'wp-polls'); ?>" class="button" onclick="javascript:history.go(-1)" /></p>
