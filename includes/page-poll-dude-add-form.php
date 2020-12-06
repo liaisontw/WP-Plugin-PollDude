@@ -169,7 +169,40 @@ if ( ! empty($_POST['do'] ) ) {
 }
 
 
-// poll_dude_time_display
+// poll_dude_time_select
+function poll_dude_time_select($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
+	
+	$time_select = array(
+		'_hour'   => array('unit'=>'H', 'min'=>0   , 'max'=>24  , 'padding'=>'H:'),
+		'_minute' => array('unit'=>'i', 'min'=>0   , 'max'=>61  , 'padding'=>'M:'),
+		'_second' => array('unit'=>'s', 'min'=>0   , 'max'=>61  , 'padding'=>'S@'),
+		'_day'    => array('unit'=>'j', 'min'=>0   , 'max'=>32  , 'padding'=>'D&nbsp;'),
+		'_month'  => array('unit'=>'n', 'min'=>0   , 'max'=>13  , 'padding'=>'M&nbsp;'),
+		'_year'   => array('unit'=>'Y', 'min'=>2010, 'max'=>2030, 'padding'=>'Y'),
+	);
+
+	echo '<div id="'.$fieldname.'" style="display: '.$display.'">'."\n";
+	echo '<span dir="ltr">'."\n";
+
+	foreach($time_select as $key => $value) {
+		$time_value = (int) gmdate($value['unit'], $poll_dude_time);
+		$time_stamp = $fieldname.$key;
+		echo '<select name="$time_stamp" size="1">'."\n";
+		for($i = $value['min']; $i < $value['max']; $i++) {
+			if($time_value === $i) {
+				echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+			} else {
+				echo "<option value=\"$i\">$i</option>\n";
+			}
+		}
+		echo '</select>&nbsp;'.$value['padding']."\n";
+	}
+
+	echo '</span>'."\n";
+	echo '</div>'."\n";
+}
+
+/*
 function poll_dude_time_display($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
 	
 	$poll_dude_time_table = array(
@@ -205,7 +238,7 @@ function poll_dude_time_display($poll_dude_time, $fieldname = 'pollq_timestamp',
 	echo '</span>'."\n";
 	echo '</div>'."\n";
 }
-
+*/
 
 ### Add Poll Form
 $poll_noquestion = 2;
@@ -275,11 +308,19 @@ $count = 0;
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Start Date/Time', 'wp-polls') ?></th>
-			<td width="80%"><?php poll_dude_time_display(current_time('timestamp')); ?></td>
+			<td width="80%"><?php 
+				//poll_dude_time_display(current_time('timestamp')); 
+				poll_dude_time_select(current_time('timestamp')); 
+			?>
+			</td>
 		</tr>
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('End Date/Time', 'wp-polls') ?></th>
-			<td width="80%"><input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" checked="checked" onclick="check_pollexpiry();" />&nbsp;&nbsp;<label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label><?php poll_dude_time_display(current_time('timestamp'), 'pollq_expiry', 'none'); ?></td>
+			<td width="80%"><input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" checked="checked" onclick="check_pollexpiry();" />&nbsp;&nbsp;<label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label>
+			<?php 
+				//poll_dude_time_display(current_time('timestamp'), 'pollq_expiry', 'none'); 
+				poll_dude_time_select(current_time('timestamp'), 'pollq_expiry', 'none'); 
+			?>
 		</tr>
 	</table>
 	<p style="text-align: center;"><input type="submit" name="do" value="<?php _e('Add Poll', 'wp-polls'); ?>"  class="button-primary" />&nbsp;&nbsp;<input type="button" name="cancel" value="<?php _e('Cancel', 'wp-polls'); ?>" class="button" onclick="javascript:history.go(-1)" /></p>
