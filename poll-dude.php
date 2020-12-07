@@ -62,47 +62,11 @@ $poll_dude_base = plugin_basename(__FILE__);
 
 add_action( 'admin_menu', 'polldude_menu' );
 function polldude_menu() {
-	
-	/*
-	//create custom top-level menu
-    add_menu_page( 
-		__( 'Poll Dude', 'poll-dude-domain' ), 
-		__( 'Poll Dude', 'poll-dude-domain' ),
-		'manage_options',
-		'poll-dude-options', 
-		'',
-		'dashicons-chart-bar'
-	);
-
-    //create submenu items
-    add_submenu_page( 
-		'poll-dude-options', 
-		__( 'Add Poll', 'poll-dude-domain' ), 
-		__( 'Add Poll', 'poll-dude-domain' ), 
-		'manage_options',
-		'add-polls'
-	);
-	*/
-
-	/*
-
-	add_submenu_page( 
-		'poll_dude_manager', 
-		__( 'Add Poll', 'poll-dude-domain' ), 
-		__( 'Add Poll', 'poll-dude-domain' ), 
-		'add_polls', 
-		'add-polls'
-	);
-	*/
-
-	
 	$page_title = __( 'Poll Dude', 'poll-dude-domain' );
 	$menu_title = __( 'Poll Dude', 'poll-dude-domain' );
 	$capability = 'manage_options';
 	$menu_slug  = 'poll_dude_manager';
-	//$function   = '';
 
-	//$icon_encoded = 'PHN2ZyBpZD0iY29udGVudCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjg4IDIyMCI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNGRkZGRkY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5pY29uLWJsdWU8L3RpdGxlPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2Mi40MSw4MC4xYy04LjQ3LTIyLjU1LTE5LjA1LTQyLjgzLTI5Ljc5LTU3LjFDMjIwLjc0LDcuMjQsMjEwLC41NywyMDEuNDcsMy43OWExMi4zMiwxMi4zMiwwLDAsMC0zLjcyLDIuM2wtLjA1LS4xNUwxNiwxNzMuOTRsOC4yLDE5LjEyLDMwLjU2LTEuOTJ2MTMuMDVhMTIuNTcsMTIuNTcsMCwwLDAsMTIuNTgsMTIuNTZjLjMzLDAsLjY3LDAsMSwwbDU4Ljg1LTQuNzdhMTIuNjUsMTIuNjUsMCwwLDAsMTEuNTYtMTIuNTNWMTg1Ljg2bDEyMS40NS03LjY0YTEzLjg4LDEzLjg4LDAsMCwwLDIuMDkuMjYsMTIuMywxMi4zLDAsMCwwLDQuNDEtLjhDMjg1LjMzLDE3MC43LDI3OC42MywxMjMuMzEsMjYyLjQxLDgwLjFabS0yLjI2LDg5Ljc3Yy0xMC40OC0zLjI1LTMwLjQ0LTI4LjE1LTQ2LjY4LTcxLjM5LTE1LjcyLTQxLjktMTcuNS03My4yMS0xMi4zNC04My41NGE2LjUyLDYuNTIsMCwwLDEsMy4yMi0zLjQ4LDMuODIsMy44MiwwLDAsMSwxLjQxLS4yNGMzLjg1LDAsMTAuOTQsNC4yNiwyMC4zMSwxNi43MUMyMzYuMzYsNDEuNTksMjQ2LjU0LDYxLjE1LDI1NC43NCw4M2MxOC40NCw0OS4xMiwxNy43NCw4My43OSw5LjEzLDg3QTUuOTMsNS45MywwLDAsMSwyNjAuMTUsMTY5Ljg3Wk0xMzAuNiwxOTkuNDFhNC40LDQuNCwwLDAsMS00LDQuMzdsLTU4Ljg1LDQuNzdBNC4zOSw0LjM5LDAsMCwxLDYzLDIwNC4xOVYxOTAuNjJsNjcuNjEtNC4yNVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik02LDE4NS4yNmExMC4yNSwxMC4yNSwwLDAsMCwxMC4yNSwxMC4yNSwxMC4wNSwxMC4wNSwwLDAsMCw0LjM0LTFsLTcuOTQtMTguNzNBMTAuMiwxMC4yLDAsMCwwLDYsMTg1LjI2WiIvPjwvc3ZnPgo=';
 	add_menu_page(
 		$page_title,
 		$menu_title,
@@ -116,8 +80,7 @@ function polldude_menu() {
 	$page_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$capability  = 'manage_options';
-	//$menu_slug   = 'add-polls';
-	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php';
+	$menu_slug   = plugin_dir_path(__FILE__) . '/admin/page-poll-dude-add-form.php';
 
 	
 	add_submenu_page( 
@@ -152,7 +115,34 @@ function polldude_menu() {
 require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
 
 // Check if admin and include admin scripts
+add_action('admin_init','poll_dude_scripts_admin');
+function poll_dude_scripts_admin(){
+	//wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
+	wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ));
+
+	wp_localize_script('poll-dude-admin', 'pollsAdminL10n', array(
+			'admin_ajax_url' => admin_url('admin-ajax.php'),
+			'text_direction' => is_rtl() ? 'right' : 'left',
+			'text_delete_poll' => __('Delete Poll', 'wp-polls'),
+			'text_no_poll_logs' => __('No poll logs available.', 'wp-polls'),
+			'text_delete_all_logs' => __('Delete All Logs', 'wp-polls'),
+			'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'wp-polls'),
+			'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'wp-polls'),
+			'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'wp-polls'),
+			'text_delete_poll_ans' => __('Delete Poll Answer', 'wp-polls'),
+			'text_open_poll' => __('Open Poll', 'wp-polls'),
+			'text_close_poll' => __('Close Poll', 'wp-polls'),
+			'text_answer' => __('Answer', 'wp-polls'),
+			'text_remove_poll_answer' => __('Remove', 'wp-polls')
+		));
+
+}
+
+
 if ( is_admin() ) {
+	//add_action('admin_enqueue_scripts', 'poll_dude_scripts_admin');
+	
+	
 	// Load Custom Post Type
 	//require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-custom-post-type.php');
 
@@ -162,6 +152,8 @@ if ( is_admin() ) {
 	// Load Post Fields
 	//require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-fields.php');
 }
+
+
 	
 
 /**
