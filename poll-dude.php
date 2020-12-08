@@ -48,8 +48,19 @@ function polldude_textdomain() {
 
 // polldude Table Name
 global $wpdb;
+$wpdb->pollsq   = $wpdb->prefix.'pollsq';
+$wpdb->pollsa   = $wpdb->prefix.'pollsa';
+$wpdb->pollsip  = $wpdb->prefix.'pollsip';
+
 global $poll_dude_base;
 $poll_dude_base = plugin_basename(__FILE__);
+
+if( ! function_exists( 'removeslashes' ) ) {
+	function removeslashes( $string ) {
+		$string = implode( '', explode( '\\', $string ) );
+		return stripslashes( trim( $string ) );
+	}
+}
 
 /**
  * The core plugin class that is used to define internationalization,
