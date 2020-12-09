@@ -91,7 +91,22 @@ function polldude_menu() {
 	$page_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$capability  = 'manage_options';
-	$menu_slug   = plugin_dir_path(__FILE__) . '/admin/page-poll-dude-add-form.php';
+	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php';
+
+	
+	add_submenu_page( 
+		$parent_slug, 
+		$page_title, 
+		$menu_title, 
+		$capability, 
+		$menu_slug 
+	);
+
+	$parent_slug = 'poll_dude_manager';
+	$page_title  = __( 'Control Panel', 'poll-dude-domain' );
+	$menu_title  = __( 'Control Panel', 'poll-dude-domain' );
+	$capability  = 'manage_options';
+	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-control-panel.php';
 
 	
 	add_submenu_page( 
@@ -129,7 +144,7 @@ require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.p
 add_action('admin_init','poll_dude_scripts_admin');
 function poll_dude_scripts_admin(){
 	//wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
-	wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ));
+	wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
 
 	wp_localize_script('poll-dude-admin', 'pollsAdminL10n', array(
 			'admin_ajax_url' => admin_url('admin-ajax.php'),
@@ -149,6 +164,139 @@ function poll_dude_scripts_admin(){
 
 }
 
+### Function: Manage Polls
+add_action('wp_ajax_poll-dude-control', 'poll_dude_control_panel');
+function poll_dude_control_panel() {
+	global $wpdb;
+	### Form Processing
+	if( isset( $_POST['action'] ) && sanitize_key( $_POST['action'] ) === 'polls-admin' ) {
+		if( ! empty( $_POST['do'] ) ) {
+			// Set Header
+			header('Content-Type: text/html; charset='.get_option('blog_charset').'');
+
+			// Decide What To Do
+			switch($_POST['do']) {
+				// Delete Polls Logs
+				case __('Delete All Logs', 'wp-polls'):
+					check_ajax_referer('wp-polls_delete-polls-logs');
+					if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
+						$delete_logs = $wpdb->query("DELETE FROM $wpdb->pollsip");
+						if($delete_logs) {
+							echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'wp-polls').'</p>';
+						} else {
+							echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'wp-polls').'</p>';
+						}
+					}
+					break;
+				// Delete Poll Logs For Individual Poll
+				case __('Delete Logs For This Poll Only', 'wp-polls'):
+					check_ajax_referer('wp-polls_delete-poll-logs');
+					$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+					$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+					if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
+						$delete_logs = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+						if( $delete_logs ) {
+							echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+						} else {
+							echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+						}
+					}
+					break;
+				// Delete Poll's Answer
+				case __('Delete Poll Answer', 'wp-polls'):
+					check_ajax_referer('wp-polls_delete-poll-answer');
+					$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+					$polla_aid = (int) sanitize_key( $_POST['polla_aid'] );
+					$poll_answers = $wpdb->get_row( $wpdb->prepare( "SELECT polla_votes, polla_answers FROM $wpdb->pollsa WHERE polla_aid = %d AND polla_qid = %d", $polla_aid, $pollq_id ) );
+					$polla_votes = (int) $poll_answers->polla_votes;
+					$polla_answers = wp_kses_post( removeslashes( trim( $poll_answers->polla_answers ) ) );
+					$delete_polla_answers = $wpdb->delete( $wpdb->pollsa, array( 'polla_aid' => $polla_aid, 'polla_qid' => $pollq_id ), array( '%d', '%d' ) );
+					$delete_pollip = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id, 'pollip_aid' => $polla_aid ), array( '%d', '%d' ) );
+					$update_pollq_totalvotes = $wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes - $polla_votes) WHERE pollq_id = $pollq_id" );
+					if($delete_polla_answers) {
+						//echo '<p style="color: green;">'.sprintf(__('Poll Answer \'%s\' Deleted Successfully.', 'wp-polls'), $polla_answers).'</p>';
+						echo '<p style="color: green;">'.sprintf(__('Poll Answer Deleted Successfully.', 'wp-polls')).'</p>';
+					} else {
+						echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll Answer \'%s\'.', 'wp-polls'), $polla_answers).'</p>';
+					}
+					break;
+				// Open Poll
+				case __('Open Poll', 'wp-polls'):
+					check_ajax_referer('wp-polls_open-poll');
+					$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+					$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+					$open_poll = $wpdb->update(
+						$wpdb->pollsq,
+						array(
+							'pollq_active' => 1
+						),
+						array(
+							'pollq_id' => $pollq_id
+						),
+						array(
+							'%d'
+						),
+						array(
+							'%d'
+						)
+					);
+					if( $open_poll ) {
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Opened', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					} else {
+						echo '<p style="color: red;">'.sprintf(__('Error Opening Poll \'%s\'', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					}
+					break;
+				// Close Poll
+				case __('Close Poll', 'wp-polls'):
+					check_ajax_referer('wp-polls_close-poll');
+					$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+					$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+					$close_poll = $wpdb->update(
+						$wpdb->pollsq,
+						array(
+							'pollq_active' => 0
+						),
+						array(
+							'pollq_id' => $pollq_id
+						),
+						array(
+							'%d'
+						),
+						array(
+							'%d'
+						)
+					);
+					if( $close_poll ) {
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Closed', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					} else {
+						echo '<p style="color: red;">'.sprintf(__('Error Closing Poll \'%s\'', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					}
+					break;
+				// Delete Poll
+				case __('Delete Poll', 'wp-polls'):
+					check_ajax_referer('wp-polls_delete-poll');
+					$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+					$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+					$delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
+					$delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
+					$delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+					$poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");
+					if(!$delete_poll_question) {
+						echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					}
+					if(empty($text)) {
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+					}
+
+					// Update Lastest Poll ID To Poll Options
+					update_option( 'poll_latestpoll', polls_latest_id() );
+					do_action( 'wp_polls_delete_poll', $pollq_id );
+					break;
+			}
+			exit();
+		}
+	}
+}
 
 if ( is_admin() ) {
 	//add_action('admin_enqueue_scripts', 'poll_dude_scripts_admin');

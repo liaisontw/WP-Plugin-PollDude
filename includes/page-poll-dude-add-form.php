@@ -95,27 +95,27 @@ if ( ! empty($_POST['do'] ) ) {
 				// Poll Start Date
 				$timestamp_sql = '';			
 				$pollq_timestamp = poll_dude_time_make('pollq_timestamp');
-				echo "<br>".$pollq_timestamp;
+				
 				if ( $pollq_timestamp > current_time( 'timestamp' ) ) {
 					$pollq_active = -1;
 				} else {
 					$pollq_active = 1;
 				}
 				// Poll End Date
-				/*
-				echo "<br>".$_POST['pollq_expiry_no'];
+				
+				
 				$pollq_expiry_no = isset( $_POST['pollq_expiry_no'] ) ? (int) sanitize_key( $_POST['pollq_expiry_no'] ) : 0;
 				
 				if ( $pollq_expiry_no === 1 ) {
 					$pollq_expiry = 0;
 				} else {
-				*/
+				
 					$pollq_expiry = poll_dude_time_make('pollq_expiry');
 					echo "<br>".$pollq_expiry;
 					if ( $pollq_expiry <= current_time( 'timestamp' ) ) {
 						$pollq_active = 0;
 					}
-				//}
+				}
 				/*
 				// Mutilple Poll
 				$pollq_multiple_yes = isset( $_POST['pollq_multiple_yes'] ) ? (int) sanitize_key( $_POST['pollq_multiple_yes'] ) : 0;
@@ -291,7 +291,7 @@ $count = 0;
 		</tr>
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('End Date/Time', 'wp-polls') ?></th>
-			<td width="80%"><?php poll_dude_time_select(current_time('timestamp'), 'pollq_expiry'); ?></td>
+			<td width="80%"><input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" checked="checked" onclick="check_pollexpiry();" />&nbsp;&nbsp;<label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label><?php poll_dude_time_select(current_time('timestamp'), 'pollq_expiry'); ?></td>
 		</tr>
 	</table>
 	<p style="text-align: center;"><input type="submit" name="do" value="<?php _e('Add Poll', 'wp-polls'); ?>"  class="button-primary" />&nbsp;&nbsp;<input type="button" name="cancel" value="<?php _e('Cancel', 'wp-polls'); ?>" class="button" onclick="javascript:history.go(-1)" /></p>
