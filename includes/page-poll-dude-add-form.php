@@ -8,45 +8,6 @@ if(!current_user_can('manage_options')) {
 $base_name = $poll_dude_base;
 $base_page = 'admin.php?page='.$base_name;
 
-/*
-$wpdb->pollsq,
-array(
-	'pollq_question'    => $pollq_question,
-	'pollq_timestamp'   => $pollq_timestamp,
-	'pollq_totalvotes'  => 0,
-	'pollq_active'      => $pollq_active,
-	'pollq_expiry'      => $pollq_expiry,
-	'pollq_multiple'    => $pollq_multiple,
-	'pollq_totalvoters' => 0
-),
-
-	$_POST['do']
-
-	'pollq_question'    => $pollq_question,
-	$_POST['pollq_question']
-
-	'pollq_timestamp'   => $pollq_timestamp,
-	$_POST['pollq_timestamp_day']
-	$_POST['pollq_timestamp_month']
-	$_POST['pollq_timestamp_year']
-	$_POST['pollq_timestamp_hour']
-	$_POST['pollq_timestamp_minute']
-	$_POST['pollq_timestamp_second']
-	$_POST['pollq_expiry_no']
-	
-	'pollq_expiry'      => $pollq_expiry,
-	$_POST['pollq_expiry_day'] 
-	$_POST['pollq_expiry_month']
-	$_POST['pollq_expiry_year']
-	$_POST['pollq_expiry_hour']
-	$_POST['pollq_expiry_minute']
-	$_POST['pollq_expiry_second']
-	$_POST['pollq_multiple_yes']
-	$_POST['pollq_multiple']
-	$_POST['polla_answers']
-
-*/
-
 function poll_dude_time_make($fieldname /*= 'pollq_timestamp'*/) {
 
 	$time_parse = array('_hour'   => 0, '_minute' => 0, '_second' => 0,
@@ -55,12 +16,9 @@ function poll_dude_time_make($fieldname /*= 'pollq_timestamp'*/) {
 
 	foreach($time_parse as $key => $value) {
 		$poll_dude_time_stamp = $fieldname.$key;
-		//echo "<br>".$poll_dude_time_stamp;
-		//echo "<br>".$_POST[$poll_dude_time_stamp];
 
 		$time_parse[$key] = isset( $_POST[$poll_dude_time_stamp] ) ? 
 				 (int) sanitize_key( $_POST[$poll_dude_time_stamp] ) : 0;
-		//echo "<br>".$time_parse[$key];
 	}
 
 	$return_timestamp = gmmktime( $time_parse['_hour']  , 
@@ -83,7 +41,7 @@ if ( ! empty($_POST['do'] ) ) {
 			$text = '';
 			// Poll Question
 			$pollq_question = isset( $_POST['pollq_question'] ) ? wp_kses_post( trim( $_POST['pollq_question'] ) ) : '';
-			//echo "<br>".$_POST['pollq_question'];
+
 			if ( ! empty( $pollq_question ) ) {
 				// Poll Start Date
 				$timestamp_sql = '';			

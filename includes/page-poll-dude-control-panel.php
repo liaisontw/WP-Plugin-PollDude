@@ -5,7 +5,10 @@ if(!current_user_can('manage_polls')) {
 }
 
 ### Variables Variables Variables
-$base_name = plugin_basename('wp-polls/polls-manager.php');
+//$base_name = plugin_basename('wp-polls/polls-manager.php');
+//$base_page = 'admin.php?page='.$base_name;
+//$base_name = basename(__FILE__);
+$base_name = plugin_basename(__FILE__);
 $base_page = 'admin.php?page='.$base_name;
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
 $poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
