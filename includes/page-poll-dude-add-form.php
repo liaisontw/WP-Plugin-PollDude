@@ -47,13 +47,6 @@ array(
 
 */
 
-### Funcion: Get Latest Poll ID
-function polls_latest_id() {
-	global $wpdb;
-	$poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY pollq_timestamp DESC LIMIT 1");
-	return (int) $poll_id;
-}
-
 function poll_dude_time_make($fieldname /*= 'pollq_timestamp'*/) {
 
 	$time_parse = array('_hour'   => 0, '_minute' => 0, '_second' => 0,

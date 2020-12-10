@@ -1,6 +1,6 @@
 
 var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, count_poll_answer_new = 0, count_poll_answer = 3; 
-function delete_poll_dev(a, c, d) { if (delete_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#poll-" + global_poll_id).remove() } }) }) }
+//function delete_poll_dev(a, c, d) { if (delete_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#poll-" + global_poll_id).remove() } }) }) }
 function delete_poll_logs(a, c) { (delete_poll_logs_confirm = confirm(a)) && jQuery(document).ready(function (a) { a("#delete_logs_yes").is(":checked") ? a.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_all_logs + "&delete_logs_yes=yes&action=poll-dude-control&_ajax_nonce=" + c, cache: !1, success: function (b) { a("#message").html(b); a("#message").show(); a("#poll_logs").html(pollsAdminL10n.text_no_poll_logs) } }) : alert(pollsAdminL10n.text_checkbox_delete_all_logs) }) }
 function delete_this_poll_logs(a, c, d) {
 	(delete_poll_logs_confirm = confirm(c)) && jQuery(document).ready(function (b) {
@@ -34,6 +34,22 @@ function add_poll_answer_edit() {
 } function remove_poll_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); check_totalvotes(); reorder_answer_num() }) }
 function check_pollq_multiple() { jQuery(document).ready(function (a) { 1 == parseInt(a("#pollq_multiple_yes").val()) ? a("#pollq_multiple").attr("disabled", !1) : (a("#pollq_multiple").val(1), a("#pollq_multiple").attr("disabled", !0)) }) } function check_polltimestamp() { jQuery(document).ready(function (a) { a("#edit_polltimestamp").is(":checked") ? a("#pollq_timestamp").show() : a("#pollq_timestamp").hide() }) }
 function check_pollexpiry() { jQuery(document).ready(function (a) { a("#pollq_expiry_no").is(":checked") ? a("#pollq_expiry").hide() : a("#pollq_expiry").show() }) };
+// Delete Poll
+function delete_poll_dev(poll_id, poll_confirm, nonce) {
+	delete_poll_confirm = confirm(poll_confirm);
+	if (delete_poll_confirm) {
+		global_poll_id = poll_id;
+		jQuery(document).ready(function ($) {
+			$.ajax({
+				type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll + '&pollq_id=' + poll_id + '&action=poll-dude-control&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+					$('#message').html(data);
+					$('#message').show();
+					$('#poll-' + global_poll_id).remove();
+				}
+			});
+		});
+	}
+}
 // Delete Poll Answer
 function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, nonce) {
 	delete_poll_ans_confirm = confirm(poll_confirm);
