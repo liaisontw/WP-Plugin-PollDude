@@ -62,6 +62,38 @@ if( ! function_exists( 'removeslashes' ) ) {
 	}
 }
 
+// poll_dude_time_select
+function poll_dude_time_select($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
+	
+	$time_select = array(
+		'_hour'   => array('unit'=>'H', 'min'=>0   , 'max'=>24  , 'padding'=>'H:'),
+		'_minute' => array('unit'=>'i', 'min'=>0   , 'max'=>61  , 'padding'=>'M:'),
+		'_second' => array('unit'=>'s', 'min'=>0   , 'max'=>61  , 'padding'=>'S@'),
+		'_day'    => array('unit'=>'j', 'min'=>0   , 'max'=>32  , 'padding'=>'D&nbsp;'),
+		'_month'  => array('unit'=>'n', 'min'=>0   , 'max'=>13  , 'padding'=>'M&nbsp;'),
+		'_year'   => array('unit'=>'Y', 'min'=>2010, 'max'=>2030, 'padding'=>'Y')
+	);
+
+	echo '<div id="'.$fieldname.'" style="display: '.$display.'">'."\n";
+	echo '<span dir="ltr">'."\n";
+
+	foreach($time_select as $key => $value) {
+		$time_value = (int) gmdate($value['unit'], $poll_dude_time);
+		$time_stamp = $fieldname.$key;
+		echo "<select name=\"$time_stamp\" size=\"1\">"."\n";
+		for($i = $value['min']; $i < $value['max']; $i++) {
+			if($time_value === $i) {
+				echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+			} else {
+				echo "<option value=\"$i\">$i</option>\n";
+			}
+		}
+		echo '</select>&nbsp;'.$value['padding']."\n";		
+	}
+
+	echo '</span>'."\n";
+	echo '</div>'."\n";
+}
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

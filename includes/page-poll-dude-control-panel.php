@@ -5,9 +5,6 @@ if(!current_user_can('manage_polls')) {
 }
 
 ### Variables Variables Variables
-//$base_name = plugin_basename('wp-polls/polls-manager.php');
-//$base_page = 'admin.php?page='.$base_name;
-//$base_name = basename(__FILE__);
 $base_name = plugin_basename(__FILE__);
 $base_page = 'admin.php?page='.$base_name;
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
@@ -309,7 +306,7 @@ switch($mode) {
                     <td width="80%">
                         <?php echo mysql2date(sprintf(__('%s @ %s', 'wp-polls'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)); ?><br />
                         <input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="check_polltimestamp()" />&nbsp;<label for="edit_polltimestamp"><?php _e('Edit Start Date/Time', 'wp-polls'); ?></label><br />
-                        <?php poll_timestamp($poll_timestamp, 'pollq_timestamp', 'none'); ?>
+                        <?php poll_dude_time_select($poll_timestamp, 'pollq_timestamp', 'none'); ?>
                     </td>
                 </tr>
                     <tr>
@@ -327,9 +324,9 @@ switch($mode) {
                         <label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'wp-polls'); ?></label><br />
                         <?php
                             if(empty($poll_expiry)) {
-                                poll_timestamp(current_time('timestamp'), 'pollq_expiry', 'none');
+                                poll_dude_time_select(current_time('timestamp'), 'pollq_expiry', 'none');
                             } else {
-                                poll_timestamp($poll_expiry, 'pollq_expiry');
+                                poll_dude_time_select($poll_expiry, 'pollq_expiry');
                             }
                         ?>
                     </td>
