@@ -4,6 +4,9 @@
 					 : admin_url($current_page);
 ?>">
 <?php ('edit' == $mode)? wp_nonce_field('wp-polls_edit-poll') : wp_nonce_field('wp-polls_add-poll');?>
+<input type="hidden" name="pollq_id" value="<?php echo $poll_id; ?>" />
+<input type="hidden" name="pollq_active" value="<?php echo $poll_active; ?>" />
+<input type="hidden" name="poll_timestamp_old" value="<?php echo $poll_timestamp; ?>" />
 <div class="wrap">
 	<h2><?php ('edit' != $mode)? _e('Add Poll', 'wp-polls'): _e('Edit Poll', 'wp-polls'); ?></h2>
 	<!-- Poll Question -->
@@ -72,6 +75,20 @@
 						} ?>
 				</td>
 			</tr>
+			<tr>
+                <td width="20%">&nbsp;</td>
+                <td width="60%">&nbsp;</td>
+                <td width="20%" align="<?php echo $last_col_align; ?>">
+					<strong><?php if ('edit' == $mode) { 
+									_e('Total Voters:', 'wp-polls'); 
+									echo number_format_i18n($poll_totalvoters); 
+								}
+					?></strong> 
+					<?php if ('edit' == $mode) { 
+						echo '<input type="text" size="4" name="pollq_totalvoters" value="'.$poll_totalvoters.'" />';
+					}?>
+				</td>
+            </tr>
 		</tfoot>
 	</table>
 	<!-- Poll Multiple Answers -->
