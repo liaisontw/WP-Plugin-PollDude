@@ -54,6 +54,7 @@ $wpdb->pollsip  = $wpdb->prefix.'pollsip';
 
 global $poll_dude_base;
 $poll_dude_base = plugin_basename(__FILE__);
+$plugin_name = 'poll-dude';
 
 if( ! function_exists( 'removeslashes' ) ) {
 	function removeslashes( $string ) {
@@ -61,6 +62,30 @@ if( ! function_exists( 'removeslashes' ) ) {
 		return stripslashes( trim( $string ) );
 	}
 }
+
+function poll_dude_time_make($fieldname /*= 'pollq_timestamp'*/) {
+
+	$time_parse = array('_hour'   => 0, '_minute' => 0, '_second' => 0,
+						'_day'    => 0, '_month'  => 0, '_year'   => 0
+	);
+
+	foreach($time_parse as $key => $value) {
+		$poll_dude_time_stamp = $fieldname.$key;
+
+		$time_parse[$key] = isset( $_POST[$poll_dude_time_stamp] ) ? 
+				 (int) sanitize_key( $_POST[$poll_dude_time_stamp] ) : 0;
+	}
+
+	$return_timestamp = gmmktime( $time_parse['_hour']  , 
+								  $time_parse['_minute'], 
+								  $time_parse['_second'], 
+								  $time_parse['_month'] , 
+								  $time_parse['_day']   , 
+								  $time_parse['_year']   );
+
+	return 	$return_timestamp;					  
+}
+
 
 // poll_dude_time_select
 function poll_dude_time_select($poll_dude_time, $fieldname = 'pollq_timestamp', $display = 'block') {
@@ -197,12 +222,19 @@ function poll_dude_scripts_admin(){
 }
 
 ### Funcion: Get Latest Poll ID
+/*
 function polls_latest_id() {
 	global $wpdb;
 	$poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY pollq_timestamp DESC LIMIT 1");
 	return (int) $poll_id;
 }
+*/
 
+function poll_dude_latest_id() {
+	global $wpdb;
+	$poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY pollq_timestamp DESC LIMIT 1");
+	return (int) $poll_id;
+}
 
 
 ### Function: Manage Polls
@@ -332,7 +364,8 @@ function poll_dude_control_panel() {
 					}
 					
 					// Update Lastest Poll ID To Poll Options
-					update_option( 'poll_latestpoll', polls_latest_id() );
+					//update_option( 'poll_latestpoll', polls_latest_id() );
+					update_option( 'poll_latestpoll', poll_dude_latest_id() );
 					do_action( 'wp_polls_delete_poll', $pollq_id );
 					//die('Debug');
 					
@@ -382,24 +415,24 @@ function deactivate_plugin_name() {
 register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
 
 ### Function: Activate Plugin
-register_activation_hook( __FILE__, 'polls_activate' );
-function polls_activation( $network_wide ) {
+register_activation_hook( __FILE__, 'poll_dude_activation' );
+function poll_dude_activation( $network_wide ) {
 	if ( is_multisite() && $network_wide ) {
 		$ms_sites = wp_get_sites();
 
 		if( 0 < count( $ms_sites ) ) {
 			foreach ( $ms_sites as $ms_site ) {
 				switch_to_blog( $ms_site['blog_id'] );
-				polls_activate();
+				poll_dude_activate();
 				restore_current_blog();
 			}
 		}
 	} else {
-		polls_activate();
+		poll_dude_activate();
 	}
 }
 
-function polls_activate() {
+function poll_dude_activate() {
 	global $wpdb;
 
 	if(@is_file(ABSPATH.'/wp-admin/includes/upgrade.php')) {
