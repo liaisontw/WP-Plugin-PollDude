@@ -63,7 +63,7 @@
 		<tfoot>
 			<tr>
 				<td width="20%">&nbsp;</td>
-				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'wp-polls') ?>" onclick="add_poll_answer_add();" class="button" /></td>
+				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'wp-polls') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'add_poll_answer_edit();' ; ?>" class="button" /></td>
 				<td width="20%" align="<?php echo ('edit' != $mode)? '': $last_col_align; ?>">
 					<strong><?php ('edit' != $mode)? _e('', 'wp-polls'): _e('Total Votes:', 'wp-polls'); ?></strong> 
 					<strong id="poll_total_votes">

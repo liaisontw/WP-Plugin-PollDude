@@ -24,14 +24,35 @@ function opening_poll(a, c, d) { if (open_poll_confirm = confirm(c)) global_poll
 function closing_poll(a, c, d) { if (close_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_close_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#open_poll").show(); b("#close_poll").hide() } }) }) }
 function reorder_answer_num() { jQuery(document).ready(function (a) { var c = a("#pollq_multiple"), d = c.val(), b = a("> option", c).size(); c.empty(); a("#poll_answers tr > th").each(function (b) { a(this).text(pollsAdminL10n.text_answer + " " + (b + 1)); a(c).append('<option value="' + (b + 1) + '">' + (b + 1) + "</option>") }); if (1 < d) { var e = a("> option", c).size(); d <= e ? a("> option", c).eq(d - 1).attr("selected", "selected") : d == b && a("> option", c).eq(e - 1).attr("selected", "selected") } }) }
 function check_totalvotes() { temp_vote_count = 0; jQuery(document).ready(function (a) { a("#poll_answers tr td input[size=4]").each(function (c) { temp_vote_count = isNaN(a(this).val()) ? temp_vote_count + 0 : temp_vote_count + parseInt(a(this).val()) }); a("#pollq_totalvotes").val(temp_vote_count) }) }
-function add_poll_answer_add() { jQuery(document).ready(function (a) { a("#poll_answers").append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>'); count_poll_answer++; reorder_answer_num() }) }
+//function add_poll_answer_add() { jQuery(document).ready(function (a) { a("#poll_answers").append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>'); count_poll_answer++; reorder_answer_num() }) }
+// Add Poll's Answer In Add Poll Page
+function add_poll_answer_add() {
+	jQuery(document).ready(function ($) {
+		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>');
+		count_poll_answer++;
+		reorder_answer_num();
+	});
+}
 function remove_poll_answer_add(a) { jQuery(document).ready(function (c) { c("#poll-answer-" + a).remove(); reorder_answer_num() }) }
+// Add Poll's Answer In Edit Poll Page
+function add_poll_answer_edit() {
+	jQuery(document).ready(function ($) {
+		$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><th width="20%" scope="row" valign="top"></th><td width="60%"><input type="text" size="50" maxlength="200" name="polla_answers_new[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td><td width="20%" align="' + pollsAdminL10n.text_direction + '">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>');
+		count_poll_answer_new++;
+		reorder_answer_num();
+	});
+}
+/*
 function add_poll_answer_edit() {
 	jQuery(document).ready(function (a) {
 		a("#poll_answers").append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><th width="20%" scope="row" valign="top"></th><td width="60%"><input type="text" size="50" maxlength="200" name="polla_answers_new[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td><td width="20%" align="' + pollsAdminL10n.text_direction +
-			'">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>'); count_poll_answer_new++; reorder_answer_num()
+			'">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>'); 
+		count_poll_answer_new++; 
+		reorder_answer_num()
 	})
-} function remove_poll_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); check_totalvotes(); reorder_answer_num() }) }
+} 
+*/
+function remove_poll_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); check_totalvotes(); reorder_answer_num() }) }
 function check_pollq_multiple() { jQuery(document).ready(function (a) { 1 == parseInt(a("#pollq_multiple_yes").val()) ? a("#pollq_multiple").attr("disabled", !1) : (a("#pollq_multiple").val(1), a("#pollq_multiple").attr("disabled", !0)) }) } function check_polltimestamp() { jQuery(document).ready(function (a) { a("#edit_polltimestamp").is(":checked") ? a("#pollq_timestamp").show() : a("#pollq_timestamp").hide() }) }
 function check_pollexpiry() { jQuery(document).ready(function (a) { a("#pollq_expiry_no").is(":checked") ? a("#pollq_expiry").hide() : a("#pollq_expiry").show() }) };
 // Delete Poll

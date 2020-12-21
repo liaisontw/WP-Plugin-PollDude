@@ -11,6 +11,9 @@ $current_page = 'admin.php?page='.$plugin_name.'/includes/'.basename(__FILE__);
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
 $poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
 $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 );
+$text = '';
+
+
 
 ### Form Processing
 if(!empty($_POST['do'])) {
@@ -19,168 +22,7 @@ if(!empty($_POST['do'])) {
         // Edit Poll
         case __('Edit Poll', 'wp-polls'):
             check_admin_referer( 'wp-polls_edit-poll' );
-            // Poll ID
-            $pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-            // Poll Total Votes
-            $pollq_totalvotes = (int) sanitize_key($_POST['pollq_totalvotes']);
-            // Poll Total Voters
-            $pollq_totalvoters = (int) sanitize_key($_POST['pollq_totalvoters']);
-            // Poll Question
-            $pollq_question = esc_sql( wp_kses_post( trim( $_POST['pollq_question'] ) ) );
-            // Poll Active
-            $pollq_active = (int) sanitize_key($_POST['pollq_active']);
-            // Poll Start Date
-            $pollq_timestamp = isset( $_POST['poll_timestamp_old'] ) ? $_POST['poll_timestamp_old'] : current_time( 'timestamp' );
-            $edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1 ? 1 : 0;
-            if($edit_polltimestamp === 1) {
-
-                $pollq_timestamp = poll_dude_time_make('pollq_timestamp');
-                if ( $pollq_timestamp > current_time( 'timestamp' ) ) {
-                    $pollq_active = -1;
-                }
-            }
-            // Poll End Date
-            $pollq_expiry_no = isset( $_POST['pollq_expiry_no'] ) ? (int) sanitize_key( $_POST['pollq_expiry_no'] ) : 0;
-            if ( $pollq_expiry_no === 1 ) {
-                $pollq_expiry = 0;
-            } else {
-                /*
-                $pollq_expiry_day = (int) sanitize_key($_POST['pollq_expiry_day']);
-                $pollq_expiry_month = (int) sanitize_key($_POST['pollq_expiry_month']);
-                $pollq_expiry_year = (int) sanitize_key($_POST['pollq_expiry_year']);
-                $pollq_expiry_hour = (int) sanitize_key($_POST['pollq_expiry_hour']);
-                $pollq_expiry_minute = (int) sanitize_key($_POST['pollq_expiry_minute']);
-                $pollq_expiry_second = (int) sanitize_key($_POST['pollq_expiry_second']);
-                $pollq_expiry = gmmktime($pollq_expiry_hour, $pollq_expiry_minute, $pollq_expiry_second, $pollq_expiry_month, $pollq_expiry_day, $pollq_expiry_year);
-                */
-                $pollq_expiry = poll_dude_time_make('pollq_expiry');
-                if($pollq_expiry <= current_time('timestamp')) {
-                    $pollq_active = 0;
-                }
-                if($edit_polltimestamp === 1) {
-                    if($pollq_expiry < $pollq_timestamp) {
-                        $pollq_active = 0;
-                    }
-                }
-            }
-            // Mutilple Poll
-            $pollq_multiple_yes = (int) sanitize_key($_POST['pollq_multiple_yes']);
-            $pollq_multiple = 0;
-            if($pollq_multiple_yes == 1) {
-                $pollq_multiple = (int) sanitize_key($_POST['pollq_multiple']);
-            } else {
-                $pollq_multiple = 0;
-            }
-            // Update Poll's Question
-            $text = '';
-            $edit_poll_question = $wpdb->update(
-                $wpdb->pollsq,
-                array(
-                    'pollq_question'        => $pollq_question,
-                    'pollq_timestamp'       => $pollq_timestamp,
-                    'pollq_totalvotes'      => $pollq_totalvotes,
-                    'pollq_active'          => $pollq_active,
-                    'pollq_expiry'          => $pollq_expiry,
-                    'pollq_multiple'        => $pollq_multiple,
-                    'pollq_totalvoters'     => $pollq_totalvoters
-                ),
-                array(
-                    'pollq_id' => $pollq_id
-                ),
-                array(
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%d',
-                    '%d'
-                ),
-                array(
-                    '%d'
-                )
-            );
-            if( ! $edit_poll_question ) {
-                $text = '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Question \'%s\'.', 'wp-polls'), removeslashes($pollq_question)).'</p>';
-            }
-            // Update Polls' Answers
-            $polla_aids = array();
-            $get_polla_aids = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $pollq_id ) );
-            if($get_polla_aids) {
-                foreach($get_polla_aids as $get_polla_aid) {
-                        $polla_aids[] = (int) $get_polla_aid->polla_aid;
-                }
-                foreach($polla_aids as $polla_aid) {
-                    $polla_answers = wp_kses_post( trim( $_POST['polla_aid-'.$polla_aid] ) );
-                    $polla_votes = (int) sanitize_key($_POST['polla_votes-'.$polla_aid]);
-                    $edit_poll_answer = $wpdb->update(
-                        $wpdb->pollsa,
-                        array(
-                            'polla_answers' => $polla_answers,
-                            'polla_votes'   => $polla_votes
-                        ),
-                        array(
-                            'polla_qid' => $pollq_id,
-                            'polla_aid' => $polla_aid
-                        ),
-                        array(
-                            '%s',
-                            '%d'
-                        ),
-                        array(
-                            '%d',
-                            '%d'
-                        )
-                    );
-                    if( ! $edit_poll_answer ) {
-                        $text .= '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Answer \'%s\'.', 'wp-polls'), $polla_answers ).'</p>';
-                    } else {
-                        $text .= '<p style="color: green">'.sprintf(__('Poll\'s Answer \'%s\' Edited Successfully.', 'wp-polls'), $polla_answers ).'</p>';
-                    }
-                }
-            } else {
-                $text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'wp-polls'), removeslashes($pollq_question)).'</p>';
-            }
-            // Add Poll Answers (If Needed)
-            $polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
-            if(!empty($polla_answers_new)) {
-                $i = 0;
-                $polla_answers_new_votes = $_POST['polla_answers_new_votes'];
-                foreach($polla_answers_new as $polla_answer_new) {
-                    $polla_answer_new = wp_kses_post( trim( $polla_answer_new ) );
-                    if(!empty($polla_answer_new)) {
-                        $polla_answer_new_vote = (int) sanitize_key( $polla_answers_new_votes[$i] );
-                        $add_poll_answers = $wpdb->insert(
-                            $wpdb->pollsa,
-                            array(
-                                'polla_qid'      => $pollq_id,
-                                'polla_answers'  => $polla_answer_new,
-                                'polla_votes'    => $polla_answer_new_vote
-                            ),
-                            array(
-                                '%d',
-                                '%s',
-                                '%d'
-                            )
-                        );
-                        if( ! $add_poll_answers ) {
-                            $text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'wp-polls'), $polla_answer_new).'</p>';
-                        } else {
-                            $text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'wp-polls'), $polla_answer_new).'</p>';
-                        }
-                    }
-                    $i++;
-                }
-            }
-            if(empty($text)) {
-                $text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'wp-polls'), removeslashes($pollq_question)).'</p>';
-            }
-            // Update Lastest Poll ID To Poll Options
-            //$latest_pollid = polls_latest_id();
-            $latest_pollid = poll_dude_latest_id();
-            $update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
-            do_action( 'wp_polls_update_poll', $pollq_id );
-            //cron_polls_place();
+            $text = poll_dude_poll_content_config('edit');
             break;
     }
 }
