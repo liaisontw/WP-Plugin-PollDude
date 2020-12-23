@@ -120,28 +120,28 @@ function poll_dude_time_select($poll_dude_time, $fieldname = 'pollq_timestamp', 
 	echo '</div>'."\n";
 }
 
-function poll_dude_poll_content_config($mode) {
+function poll_dude_poll_config($mode) {
 	global $wpdb;
 	$text = '';
-
-	// Poll ID
-    $pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-    // Poll Total Votes
-    $pollq_totalvotes = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvotes']) : 0;
-    // Poll Total Voters
-    $pollq_totalvoters = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvoters']) : 0;
+	
     // Poll Question
-	// $pollq_question = esc_sql( wp_kses_post( trim( $_POST['pollq_question'] ) ) );
 	$pollq_question = isset( $_POST['pollq_question'] ) ? wp_kses_post( trim( $_POST['pollq_question'] ) ) : '';
-    // Poll Active
-    $pollq_active = isset( $_POST['pollq_active'] ) ? (int) sanitize_key($_POST['pollq_active']) : '';
-    // Poll Start Date
-    $pollq_timestamp = isset( $_POST['poll_timestamp_old'] ) ? $_POST['poll_timestamp_old'] : current_time( 'timestamp' );
-	$edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1 ? 1 : 0;
-	$pollq_expiry_no = isset( $_POST['pollq_expiry_no'] ) ? (int) sanitize_key( $_POST['pollq_expiry_no'] ) : 0;
-	$pollq_multiple_yes = isset( $_POST['pollq_multiple_yes'] ) ? (int) sanitize_key( $_POST['pollq_multiple_yes'] ) : 0;
 
 	if ( ! empty( $pollq_question ) ) {
+		// Poll ID
+		$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
+		// Poll Total Votes
+		$pollq_totalvotes = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvotes']) : 0;
+		// Poll Total Voters
+		$pollq_totalvoters = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvoters']) : 0;
+		// Poll Active
+		$pollq_active = isset( $_POST['pollq_active'] ) ? (int) sanitize_key($_POST['pollq_active']) : '';
+		// Poll Start Date
+		$pollq_timestamp = isset( $_POST['poll_timestamp_old'] ) ? $_POST['poll_timestamp_old'] : current_time( 'timestamp' );
+		$edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1 ? 1 : 0;
+		$pollq_expiry_no = isset( $_POST['pollq_expiry_no'] ) ? (int) sanitize_key( $_POST['pollq_expiry_no'] ) : 0;
+		$pollq_multiple_yes = isset( $_POST['pollq_multiple_yes'] ) ? (int) sanitize_key( $_POST['pollq_multiple_yes'] ) : 0;
+
 		if(('edit' !== $mode)||($edit_polltimestamp === 1)) {
 			$pollq_timestamp = poll_dude_time_make('pollq_timestamp');
 			if ( $pollq_timestamp > current_time( 'timestamp' ) ) {
@@ -203,6 +203,12 @@ function poll_dude_poll_content_config($mode) {
 			if ( ! $add_poll_question ) {
 				$text .= '<p style="color: red;">' . sprintf(__('Error In Adding Poll \'%s\'.', 'wp-polls'), $pollq_question) . '</p>';
 			}
+			$polla_answers_new = isset( $_POST['polla_answers'] ) ? $_POST['polla_answers'] : array();
+
+			$polla_qid = (int) $wpdb->insert_id;
+			if(empty($polla_answers_new)) {
+				$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'wp-polls' ) . '</p>';
+			}
 		}else{
 			// Update Poll's Question
 			$edit_poll_question = $wpdb->update(
@@ -253,52 +259,48 @@ function poll_dude_poll_content_config($mode) {
 			} else {
 				$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'wp-polls'), removeslashes($pollq_question)).'</p>';
 			}
+			$polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
+			$polla_qid = $pollq_id;
 		}
 		
 		
 		// Add Poll Answers (If Needed)
-		$polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
-		//$polla_answers = isset( $_POST['polla_answers'] ) ? $_POST['polla_answers'] : array();
-
-		$polla_qid = ('edit' !== $mode)? (int) $wpdb->insert_id : $pollq_id;
 		if(!empty($polla_answers_new)) {
 			$i = 0;
-			$polla_answers_new_votes = $_POST['polla_answers_new_votes'];
+			$polla_answers_new_votes = isset($_POST['polla_answers_new_votes'])? $_POST['polla_answers_new_votes'] : array();
 			
 			foreach($polla_answers_new as $polla_answer_new) {
 				$polla_answer_new = wp_kses_post( trim( $polla_answer_new ) );
-				if(!empty($polla_answer_new)) {
-					$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
-						
-					$add_poll_answers = $wpdb->insert(
-						$wpdb->pollsa,
-						array(
-							'polla_qid'      => $polla_qid,
-							'polla_answers'  => $polla_answer_new,
-							'polla_votes'    => $polla_answer_new_vote
-						),
-						array(
-							'%d',
-							'%s',
-							'%d'
-						)
-					);
-					if( ! $add_poll_answers ) {
-						$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'wp-polls'), $polla_answer_new).'</p>';
-					} else {
+				$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
+					
+				$add_poll_answers = $wpdb->insert(
+					$wpdb->pollsa,
+					array(
+						'polla_qid'      => $polla_qid,
+						'polla_answers'  => $polla_answer_new,
+						'polla_votes'    => $polla_answer_new_vote
+					),
+					array(
+						'%d',
+						'%s',
+						'%d'
+					)
+				);
+				
+				if( ! $add_poll_answers ) {
+					$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'wp-polls'), $polla_answer_new).'</p>';
+				} else {
+					if ('edit' === $mode) {
 						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'wp-polls'), $polla_answer_new).'</p>';
 					}
-				}else{
-					if ('edit' !== $mode) {
-						$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'wp-polls' ) . '</p>';
-					}
 				}
+				
 				$i++;
 			}
 		}
+
 		
 		// Update Lastest Poll ID To Poll Options
-		//$latest_pollid = polls_latest_id();
 		$latest_pollid = poll_dude_latest_id();
 		$update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
 		
@@ -312,7 +314,7 @@ function poll_dude_poll_content_config($mode) {
 				$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'wp-polls' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) . '</p>';
 			} else {
 				if ( $add_poll_question ) {
-					$text .= '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) (Shortcode: %s) added successfully, but there are some errors with the Poll\'s Answers. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'wp-polls' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />' ) .'</p>';
+					$text .= '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) (Shortcode: %s) added successfully, but there are some errors with the Poll\'s Answers. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'wp-polls' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) .'</p>';
 				}
 			}
 			do_action( 'wp_polls_add_poll', $latest_pollid );
@@ -361,6 +363,7 @@ function polldude_menu() {
 	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
 	$capability  = 'manage_options';
 	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php';
+	//$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-control-panel.php';
 
 	
 	add_submenu_page( 

@@ -22,7 +22,7 @@ if(!empty($_POST['do'])) {
         // Edit Poll
         case __('Edit Poll', 'wp-polls'):
             check_admin_referer( 'wp-polls_edit-poll' );
-            $text = poll_dude_poll_content_config('edit');
+            $text = poll_dude_poll_config('edit');
             break;
     }
 }

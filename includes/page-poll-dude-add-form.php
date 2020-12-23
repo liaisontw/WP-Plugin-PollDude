@@ -19,7 +19,7 @@ if ( ! empty($_POST['do'] ) ) {
 		case __( 'Add Poll', 'wp-polls' ):
 			check_admin_referer( 'wp-polls_add-poll' );
 
-			$text = poll_dude_poll_content_config('add');
+			$text = poll_dude_poll_config('add');
 			break;
 	}
 }
