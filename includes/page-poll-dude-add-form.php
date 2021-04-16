@@ -28,8 +28,6 @@ if ( ! empty($_POST['do'] ) ) {
 
 
 ### Add Poll Form
-$poll_noquestion = 2;
-$count = 0;
 
 require_once('page-poll-dude-poll-profile.php');
 ?>

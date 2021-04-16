@@ -58,7 +58,7 @@ $plugin_name = 'poll-dude';
 
 if( ! function_exists( 'removeslashes' ) ) {
 	function removeslashes( $string ) {
-		$string = implode( '', explode( '\\', $string ) );
+		//$string = implode( '', explode( '\\', $string ) );
 		return stripslashes( trim( $string ) );
 	}
 }
@@ -70,10 +70,8 @@ function poll_dude_time_make($fieldname /*= 'pollq_timestamp'*/) {
 	);
 
 	foreach($time_parse as $key => $value) {
-		$poll_dude_time_stamp = $fieldname.$key;
-
-		$time_parse[$key] = isset( $_POST[$poll_dude_time_stamp] ) ? 
-				 (int) sanitize_key( $_POST[$poll_dude_time_stamp] ) : 0;
+		$time_parse[$key] = isset( $_POST[$fieldname.$key] ) ? 
+				 (int) sanitize_key( $_POST[$fieldname.$key] ) : 0;
 	}
 
 	$return_timestamp = gmmktime( $time_parse['_hour']  , 
@@ -344,66 +342,38 @@ function poll_dude_poll_config($mode) {
 
 add_action( 'admin_menu', 'polldude_menu' );
 function polldude_menu() {
-	$page_title = __( 'Poll Dude', 'poll-dude-domain' );
-	$menu_title = __( 'Poll Dude', 'poll-dude-domain' );
-	$capability = 'manage_options';
-	$menu_slug  = 'poll_dude_manager';
-
 	add_menu_page(
-		$page_title,
-		$menu_title,
-		$capability,
-		$menu_slug,
+		/* $page_title */__( 'Poll Dude', 'poll-dude-domain' ),
+		/* $menu_title */__( 'Poll Dude', 'poll-dude-domain' ),
+		/* $capability */'manage_options',
+		/* $menu_slug  */'poll_dude_manager',
 		'',
 		'dashicons-chart-bar'
 	);
 
-	$parent_slug = 'poll_dude_manager';
-	$page_title  = __( 'Add Poll', 'poll-dude-domain' );
-	$menu_title  = __( 'Add Poll', 'poll-dude-domain' );
-	$capability  = 'manage_options';
-	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php';
-	//$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-control-panel.php';
-
-	
 	add_submenu_page( 
-		$parent_slug, 
-		$page_title, 
-		$menu_title, 
-		$capability, 
-		$menu_slug 
+		/* $parent_slug */ 'poll_dude_manager', 
+		/* $page_title  */ __( 'Add Poll', 'poll-dude-domain' ), 
+		/* $menu_title  */ __( 'Add Poll', 'poll-dude-domain' ), 
+		/* $capability  */ 'manage_options', 
+		/* $menu_slug   */ plugin_dir_path(__FILE__) . '/includes/page-poll-dude-add-form.php'
 	);
 
-	$parent_slug = 'poll_dude_manager';
-	$page_title  = __( 'Control Panel', 'poll-dude-domain' );
-	$menu_title  = __( 'Control Panel', 'poll-dude-domain' );
-	$capability  = 'manage_options';
-	$menu_slug   = plugin_dir_path(__FILE__) . '/includes/page-poll-dude-control-panel.php';
-
-	
 	add_submenu_page( 
-		$parent_slug, 
-		$page_title, 
-		$menu_title, 
-		$capability, 
-		$menu_slug 
+		/* $parent_slug */ 'poll_dude_manager', 
+		/* $page_title  */ __( 'Control Poll', 'poll-dude-domain' ), 
+		/* $menu_title  */ __( 'Control Poll', 'poll-dude-domain' ), 
+		/* $capability  */ 'manage_options', 
+		/* $menu_slug   */ plugin_dir_path(__FILE__) . '/includes/page-poll-dude-control-panel.php'
 	);
 
-	$parent_slug = 'poll_dude_manager';
-	$page_title  = __( 'Poll Setting', 'poll-dude-domain' );
-	$menu_title  = __( 'Poll Setting', 'poll-dude-domain' );
-	$capability  = 'manage_options';
-	$menu_slug   = 'setting_polls';
-
 	add_submenu_page( 
-		$parent_slug, 
-		$page_title, 
-		$menu_title, 
-		$capability, 
-		$menu_slug 
+		/* $parent_slug */ 'poll_dude_manager'
+		,/* $page_title  */ __( 'Poll Setting', 'poll-dude-domain' )
+		,/* $menu_title  */ __( 'Poll Setting', 'poll-dude-domain' )
+		,/* $capability  */ 'manage_options'
+		,/* $menu_slug   */ 'setting_polls'
 	);
-	
-
 }
 
 

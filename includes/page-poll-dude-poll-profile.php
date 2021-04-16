@@ -8,7 +8,7 @@
 <input type="hidden" name="pollq_active" value="<?php echo $poll_active; ?>" />
 <input type="hidden" name="poll_timestamp_old" value="<?php echo $poll_timestamp; ?>" />
 <div class="wrap">
-	<h2><?php ('edit' != $mode)? _e('Add Poll', 'poll-dude-domain'): _e('Edit Poll', 'poll-dude-domain'); ?></h2>
+	<h2><?php ('edit' == $mode)? _e('Edit Poll', 'poll-dude-domain'): _e('Add Poll', 'poll-dude-domain'); ?></h2>
 	<!-- Poll Question -->
 	<h3><?php _e('Poll Question', 'poll-dude-domain'); ?></h3>
 	<table class="form-table">
@@ -30,12 +30,13 @@
 		<tbody id="poll_answers">
 		<?php
 			if ('edit' != $mode) { 
+				$poll_noquestion = 2;
+
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
 					echo "<th width=\"20%\" scope=\"row\" valign=\"top\">".sprintf(__('Answer %s', 'poll-dude-domain'), number_format_i18n($i))."</th>\n";
 					echo "<td width=\"60%\"><input type=\"text\" size=\"50\" maxlength=\"200\" name=\"polla_answers[]\" />&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Remove', 'poll-dude-domain')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
 					echo "</tr>\n";
-					$count++;
 				}
 			} else {
 				$i=1;
@@ -67,7 +68,7 @@
 				<td width="20%" align="<?php echo ('edit' != $mode)? '': $last_col_align; ?>">
 					<strong><?php ('edit' != $mode)? _e('', 'poll-dude-domain'): _e('Total Votes:', 'poll-dude-domain'); ?></strong> 
 					<strong id="poll_total_votes">
-						<?php echo ('edit' != $mode)? '': number_format_i18n($poll_actual_totalvotes); ?>
+						<?php echo ('edit' == $mode)? number_format_i18n($poll_actual_totalvotes): ''; ?>
 					</strong> 
 						<?php if ('edit' == $mode) { 
 							echo '<input type="text" size="4" readonly="readonly" id="pollq_totalvotes" name="pollq_totalvotes" value="';
@@ -127,15 +128,14 @@
 			<th width="20%" scope="row" valign="top"><?php _e('Start Date/Time', 'poll-dude-domain') ?></th>
 			<td width="80%">
 				<?php 
-				if ('edit'==$mode) {
-					echo mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)).'<br />';
+					if ('edit'!==$mode) {
+						$poll_timestamp = current_time('timestamp');					
+					}
+					echo mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('time_format'), get_option('date_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)).'<br />';
 					echo '<input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="check_polltimestamp()" />&nbsp;<label for="edit_polltimestamp">';
 					_e('Edit Start Date/Time', 'poll-dude-domain'); 
 					echo '</label><br />';
 					poll_dude_time_select($poll_timestamp, 'pollq_timestamp', 'none');
-				}else{
-					poll_dude_time_select(current_time('timestamp'));
-				}
 				?>
 			</td>
 		</tr>
