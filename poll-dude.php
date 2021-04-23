@@ -309,10 +309,10 @@ function poll_dude_poll_config($mode) {
 			// If poll starts in the future use the correct poll ID
 			$latest_pollid = ( $latest_pollid < $polla_qid ) ? $polla_qid : $latest_pollid;
 			if ( empty( $text ) ) {
-				$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) . '</p>';
+				$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 			} else {
 				if ( $add_poll_question ) {
-					$text .= '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) (Shortcode: %s) added successfully, but there are some errors with the Poll\'s Answers. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) .'</p>';
+					$text .= '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) (Shortcode: %s) added successfully, but there are some errors with the Poll\'s Answers. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll-dude id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) .'</p>';
 				}
 			}
 			do_action( 'wp_polls_add_poll', $latest_pollid );
@@ -383,11 +383,10 @@ function polldude_menu() {
 require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
 
 // Check if admin and include admin scripts
-add_action('admin_init','poll_dude_scripts_admin');
+add_action('wp_enqueue_scripts','poll_dude_scripts_admin');
 function poll_dude_scripts_admin(){
-	//wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
+	wp_enqueue_style('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
 	wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
-
 	wp_localize_script('poll-dude-admin', 'pollsAdminL10n', array(
 			'admin_ajax_url' => admin_url('admin-ajax.php'),
 			'text_direction' => is_rtl() ? 'right' : 'left',
@@ -591,30 +590,17 @@ function activate_poll_dude($network_wide) {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-poll-dude-deactivator.php
  */
+/*
 function deactivate_plugin_name() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-poll-dude-deactivator.php';
 	Plugin_Name_Deactivator::deactivate();
 }
+*/
 
 //register_activation_hook( __FILE__, 'activate_plugin_name' );
-register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
+//register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
 
 ### Function: Activate Plugin
-register_activation_hook( __FILE__, 'activate_poll_dude' );
+//register_activation_hook( __FILE__, 'activate_poll_dude' );
 
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_plugin_name() {
 
-	$plugin = new Plugin_Name();
-	$plugin->run();
-
-}
-//run_plugin_name();
