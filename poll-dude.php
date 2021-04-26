@@ -381,6 +381,14 @@ function polldude_menu() {
 
 // Load Shortcodes
 require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
+new Poll_Dude_Shortcode();
+/*
+function poll_dude_shortcode_init( ) {
+	require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
+	new Poll_Dude_Shortcode();
+}
+*/
+
 
 // Check if admin and include admin scripts
 add_action('wp_enqueue_scripts','poll_dude_scripts_admin');
@@ -581,7 +589,7 @@ if ( is_admin() ) {
  * The code that runs during plugin activation.
  * This action is documented in includes/class-poll-dude-activator.php
  */
-function activate_poll_dude($network_wide) {
+function poll_dude_activate_init($network_wide) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-poll-dude-activator.php';
 	Poll_Dude_Activator::activate($network_wide);
 }
@@ -601,6 +609,7 @@ function deactivate_plugin_name() {
 //register_deactivation_hook( __FILE__, 'deactivate_plugin_name' );
 
 ### Function: Activate Plugin
-//register_activation_hook( __FILE__, 'activate_poll_dude' );
+register_activation_hook( __FILE__, 'poll_dude_activate_init' );
+//register_activation_hook( __FILE__, 'poll_dude_short_init' );
 
 
