@@ -389,9 +389,47 @@ function poll_dude_shortcode_init( ) {
 }
 */
 
+### Function: Enqueue Polls JavaScripts/CSS
+add_action('wp_enqueue_scripts', 'poll_scripts');
+function poll_scripts() {
+	wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, WP_POLLS_VERSION, 'all');
+	
+	$pollbar = get_option( 'poll_bar' );
+	if( $pollbar['style'] === 'use_css' ) {
+		$pollbar_css = '.wp-polls .pollbar {'."\n";
+		$pollbar_css .= "\t".'margin: 1px;'."\n";
+		$pollbar_css .= "\t".'font-size: '.($pollbar['height']-2).'px;'."\n";
+		$pollbar_css .= "\t".'line-height: '.$pollbar['height'].'px;'."\n";
+		$pollbar_css .= "\t".'height: '.$pollbar['height'].'px;'."\n";
+		$pollbar_css .= "\t".'background: #'.$pollbar['background'].';'."\n";
+		$pollbar_css .= "\t".'border: 1px solid #'.$pollbar['border'].';'."\n";
+		$pollbar_css .= '}'."\n";
+	} else {
+		$pollbar_css = '.wp-polls .pollbar {'."\n";
+		$pollbar_css .= "\t".'margin: 1px;'."\n";
+		$pollbar_css .= "\t".'font-size: '.($pollbar['height']-2).'px;'."\n";
+		$pollbar_css .= "\t".'line-height: '.$pollbar['height'].'px;'."\n";
+		$pollbar_css .= "\t".'height: '.$pollbar['height'].'px;'."\n";
+		$pollbar_css .= "\t".'background-image: url(\''.plugins_url('wp-polls/images/'.$pollbar['style'].'/pollbg.gif').'\');'."\n";
+		$pollbar_css .= "\t".'border: 1px solid #'.$pollbar['border'].';'."\n";
+		$pollbar_css .= '}'."\n";
+	}
+	wp_add_inline_style( 'wp-polls', $pollbar_css );
+	$poll_ajax_style = get_option('poll_ajax_style');
+	wp_enqueue_script('wp-polls', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), WP_POLLS_VERSION, true);
+	wp_localize_script('wp-polls', 'pollsL10n', array(
+		'ajax_url' => admin_url('admin-ajax.php'),
+		'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'wp-polls'),
+		'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
+		'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
+		'show_loading' => (int) $poll_ajax_style['loading'],
+		'show_fading' => (int) $poll_ajax_style['fading']
+	));
+}
+
 
 // Check if admin and include admin scripts
-add_action('wp_enqueue_scripts','poll_dude_scripts_admin');
+add_action('admin_enqueue_scripts','poll_dude_scripts_admin');
 function poll_dude_scripts_admin(){
 	wp_enqueue_style('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
 	wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
