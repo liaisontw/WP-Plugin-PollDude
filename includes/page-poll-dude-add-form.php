@@ -5,10 +5,15 @@ if(!current_user_can('manage_options')) {
 }
 
 ### Poll Manager
-$base_name = $poll_dude_base;
+$base_name = $poll_dude->base;
 $base_page = 'admin.php?page='.$base_name;
-$current_page = 'admin.php?page='.$plugin_name.'/includes/'.basename(__FILE__);
+$current_page = 'admin.php?page='.$poll_dude->name.'/includes/'.basename(__FILE__);
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
+$poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
+$poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 );
+$poll_active = 0;
+$poll_timestamp = 0;
+$last_col_align = is_rtl() ? 'right' : 'left';
 
 
 ### Form Processing

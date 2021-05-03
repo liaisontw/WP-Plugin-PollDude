@@ -113,6 +113,9 @@ class Poll_Dude_Activator {
 			}
 		}
 		// Add In Options (16 Records)
+		add_option('poll_dude_template_voteheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
+		'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
+		'<ul class="wp-polls-ul">');
 		add_option('poll_template_voteheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
 		'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
 		'<ul class="wp-polls-ul">');
