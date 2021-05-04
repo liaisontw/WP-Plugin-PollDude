@@ -2,7 +2,7 @@
 namespace poll_dude;
 
 class Poll_Dude_Shortcode {
-	//global $poll_dude_utitlity;
+	//global $poll_dude_utility;
 
 	public function __construct($utility)
     {
@@ -164,118 +164,7 @@ class Poll_Dude_Shortcode {
 			}
 		}
 	}
-/*
-	### Function: Check Who Is Allow To Vote
-	public function check_allowtovote() {
-		global $user_ID;
-		$user_ID = (int) $user_ID;
-		$allow_to_vote = (int) get_option( 'poll_allowtovote' );
-		switch($allow_to_vote) {
-			// Guests Only
-			case 0:
-				if($user_ID > 0) {
-					return false;
-				}
-				return true;
-				break;
-			// Registered Users Only
-			case 1:
-				if($user_ID === 0) {
-					return false;
-				}
-				return true;
-				break;
-			// Registered Users And Guests
-			case 2:
-			default:
-				return true;
-		}
-	}
 
-
-	### Funcrion: Check Voted By Cookie Or IP
-	public function check_voted($poll_id) {
-		$poll_logging_method = (int) get_option( 'poll_logging_method' );
-		switch($poll_logging_method) {
-			// Do Not Log
-			case 0:
-				return 0;
-				break;
-			// Logged By Cookie
-			case 1:
-				return $this->check_voted_cookie($poll_id);
-				break;
-			// Logged By IP
-			case 2:
-				return $this->check_voted_ip($poll_id);
-				break;
-			// Logged By Cookie And IP
-			case 3:
-				$check_voted_cookie = $this->check_voted_cookie($poll_id);
-				if(!empty($check_voted_cookie)) {
-					return $check_voted_cookie;
-				}
-				return $this->check_voted_ip($poll_id);
-				break;
-			// Logged By Username
-			case 4:
-				return $this->check_voted_username($poll_id);
-				break;
-		}
-	}
-
-
-	### Function: Check Voted By Cookie
-	public function check_voted_cookie( $poll_id ) {
-		$get_voted_aids = 0;
-		if ( ! empty( $_COOKIE[ 'voted_' . $poll_id ] ) ) {
-			$get_voted_aids = explode( ',', $_COOKIE[ 'voted_' . $poll_id ] );
-			$get_voted_aids = array_map( 'intval', array_map( 'sanitize_key', $get_voted_aids ) );
-		}
-		return $get_voted_aids;
-	}
-
-
-	### Function: Check Voted By IP
-	public function check_voted_ip( $poll_id ) {
-		global $wpdb;
-		$log_expiry = (int) get_option( 'poll_cookielog_expiry' );
-		$log_expiry_sql = '';
-		if( $log_expiry > 0 ) {
-			$log_expiry_sql = ' AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
-		}
-		// Check IP From IP Logging Database
-		$get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, poll_get_ipaddress(), get_ipaddress() ) . $log_expiry_sql );
-		if( $get_voted_aids ) {
-			return $get_voted_aids;
-		}
-
-		return 0;
-	}
-
-
-	### Function: Check Voted By Username
-	public function check_voted_username($poll_id) {
-		global $wpdb, $user_ID;
-		// Check IP If User Is Guest
-		if ( ! is_user_logged_in() ) {
-			return 1;
-		}
-		$pollsip_userid = (int) $user_ID;
-		$log_expiry = (int) get_option( 'poll_cookielog_expiry' );
-		$log_expiry_sql = '';
-		if( $log_expiry > 0 ) {
-			$log_expiry_sql = 'AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
-		}
-		// Check User ID From IP Logging Database
-		$get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND pollip_userid = %d", $poll_id, $pollsip_userid ) . $log_expiry_sql );
-		if($get_voted_aids) {
-			return $get_voted_aids;
-		} else {
-			return 0;
-		}
-	}
-*/
 	### Function: Display Voting Form
 	public function header_filter($poll_q_text, $poll_q_id,$poll_q_totalvotes, $poll_q_totalvoters,						  
 								  $poll_start_date,$poll_end_date,$poll_multiple_ans) {

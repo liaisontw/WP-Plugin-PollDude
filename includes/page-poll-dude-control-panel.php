@@ -39,7 +39,7 @@ switch($mode) {
         $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
         $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
         $poll_noquestion = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(polla_aid) FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
-        $poll_question_text = $poll_dude->utitlity->removeslashes($poll_question->pollq_question);
+        $poll_question_text = $poll_dude->utility->removeslashes($poll_question->pollq_question);
         $poll_totalvotes = (int) $poll_question->pollq_totalvotes;
         $poll_timestamp = $poll_question->pollq_timestamp;
         $poll_active = (int) $poll_question->pollq_active;
@@ -85,7 +85,7 @@ switch($mode) {
                             $latest_poll = (int) get_option('poll_latestpoll');
                             foreach($polls as $poll) {
                                 $poll_id = (int) $poll->pollq_id;
-                                $poll_question = $poll_dude->utitlity->removeslashes($poll->pollq_question);
+                                $poll_question = $poll_dude->utility->removeslashes($poll->pollq_question);
                                 $poll_date = mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll->pollq_timestamp));
                                 $poll_totalvotes = (int) $poll->pollq_totalvotes;
                                 $poll_totalvoters = (int) $poll->pollq_totalvoters;

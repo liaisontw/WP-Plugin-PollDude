@@ -1,4 +1,4 @@
-<?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.$poll_dude->utitlity->removeslashes($text).'</div>'; } else { echo '<div id="message" class="updated" style="display: none;"></div>'; } ?>
+<?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.$poll_dude->utility->removeslashes($text).'</div>'; } else { echo '<div id="message" class="updated" style="display: none;"></div>'; } ?>
 <form method="post" action="<?php echo 
 	('edit' == $mode)? admin_url($current_page.'&amp;mode=edit&amp;id='.$poll_id)
 					 : admin_url($current_page);
@@ -46,7 +46,7 @@
                     $pollip_answers[0] = __('Null Votes', 'poll-dude-domain');
                     foreach($poll_answers as $poll_answer) {
                         $polla_aid = (int) $poll_answer->polla_aid;
-                        $polla_answers = $poll_dude->utitlity->removeslashes($poll_answer->polla_answers);
+                        $polla_answers = $poll_dude->utility->removeslashes($poll_answer->polla_answers);
                         $polla_votes = (int) $poll_answer->polla_votes;
                         $pollip_answers[$polla_aid] = $polla_answers;
                         echo "<tr id=\"poll-answer-$polla_aid\">\n";
@@ -136,7 +136,7 @@
 					_e('Edit Start Date/Time', 'poll-dude-domain'); 
 					echo '</label><br />';
 					//poll_dude_time_select($poll_timestamp, 'pollq_timestamp', 'none');
-					$poll_dude->utitlity->time_select($poll_timestamp, 'pollq_timestamp', 'none');
+					$poll_dude->utility->time_select($poll_timestamp, 'pollq_timestamp', 'none');
 				?>
 			</td>
 		</tr>
@@ -158,11 +158,11 @@
                 <?php
 					if(('edit'!=$mode) || empty($poll_expiry)) {
 						//poll_dude_time_select(current_time('timestamp'), 'pollq_expiry', 'none');
-						$poll_dude->utitlity->time_select(current_time('timestamp'), 'pollq_expiry', 'none');
+						$poll_dude->utility->time_select(current_time('timestamp'), 'pollq_expiry', 'none');
 						
 					} else {
 						//poll_dude_time_select($poll_expiry, 'pollq_expiry');
-						$poll_dude->utitlity->time_select($poll_expiry, 'pollq_expiry');
+						$poll_dude->utility->time_select($poll_expiry, 'pollq_expiry');
 					}
                 ?>
 			</td>

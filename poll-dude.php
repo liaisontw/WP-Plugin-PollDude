@@ -59,39 +59,9 @@ global $poll_dude;
 $poll_dude = new \stdClass();
 $poll_dude->base = plugin_basename(__FILE__);
 $poll_dude->name = 'poll-dude';
-$poll_dude->utitlity = new poll_dude\Poll_Dude_Utility();
-$poll_dude->shortcode = new poll_dude\Poll_Dude_Shortcode($poll_dude->utitlity);
-
-
-### Function: Get IP Address
-function get_ipaddress() {
-	foreach ( array( 'HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
-		if ( array_key_exists( $key, $_SERVER ) === true ) {
-			foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
-				$ip = trim( $ip );
-				if ( filter_var( $ip, FILTER_VALIDATE_IP ) !== false ) {
-					return esc_attr( $ip );
-				}
-			}
-		}
-	}
-}
-
-function poll_get_ipaddress() {
-	return apply_filters( 'wp_polls_ipaddress', wp_hash( get_ipaddress() ) );
-}
-
-function poll_get_hostname() {
-	$hostname = gethostbyaddr( get_ipaddress() );
-	if ( $hostname === get_ipaddress() ) {
-		$hostname = wp_privacy_anonymize_ip( get_ipaddress() );
-	}
-
-	if ( false !== $hostname ) {
-		$hostname = substr( $hostname, strpos( $hostname, '.' ) + 1 );
-	}
-
-	return apply_filters( 'wp_polls_hostname', $hostname );
+$poll_dude->utility = new poll_dude\Poll_Dude_Utility();
+if(isset($poll_dude->utility)){
+	$poll_dude->shortcode = new poll_dude\Poll_Dude_Shortcode($poll_dude->utility);
 }
 
 
@@ -118,7 +88,7 @@ function poll_dude_poll_config($mode) {
 		$pollq_multiple_yes = isset( $_POST['pollq_multiple_yes'] ) ? (int) sanitize_key( $_POST['pollq_multiple_yes'] ) : 0;
 
 		if(('edit' !== $mode)||($edit_polltimestamp === 1)) {
-			$pollq_timestamp = $poll_dude->utitlity->time_make('pollq_timestamp');
+			$pollq_timestamp = $poll_dude->utility->time_make('pollq_timestamp');
 			if ( $pollq_timestamp > current_time( 'timestamp' ) ) {
 				$pollq_active = -1;
 			}else {
@@ -130,7 +100,7 @@ function poll_dude_poll_config($mode) {
 		if ( $pollq_expiry_no === 1 ) {
 			$pollq_expiry = 0;
 		} else {			
-			$pollq_expiry = $poll_dude->utitlity->time_make('pollq_expiry');
+			$pollq_expiry = $poll_dude->utility->time_make('pollq_expiry');
 			if($pollq_expiry <= current_time('timestamp')) {
 				$pollq_active = 0;
 			}
@@ -194,7 +164,7 @@ function poll_dude_poll_config($mode) {
 				array('%d')
 			);
 			if( ! $edit_poll_question ) {
-				$text = '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Question \'%s\'.', 'poll-dude-domain'), $poll_dude->utitlity->removeslashes($pollq_question)).'</p>';
+				$text = '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Question \'%s\'.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 			}
 			// Update Polls' Answers
 			$polla_aids = array();
@@ -232,7 +202,7 @@ function poll_dude_poll_config($mode) {
 					}
 				}
 			} else {
-				$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude-domain'), $poll_dude->utitlity->removeslashes($pollq_question)).'</p>';
+				$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 			}
 			$polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
 			$polla_qid = $pollq_id;
@@ -277,7 +247,7 @@ function poll_dude_poll_config($mode) {
 		
 		// Update Lastest Poll ID To Poll Options
 		//$latest_pollid = poll_dude_latest_id();
-		$latest_pollid = $poll_dude->utitlity->latest_poll();
+		$latest_pollid = $poll_dude->utility->latest_poll();
 		$update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
 		
 		if ('edit' !== $mode) {
@@ -298,7 +268,7 @@ function poll_dude_poll_config($mode) {
 			do_action( 'wp_polls_add_poll', $latest_pollid );
 		} else {
 			if(empty($text)) {
-				$text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'poll-dude-domain'), $poll_dude->utitlity->removeslashes($pollq_question)).'</p>';
+				$text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 			}
 			do_action( 'wp_polls_update_poll', $pollq_id );
 		}
@@ -423,27 +393,6 @@ function poll_dude_scripts_admin($hook_suffix){
 }
 
 
-
-### Check If In Poll Archive Page
-function in_pollarchive() {
-	$poll_archive_url = get_option('poll_archive_url');
-	$poll_archive_url_array = explode('/', $poll_archive_url);
-	$poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-1];
-	if(empty($poll_archive_url)) {
-		$poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-2];
-	}
-	$current_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
-	if(strpos($current_url, $poll_archive_url) === false) {
-		return false;
-	}
-
-	return true;
-}
-
-
-
-
-
 function vote_poll_process($poll_id, $poll_aid_array = [])
 {
 	global $wpdb, $user_identity, $user_ID, $poll_dude;
@@ -457,7 +406,7 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 		throw new InvalidArgumentException(sprintf(__('Invalid Answer to Poll ID #%s', 'wp-polls'), $poll_id));
 	}
 
-	if (!$poll_dude->utitlity->vote_allow()) {
+	if (!$poll_dude->utility->vote_allow()) {
 		throw new InvalidArgumentException(sprintf(__('User is not allowed to vote for Poll ID #%s', 'wp-polls'), $poll_id));
 	}
 
@@ -476,7 +425,7 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 	}
 
 	//$check_voted = check_voted($poll_id);
-	$is_voted = $poll_dude->utitlity->is_voted($poll_id);
+	$is_voted = $poll_dude->utility->is_voted($poll_id);
 	if ( !empty( $is_voted ) ) {
 		throw new InvalidArgumentException(sprintf(__('You Had Already Voted For This Poll. Poll ID #%s', 'wp-polls'), $poll_id));
 	}
@@ -491,8 +440,10 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 
 	$pollip_user = sanitize_text_field( $pollip_user );
 	$pollip_userid = $user_ID;
-	$pollip_ip = poll_get_ipaddress();
-	$pollip_host = poll_get_hostname();
+	//$pollip_ip = poll_get_ipaddress();
+	//$pollip_host = poll_get_hostname();
+	$pollip_ip = $poll_dude->utility->get_ipaddr();
+	$pollip_host = $poll_dude->utility->get_hostname();
 	$pollip_timestamp = current_time('timestamp');
 	$poll_logging_method = (int) get_option('poll_logging_method');
 
@@ -639,9 +590,9 @@ function poll_dude_control_panel() {
 					if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
 						$delete_logs = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 						if( $delete_logs ) {
-							echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						} else {
-							echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 					}
 					break;
@@ -652,7 +603,7 @@ function poll_dude_control_panel() {
 					$polla_aid = (int) sanitize_key( $_POST['polla_aid'] );
 					$poll_answers = $wpdb->get_row( $wpdb->prepare( "SELECT polla_votes, polla_answers FROM $wpdb->pollsa WHERE polla_aid = %d AND polla_qid = %d", $polla_aid, $pollq_id ) );
 					$polla_votes = (int) $poll_answers->polla_votes;
-					$polla_answers = wp_kses_post( $poll_dude->utitlity->removeslashes( trim( $poll_answers->polla_answers ) ) );
+					$polla_answers = wp_kses_post( $poll_dude->utility->removeslashes( trim( $poll_answers->polla_answers ) ) );
 					$delete_polla_answers = $wpdb->delete( $wpdb->pollsa, array( 'polla_aid' => $polla_aid, 'polla_qid' => $pollq_id ), array( '%d', '%d' ) );
 					$delete_pollip = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id, 'pollip_aid' => $polla_aid ), array( '%d', '%d' ) );
 					$update_pollq_totalvotes = $wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes - $polla_votes) WHERE pollq_id = $pollq_id" );
@@ -684,9 +635,9 @@ function poll_dude_control_panel() {
 						)
 					);
 					if( $open_poll ) {
-						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Opened', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Opened', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					} else {
-						echo '<p style="color: red;">'.sprintf(__('Error Opening Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: red;">'.sprintf(__('Error Opening Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					}
 					break;
 				// Close Poll
@@ -710,9 +661,9 @@ function poll_dude_control_panel() {
 						)
 					);
 					if( $close_poll ) {
-						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Closed', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Closed', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					} else {
-						echo '<p style="color: red;">'.sprintf(__('Error Closing Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: red;">'.sprintf(__('Error Closing Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					}
 					break;
 				// Delete Poll
@@ -725,13 +676,13 @@ function poll_dude_control_panel() {
 					$delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 					$poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");
 					if(!$delete_poll_question) {
-						echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					}
 					if(empty($text)) {
-						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'poll-dude-domain'), wp_kses_post( $poll_dude->utitlity->removeslashes( $pollq_question ) ) ).'</p>';
+						echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 					}
 							
-					update_option( 'poll_latestpoll', $poll_dude->utitlity->latest_poll() );
+					update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
 					do_action( 'wp_polls_delete_poll', $pollq_id );
 					
 					break;

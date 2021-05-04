@@ -146,7 +146,7 @@ class Poll_Dude_Utility {
             $log_expiry_sql = ' AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
         }
         // Check IP From IP Logging Database
-        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, poll_get_ipaddress(), get_ipaddress() ) . $log_expiry_sql );
+        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, $this->hash_ipaddr(), $this->get_ipaddr() ) . $log_expiry_sql );
         if( $get_voted_aids ) {
             return $get_voted_aids;
         }
@@ -177,7 +177,7 @@ class Poll_Dude_Utility {
     }
 
     ### Function: Get IP Address
-    public function get_ipaddress() {
+    public function get_ipaddr() {
         foreach ( array( 'HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
             if ( array_key_exists( $key, $_SERVER ) === true ) {
                 foreach ( explode( ',', $_SERVER[$key] ) as $ip ) {
@@ -190,14 +190,14 @@ class Poll_Dude_Utility {
         }
     }
 
-    public function poll_get_ipaddress() {
-        return apply_filters( 'wp_polls_ipaddress', wp_hash( get_ipaddress() ) );
+    public function hash_ipaddr() {
+        return apply_filters( 'wp_polls_ipaddress', wp_hash( $this->get_ipaddr() ) );
     }
 
-    public function poll_get_hostname() {
-        $hostname = gethostbyaddr( get_ipaddress() );
-        if ( $hostname === get_ipaddress() ) {
-            $hostname = wp_privacy_anonymize_ip( get_ipaddress() );
+    public function get_hostname() {
+        $hostname = gethostbyaddr( $this->get_ipaddr() );
+        if ( $hostname === $this->get_ipaddr() ) {
+            $hostname = wp_privacy_anonymize_ip( $this->get_ipaddr() );
         }
 
         if ( false !== $hostname ) {
@@ -205,5 +205,21 @@ class Poll_Dude_Utility {
         }
 
         return apply_filters( 'wp_polls_hostname', $hostname );
+    }
+
+    ### Check If In Poll Archive Page
+    function in_pollarchive() {
+        $poll_archive_url = get_option('poll_archive_url');
+        $poll_archive_url_array = explode('/', $poll_archive_url);
+        $poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-1];
+        if(empty($poll_archive_url)) {
+            $poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-2];
+        }
+        $current_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
+        if(strpos($current_url, $poll_archive_url) === false) {
+            return false;
+        }
+
+        return true;
     }
 }
