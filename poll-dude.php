@@ -24,7 +24,7 @@
  * Text Domain:       poll-dude
  * Domain Path:       /languages
  */
-//namespace poll_dude;
+
 
 // Exit If Accessed Directly
 if(!defined('ABSPATH')){
@@ -62,127 +62,6 @@ $poll_dude->name = 'poll-dude';
 $poll_dude->utitlity = new poll_dude\Poll_Dude_Utility();
 $poll_dude->shortcode = new poll_dude\Poll_Dude_Shortcode($poll_dude->utitlity);
 
-//global $poll_dude_base;
-//$poll_dude_base = plugin_basename(__FILE__);
-//$plugin_name = 'poll-dude';
-
-//global $poll_dude_utitlity;
-//$poll_dude_utitlity = new poll_dude\Poll_Dude_Utility();
-
-// Load Shortcodes
-//global $poll_dude_shortcode;
-//$poll_dude_shortcode = new poll_dude\Poll_Dude_Shortcode($poll_dude_utitlity);
-
-/*
-### Function: Check Who Is Allow To Vote
-function check_allowtovote() {
-	global $user_ID;
-	$user_ID = (int) $user_ID;
-	$allow_to_vote = (int) get_option( 'poll_allowtovote' );
-	switch($allow_to_vote) {
-		// Guests Only
-		case 0:
-			if($user_ID > 0) {
-				return false;
-			}
-			return true;
-			break;
-		// Registered Users Only
-		case 1:
-			if($user_ID === 0) {
-				return false;
-			}
-			return true;
-			break;
-		// Registered Users And Guests
-		case 2:
-		default:
-			return true;
-	}
-}
-
-### Funcrion: Check Voted By Cookie Or IP
-function check_voted($poll_id) {
-	$poll_logging_method = (int) get_option( 'poll_logging_method' );
-	switch($poll_logging_method) {
-		// Do Not Log
-		case 0:
-			return 0;
-			break;
-		// Logged By Cookie
-		case 1:
-			return check_voted_cookie($poll_id);
-			break;
-		// Logged By IP
-		case 2:
-			return check_voted_ip($poll_id);
-			break;
-		// Logged By Cookie And IP
-		case 3:
-			$check_voted_cookie = check_voted_cookie($poll_id);
-			if(!empty($check_voted_cookie)) {
-				return $check_voted_cookie;
-			}
-			return check_voted_ip($poll_id);
-			break;
-		// Logged By Username
-		case 4:
-			return check_voted_username($poll_id);
-			break;
-	}
-}
-
-### Function: Check Voted By Cookie
-function check_voted_cookie( $poll_id ) {
-	$get_voted_aids = 0;
-	if ( ! empty( $_COOKIE[ 'voted_' . $poll_id ] ) ) {
-		$get_voted_aids = explode( ',', $_COOKIE[ 'voted_' . $poll_id ] );
-		$get_voted_aids = array_map( 'intval', array_map( 'sanitize_key', $get_voted_aids ) );
-	}
-	return $get_voted_aids;
-}
-
-
-### Function: Check Voted By IP
-function check_voted_ip( $poll_id ) {
-	global $wpdb;
-	$log_expiry = (int) get_option( 'poll_cookielog_expiry' );
-	$log_expiry_sql = '';
-	if( $log_expiry > 0 ) {
-		$log_expiry_sql = ' AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
-	}
-	// Check IP From IP Logging Database
-	$get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, poll_get_ipaddress(), get_ipaddress() ) . $log_expiry_sql );
-	if( $get_voted_aids ) {
-		return $get_voted_aids;
-	}
-
-	return 0;
-}
-
-
-### Function: Check Voted By Username
-function check_voted_username($poll_id) {
-	global $wpdb, $user_ID;
-	// Check IP If User Is Guest
-	if ( ! is_user_logged_in() ) {
-		return 1;
-	}
-	$pollsip_userid = (int) $user_ID;
-	$log_expiry = (int) get_option( 'poll_cookielog_expiry' );
-	$log_expiry_sql = '';
-	if( $log_expiry > 0 ) {
-		$log_expiry_sql = 'AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
-	}
-	// Check User ID From IP Logging Database
-	$get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND pollip_userid = %d", $poll_id, $pollsip_userid ) . $log_expiry_sql );
-	if($get_voted_aids) {
-		return $get_voted_aids;
-	} else {
-		return 0;
-	}
-}
-*/
 
 ### Function: Get IP Address
 function get_ipaddress() {
@@ -568,7 +447,6 @@ function in_pollarchive() {
 function vote_poll_process($poll_id, $poll_aid_array = [])
 {
 	global $wpdb, $user_identity, $user_ID, $poll_dude;
-	global $poll_dude_shortcode;
 
 	do_action('wp_polls_vote_poll');
 
@@ -669,7 +547,7 @@ function vote_poll_process($poll_id, $poll_aid_array = [])
 	}
 	do_action( 'wp_polls_vote_poll_success' );
 
-	return $poll_dude_shortcode->display_pollresult($poll_id, $poll_aid_array, false);
+	return $poll_dude->shortcode->display_pollresult($poll_id, $poll_aid_array, false);
 }
 
 
@@ -678,7 +556,7 @@ add_action('wp_ajax_poll-dude', 'poll_dude_vote');
 add_action('wp_ajax_nopriv_poll-dude', 'poll_dude_vote');
 function poll_dude_vote() {
 	global $wpdb, $user_identity, $user_ID;
-	global $poll_dude_shortcode;
+	global $poll_dude;
 
 
 	if( isset( $_REQUEST['action'] ) && sanitize_key( $_REQUEST['action'] ) === 'poll-dude') {
@@ -716,11 +594,11 @@ function poll_dude_vote() {
 			// Poll Result
 			case 'result':
 				
-				echo $poll_dude_shortcode->display_pollresult($poll_id, 0, false);
+				echo $poll_dude->shortcode->display_pollresult($poll_id, 0, false);
 				break;
 			// Poll Booth Aka Poll Voting Form
 			case 'booth':
-				echo $poll_dude_shortcode->display_pollvote($poll_id, false);
+				echo $poll_dude->shortcode->display_pollvote($poll_id, false);
 				break;
 		} // End switch($_REQUEST['view'])
 	} // End if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'polls')
