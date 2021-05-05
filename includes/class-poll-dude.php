@@ -1,5 +1,5 @@
 <?php
-
+//namespace poll_dude;
 /**
  * The file that defines the core plugin class
  *
@@ -9,8 +9,8 @@
  * @link       http://example.com
  * @since      1.0.0
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
  * @author     Your Name <email@example.com>
  */
-class Plugin_Name {
+class Poll_Dude {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Plugin_Name {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Plugin_Name_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Poll_Dude_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -46,7 +46,7 @@ class Plugin_Name {
 	 * @access   protected
 	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
-	protected $plugin_name;
+	protected $name;
 
 	/**
 	 * The current version of the plugin.
@@ -56,6 +56,9 @@ class Plugin_Name {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $version;
+	protected $base;
+	public $utility;
+	public $shortcode;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -67,18 +70,18 @@ class Plugin_Name {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
-			$this->version = PLUGIN_NAME_VERSION;
+		if ( defined( 'POLL_DUDE_VERSION' ) ) {
+			$this->version = POLL_DUDE_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'plugin-name';
+		$this->name = 'poll-dude';
+		$this->base = plugin_basename( dirname( __FILE__) );
 
 		$this->load_dependencies();
-		$this->set_locale();
+		//$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_public_hooks();
-
+		//$this->define_public_hooks();
 	}
 
 	/**
@@ -99,30 +102,37 @@ class Plugin_Name {
 	 */
 	private function load_dependencies() {
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/class-poll-dude-utility.php';
+		
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-name-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-name-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-plugin-name-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-poll-dude-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-plugin-name-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/class-poll-dude-shortcodes.php';
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-poll-dude-public.php';
 
-		$this->loader = new Plugin_Name_Loader();
+		$this->loader = new Poll_Dude_Loader();
+		$this->utility = new poll_dude\Poll_Dude_Utility();
+		if(isset($this->utility)){
+			$this->shortcode = new poll_dude\Poll_Dude_Shortcode($this->utility);
+		}
 
 	}
 
@@ -137,10 +147,11 @@ class Plugin_Name {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Plugin_Name_i18n();
+		$plugin_i18n = new Poll_Dude_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		//add_action( 'plugins_loaded', 'polldude_textdomain' );
 
+		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'polldude_textdomain' );
 	}
 
 	/**
@@ -152,7 +163,7 @@ class Plugin_Name {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Plugin_Name_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -192,7 +203,11 @@ class Plugin_Name {
 	 * @return    string    The name of the plugin.
 	 */
 	public function get_plugin_name() {
-		return $this->plugin_name;
+		return $this->name;
+	}
+
+	public function get_plugin_base() {
+		return $this->base;
 	}
 
 	/**

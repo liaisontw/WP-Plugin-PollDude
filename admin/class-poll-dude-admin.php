@@ -20,7 +20,7 @@
  * @subpackage Plugin_Name/admin
  * @author     Your Name <email@example.com>
  */
-class Plugin_Name_Admin {
+class Poll_Dude_Admin {
 
 	/**
 	 * The ID of this plugin.
@@ -54,6 +54,16 @@ class Plugin_Name_Admin {
 
 	}
 
+/*
+	add_action('admin_enqueue_scripts','poll_dude_scripts_admin');
+function poll_dude_scripts_admin($hook_suffix){
+	$poll_admin_pages = array('poll-dude/poll-dude.php', 'poll-dude/includes/page-poll-dude-add-form.php', 'poll-dude/includes/page-poll-dude-control-panel.php');
+	if(in_array($hook_suffix, $poll_admin_pages, true)) {
+		
+		
+	}
+}
+*/
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
@@ -72,8 +82,8 @@ class Plugin_Name_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-name-admin.css', array(), $this->version, 'all' );
+		//wp_enqueue_style('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/poll-dude-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -95,8 +105,8 @@ class Plugin_Name_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/plugin-name-admin.js', array( 'jquery' ), $this->version, false );
+		//wp_enqueue_script('poll-dude-admin', plugin_dir_url( __FILE__ ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 

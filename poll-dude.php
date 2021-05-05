@@ -39,12 +39,6 @@ if(!defined('ABSPATH')){
  */
 define( 'POLL_DUDE_VERSION', '1.0.0' );
 
-// Create Text Domain For Translations
-//add_action( 'plugins_loaded', 'polldude_textdomain' );
-add_action( 'plugins_loaded', 'polldude_textdomain' );
-function polldude_textdomain() {
-	load_plugin_textdomain( 'poll-dude-domain' );
-}
 
 
 // polldude Table Name
@@ -53,16 +47,18 @@ $wpdb->pollsq   = $wpdb->prefix.'pollsq';
 $wpdb->pollsa   = $wpdb->prefix.'pollsa';
 $wpdb->pollsip  = $wpdb->prefix.'pollsip';
 
-require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-utility.php');
-require_once(plugin_dir_path(__FILE__) . '/includes/class-poll-dude-shortcodes.php');
+require_once plugin_dir_path(__FILE__) . '/includes/class-poll-dude.php';
 global $poll_dude;
-$poll_dude = new \stdClass();
-$poll_dude->base = plugin_basename(__FILE__);
-$poll_dude->name = 'poll-dude';
-$poll_dude->utility = new poll_dude\Poll_Dude_Utility();
-if(isset($poll_dude->utility)){
-	$poll_dude->shortcode = new poll_dude\Poll_Dude_Shortcode($poll_dude->utility);
+$poll_dude = new Poll_Dude();
+
+
+// Create Text Domain For Translations
+/*
+add_action( 'plugins_loaded', 'polldude_textdomain' );
+function polldude_textdomain() {
+	load_plugin_textdomain( 'poll-dude-domain' );
 }
+*/
 
 
 function poll_dude_poll_config($mode) {
@@ -368,6 +364,7 @@ function poll_dude_scripts() {
 
 
 // Check if admin and include admin scripts
+/*
 add_action('admin_enqueue_scripts','poll_dude_scripts_admin');
 function poll_dude_scripts_admin($hook_suffix){
 	$poll_admin_pages = array('poll-dude/poll-dude.php', 'poll-dude/includes/page-poll-dude-add-form.php', 'poll-dude/includes/page-poll-dude-control-panel.php');
@@ -392,6 +389,7 @@ function poll_dude_scripts_admin($hook_suffix){
 	}
 }
 
+*/
 
 function vote_poll_process($poll_id, $poll_aid_array = [])
 {
