@@ -5,7 +5,7 @@ if(!current_user_can('manage_options')) {
 }
 
 ### Poll Manager
-$base_name = $poll_dude->get_plugin_base();
+$base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
@@ -24,7 +24,7 @@ if ( ! empty($_POST['do'] ) ) {
 		case __( 'Add Poll', 'poll-dude-domain' ):
 			check_admin_referer( 'wp-polls_add-poll' );
 
-			$text = poll_dude_poll_config('add');
+			$text = poll_dude_poll_config('add', $base_name);
 			break;
 	}
 }

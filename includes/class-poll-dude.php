@@ -56,9 +56,9 @@ class Poll_Dude {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $version;
-	protected $base;
 	public $utility;
 	public $shortcode;
+	public $admin;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -76,8 +76,6 @@ class Poll_Dude {
 			$this->version = '1.0.0';
 		}
 		$this->name = 'poll-dude';
-		$this->base = plugin_basename( dirname( __FILE__) );
-
 		$this->load_dependencies();
 		//$this->set_locale();
 		$this->define_admin_hooks();
@@ -151,7 +149,7 @@ class Poll_Dude {
 
 		//add_action( 'plugins_loaded', 'polldude_textdomain' );
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'polldude_textdomain' );
+		//$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'polldude_textdomain' );
 	}
 
 	/**
@@ -163,10 +161,11 @@ class Poll_Dude {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
+		//$plugin_admin = new POLL_DUDE_NAME_SPACE\Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
+		$this->admin = new Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		//$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
+		//$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 
 	}
 
@@ -206,10 +205,6 @@ class Poll_Dude {
 		return $this->name;
 	}
 
-	public function get_plugin_base() {
-		return $this->base;
-	}
-
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
@@ -218,6 +213,10 @@ class Poll_Dude {
 	 */
 	public function get_loader() {
 		return $this->loader;
+	}
+
+	public function admin() {
+		return $this->admin;
 	}
 
 	/**
