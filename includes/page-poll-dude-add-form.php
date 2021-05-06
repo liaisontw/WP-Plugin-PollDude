@@ -5,6 +5,7 @@ if(!current_user_can('manage_options')) {
 }
 
 ### Poll Manager
+global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
@@ -24,7 +25,8 @@ if ( ! empty($_POST['do'] ) ) {
 		case __( 'Add Poll', 'poll-dude-domain' ):
 			check_admin_referer( 'wp-polls_add-poll' );
 
-			$text = poll_dude_poll_config('add', $base_name);
+			$text = $poll_dude->admin->poll_config('add', $base_name);
+			//$text = poll_dude_poll_config('add', $base_name);
 			break;
 	}
 }

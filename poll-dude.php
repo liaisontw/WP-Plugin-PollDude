@@ -54,7 +54,7 @@ global $poll_dude;
 $poll_dude = new Poll_Dude();
 
 
-
+/*
 function poll_dude_poll_config($mode, $base_name) {
 	global $wpdb, $poll_dude;
 	$text = '';
@@ -269,6 +269,8 @@ function poll_dude_poll_config($mode, $base_name) {
 
     return $text;
 }
+*/
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

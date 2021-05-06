@@ -5,7 +5,7 @@ if(!current_user_can('manage_polls')) {
 }
 
 ### Variables Variables Variables
-
+global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
@@ -23,7 +23,9 @@ if(!empty($_POST['do'])) {
         // Edit Poll
         case __('Edit Poll', 'poll-dude-domain'):
             check_admin_referer( 'wp-polls_edit-poll' );
-            $text = poll_dude_poll_config('edit', $base_name);
+
+            $text = $poll_dude->admin->poll_config('edit', $base_name);
+            //$text = poll_dude_poll_config('edit', $base_name);
             break;
     }
 }
@@ -32,7 +34,7 @@ if(!empty($_POST['do'])) {
 switch($mode) {
     // Poll Logging
     case 'logs':
-        require('polls-logs.php');
+        //require('polls-logs.php');
         break;
     // Edit A Poll
     case 'edit':
