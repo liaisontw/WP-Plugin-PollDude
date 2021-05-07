@@ -8,6 +8,18 @@
 .wp-polls, .wp-polls-form {
 	/* background-color: #ffffff; */
 }
+
+/*div > div > ul > li > */
+
+.wp-polls-pollbar {
+	margin: 1px;
+	font-size: 6px;
+	line-height: 8px;
+	height: 8px;
+	background: #d8e1eb;
+	border: 1px solid #c8c8c8;
+}
+
 .wp-polls ul li, .wp-polls-ul li, .wp-polls-ans ul li {
 	text-align: left;
 	background-image: none;
@@ -103,3 +115,4 @@
 	color: #000000;
 	background-color: #FFFFFF;
 }
+

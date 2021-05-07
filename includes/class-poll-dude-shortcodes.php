@@ -404,11 +404,13 @@ class Poll_Dude_Shortcode {
 				// Let User See What Options They Voted
 				if ( in_array( $poll_answer_id, $user_voted, true ) ) {
 					// Results Body Variables
-					$template_answer = $this->removeslashes( get_option( 'poll_template_resultbody2' ) );
+					//$template_answer = $this->removeslashes( get_option( 'poll_template_resultbody2' ) );
+					$template_answer = $this->removeslashes( get_option( 'polldude_template_resultbody2' ) );
 					$template_answer = apply_filters('wp_polls_template_resultbody2_markup', $template_answer, $poll_answer, $template_variables);
 				} else {
 					// Results Body Variables
-					$template_answer = $this->removeslashes (get_option( 'poll_template_resultbody' ) );
+					//$template_answer = $this->removeslashes (get_option( 'poll_template_resultbody' ) );
+					$template_answer = $this->removeslashes (get_option( 'polldude_template_resultbody' ) );
 					$template_answer = apply_filters('wp_polls_template_resultbody_markup', $template_answer, $poll_answer, $template_variables);
 				}
 

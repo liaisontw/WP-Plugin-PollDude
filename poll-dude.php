@@ -96,6 +96,7 @@ add_action('wp_enqueue_scripts', 'poll_dude_scripts');
 function poll_dude_scripts() {
 	wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, POLL_DUDE_VERSION, 'all');
 	
+	
 	$pollbar = get_option( 'poll_bar' );
 	if( $pollbar['style'] === 'use_css' ) {
 		$pollbar_css = '.wp-polls .pollbar {'."\n";
@@ -107,16 +108,19 @@ function poll_dude_scripts() {
 		$pollbar_css .= "\t".'border: 1px solid #'.$pollbar['border'].';'."\n";
 		$pollbar_css .= '}'."\n";
 	} else {
+
 		$pollbar_css = '.wp-polls .pollbar {'."\n";
 		$pollbar_css .= "\t".'margin: 1px;'."\n";
 		$pollbar_css .= "\t".'font-size: '.($pollbar['height']-2).'px;'."\n";
 		$pollbar_css .= "\t".'line-height: '.$pollbar['height'].'px;'."\n";
 		$pollbar_css .= "\t".'height: '.$pollbar['height'].'px;'."\n";
-		$pollbar_css .= "\t".'background-image: url(\''.plugins_url('wp-polls/images/'.$pollbar['style'].'/pollbg.gif').'\');'."\n";
+		$pollbar_css .= "\t".'background: #'.$pollbar['background'].';'."\n";
 		$pollbar_css .= "\t".'border: 1px solid #'.$pollbar['border'].';'."\n";
 		$pollbar_css .= '}'."\n";
+
 	}
 	wp_add_inline_style( 'poll-dude', $pollbar_css );
+
 	$poll_ajax_style = get_option('poll_ajax_style');
 	wp_enqueue_script('poll-dude', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), POLL_DUDE_VERSION, true);
 	wp_localize_script('poll-dude', 'pollsL10n', array(
