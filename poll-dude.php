@@ -63,6 +63,29 @@ $poll_dude = new Poll_Dude();
 
 ### Function: Manage Polls
 
+	add_action('wp_enqueue_scripts', 'poll_dude_scripts_temp');
+	
+	
+	function poll_dude_scripts_temp() {
+		//$this->enqueue_styles();
+		//$this->enqueue_scripts();
+		//wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, POLL_DUDE_VERSION, 'all');
+		wp_enqueue_script('poll-dude', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), POLL_DUDE_VERSION, true);
+		/*
+		$poll_ajax_style = get_option('poll_ajax_style');
+		wp_localize_script('poll-dude', 'pollsL10n', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'wp-polls'),
+			'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
+			'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
+			'show_loading' => (int) $poll_ajax_style['loading'],
+			'show_fading' => (int) $poll_ajax_style['fading']
+		));
+		*/
+		
+	}
+
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-poll-dude-activator.php

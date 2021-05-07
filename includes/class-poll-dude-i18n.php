@@ -50,11 +50,12 @@ class Poll_Dude_i18n {
 	 * @since    1.0.0
 	 */
 
-	public function __construct() {
+	public function __construct($plugin_name, $version) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		add_action( 'plugins_loaded',  array($this, 'polldude_textdomain') );
 		add_action( 'admin_i18n',      array($this, 'admin_i18n_scripts') );
+		//add_action( 'public_i18n',     array($this, 'public_i18n_scripts') );
 	}
 
 	public function polldude_textdomain() {
@@ -65,6 +66,20 @@ class Poll_Dude_i18n {
 		);
 	}
 	
+	public function public_i18n_scripts() {
+		//wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, POLL_DUDE_VERSION, 'all');
+		//wp_enqueue_script('poll-dude', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), POLL_DUDE_VERSION, true);
+		$poll_ajax_style = get_option('poll_ajax_style');
+		wp_localize_script('poll-dude', 'pollsL10n', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'wp-polls'),
+			'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
+			'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
+			'show_loading' => (int) $poll_ajax_style['loading'],
+			'show_fading' => (int) $poll_ajax_style['fading']
+		));
+	}
+
 	public function admin_i18n_scripts($hook_suffix){
 		$admin_pages = array($this->plugin_name.'/poll-dude.php', $this->plugin_name.'/includes/page-poll-dude-add-form.php', $this->plugin_name.'/includes/page-poll-dude-control-panel.php');
 		if(in_array($hook_suffix, $admin_pages, true)) {

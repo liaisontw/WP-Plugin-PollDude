@@ -78,9 +78,8 @@ class Poll_Dude {
 		$this->name = 'poll-dude';
 		$this->load_dependencies();
 		$this->define_admin_hooks();
+		$this->define_public_hooks();
 		$this->set_locale();
-		//$this->define_public_hooks();
-		
 	}
 
 	/**
@@ -101,7 +100,7 @@ class Poll_Dude {
 	 */
 	private function load_dependencies() {
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/class-poll-dude-utility.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-utility.php';
 		
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -124,8 +123,8 @@ class Poll_Dude {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/includes/class-poll-dude-shortcodes.php';
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-poll-dude-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-shortcodes.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-poll-dude-public.php';
 
 		$this->loader = new Poll_Dude_Loader();
 		$this->utility = new poll_dude\Poll_Dude_Utility();
@@ -176,11 +175,10 @@ class Poll_Dude {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Plugin_Name_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Poll_Dude_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 	}
 
 	/**
