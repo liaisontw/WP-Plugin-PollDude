@@ -77,9 +77,10 @@ class Poll_Dude {
 		}
 		$this->name = 'poll-dude';
 		$this->load_dependencies();
-		//$this->set_locale();
 		$this->define_admin_hooks();
+		$this->set_locale();
 		//$this->define_public_hooks();
+		
 	}
 
 	/**
@@ -145,11 +146,8 @@ class Poll_Dude {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Poll_Dude_i18n();
+		$plugin_i18n = new Poll_Dude_i18n($this->get_plugin_name(), $this->get_version() );
 
-		//add_action( 'plugins_loaded', 'polldude_textdomain' );
-
-		//$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'polldude_textdomain' );
 	}
 
 	/**

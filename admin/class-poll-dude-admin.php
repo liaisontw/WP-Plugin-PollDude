@@ -30,7 +30,7 @@ class Poll_Dude_Admin {
 	 * @access   private
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $name;
+	private $plugin_name;
 
 	/**
 	 * The version of this plugin.
@@ -49,11 +49,84 @@ class Poll_Dude_Admin {
 	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
-		$this->name = $plugin_name;
+		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		add_action( 'admin_menu',                array($this, 'admin_menu') );
 		add_action( 'admin_enqueue_scripts',     array($this, 'admin_scripts') );
 		add_action( 'wp_ajax_poll-dude-control', array($this, 'control_panel') );
+	}
+
+	public function admin_scripts($hook_suffix){
+		$admin_pages = array($this->plugin_name.'/poll-dude.php', $this->plugin_name.'/includes/page-poll-dude-add-form.php', $this->plugin_name.'/includes/page-poll-dude-control-panel.php');
+		if(in_array($hook_suffix, $admin_pages, true)) {
+			
+			$this->enqueue_scripts();
+			$this->enqueue_styles();
+			/*
+			wp_enqueue_style('poll-dude-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
+			wp_enqueue_script('poll-dude-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
+			*/
+			wp_localize_script('poll-dude', 'pollsAdminL10n', array(
+					'admin_ajax_url' => admin_url('admin-ajax.php'),
+					'text_direction' => is_rtl() ? 'right' : 'left',
+					'text_delete_poll' => __('Delete Poll', 'poll-dude-domain'),
+					'text_no_poll_logs' => __('No poll logs available.', 'poll-dude-domain'),
+					'text_delete_all_logs' => __('Delete All Logs', 'poll-dude-domain'),
+					'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'poll-dude-domain'),
+					'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'poll-dude-domain'),
+					'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'poll-dude-domain'),
+					'text_delete_poll_ans' => __('Delete Poll Answer', 'poll-dude-domain'),
+					'text_open_poll' => __('Open Poll', 'poll-dude-domain'),
+					'text_close_poll' => __('Close Poll', 'poll-dude-domain'),
+					'text_answer' => __('Answer', 'poll-dude-domain'),
+					'text_remove_poll_answer' => __('Remove', 'poll-dude-domain')
+			));
+		}
+	}
+
+	/**
+	 * Register the stylesheets for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_styles() {
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/poll-dude-admin.css', array(), $this->version, 'all' );
+		//wp_enqueue_style('poll-dude-admin',   plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
+	
+		/**
+		 * This function is provided for demonstration purposes only.
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Plugin_Name_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Plugin_Name_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */		
+
+	}
+
+	/**
+	 * Register the JavaScript for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_scripts() {
+
+		/**
+		 * This function is provided for demonstration purposes only.
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Plugin_Name_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Plugin_Name_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-admin.js', array( 'jquery' ), $this->version, true );
+		//wp_enqueue_script('poll-dude-admin',   plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
 	}
 
 	public function admin_menu() {
@@ -91,28 +164,7 @@ class Poll_Dude_Admin {
 		);
 	}
 
-	public function admin_scripts($hook_suffix){
-		$admin_pages = array($this->name.'/poll-dude.php', $this->name.'/includes/page-poll-dude-add-form.php', $this->name.'/includes/page-poll-dude-control-panel.php');
-		if(in_array($hook_suffix, $admin_pages, true)) {
-			wp_enqueue_style('poll-dude-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
-			wp_enqueue_script('poll-dude-admin', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
-			wp_localize_script('poll-dude-admin', 'pollsAdminL10n', array(
-					'admin_ajax_url' => admin_url('admin-ajax.php'),
-					'text_direction' => is_rtl() ? 'right' : 'left',
-					'text_delete_poll' => __('Delete Poll', 'poll-dude-domain'),
-					'text_no_poll_logs' => __('No poll logs available.', 'poll-dude-domain'),
-					'text_delete_all_logs' => __('Delete All Logs', 'poll-dude-domain'),
-					'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'poll-dude-domain'),
-					'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'poll-dude-domain'),
-					'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'poll-dude-domain'),
-					'text_delete_poll_ans' => __('Delete Poll Answer', 'poll-dude-domain'),
-					'text_open_poll' => __('Open Poll', 'poll-dude-domain'),
-					'text_close_poll' => __('Close Poll', 'poll-dude-domain'),
-					'text_answer' => __('Answer', 'poll-dude-domain'),
-					'text_remove_poll_answer' => __('Remove', 'poll-dude-domain')
-				));
-		}
-	}
+	
 
 	public function control_panel() {
 		global $wpdb, $poll_dude;
@@ -464,48 +516,6 @@ class Poll_Dude_Admin {
 		return $text;
 	}
 
-	/**
-	 * Register the stylesheets for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-		//wp_enqueue_style('poll-dude', plugins_url('poll-dude/admin/css/poll-dude-admin.css'), false, POLL_DUDE_VERSION, 'all');
-		//wp_enqueue_style( $this->plugin_name, plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/poll-dude-admin.css', array(), $this->version, 'all' );
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Plugin_Name_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Plugin_Name_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */		
-
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Plugin_Name_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Plugin_Name_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), $this->version, false );
-		//wp_enqueue_script('poll-dude', plugins_url('poll-dude/admin/js/poll-dude-admin.js'), array('jquery'), POLL_DUDE_VERSION, true);
-	}
+	
 
 }

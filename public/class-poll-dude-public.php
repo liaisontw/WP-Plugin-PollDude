@@ -20,7 +20,7 @@
  * @subpackage Plugin_Name/public
  * @author     Your Name <email@example.com>
  */
-class Plugin_Name_Public {
+class Poll_Dude_Public {
 
 	/**
 	 * The ID of this plugin.
@@ -48,11 +48,26 @@ class Plugin_Name_Public {
 	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
+		add_action('wp_enqueue_scripts', 'poll_dude_scripts');
 	}
+	
+	public function poll_dude_scripts() {
+		$this->enqueue_styles();
+		wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, POLL_DUDE_VERSION, 'all');
+		wp_enqueue_script('poll-dude', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), POLL_DUDE_VERSION, true);
+		$poll_ajax_style = get_option('poll_ajax_style');
+		wp_localize_script('poll-dude', 'pollsL10n', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'wp-polls'),
+			'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
+			'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
+			'show_loading' => (int) $poll_ajax_style['loading'],
+			'show_fading' => (int) $poll_ajax_style['fading']
+		));
+	}
+
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
@@ -72,9 +87,8 @@ class Plugin_Name_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-name-public.css', array(), $this->version, 'all' );
-
+		//wp_enqueue_style('poll-dude', plugins_url('poll-dude/public/css/poll-dude-public.css'), false, POLL_DUDE_VERSION, 'all');
 	}
 
 	/**
