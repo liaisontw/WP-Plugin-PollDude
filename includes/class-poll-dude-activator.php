@@ -136,9 +136,10 @@ class Poll_Dude_Activator {
 		'<p style="text-align: center;">'.__('Total Voters', 'poll-dude-domain').': <strong>%POLL_TOTALVOTERS%</strong></p>'.
 		'<p style="text-align: center;"><a href="#VotePoll" onclick="poll_booth(%POLL_ID%); return false;" title="'.__('Vote For This Poll', 'poll-dude-domain').'">'.__('Vote', 'poll-dude-domain').'</a></p>'.
 		'</div>');
+		*/
 		add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
 		add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));
-		*/
+
 		add_option('poll_currentpoll', 0);
 		add_option('poll_latestpoll', 1);
 		add_option('poll_archive_perpage', 5);

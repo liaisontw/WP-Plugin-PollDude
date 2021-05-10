@@ -190,7 +190,7 @@ class Poll_Dude_Shortcode {
 		}
 		//$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
 		
-		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
+		$template_question  ="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
 		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
 		$template_question .="<ul class=\"wp-polls-ul\">";
 
@@ -237,7 +237,7 @@ class Poll_Dude_Shortcode {
 				}
 			}
 
-			$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+			$template_footer  = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
 			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
 
 			// Print Out Voting Form Footer Template
@@ -571,29 +571,7 @@ class Poll_Dude_Shortcode {
 		exit();
 	}
 
-	/*
-	add_option('poll_template_voteheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
-	'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
-	'<ul class="wp-polls-ul">');
-	add_option('poll_template_votebody', '<li><input type="%POLL_CHECKBOX_RADIO%" id="poll-answer-%POLL_ANSWER_ID%" name="poll_%POLL_ID%" value="%POLL_ANSWER_ID%" /> <label for="poll-answer-%POLL_ANSWER_ID%">%POLL_ANSWER%</label></li>');
-	add_option('poll_template_votefooter', '</ul>'.
-	'<p style="text-align: center;"><input type="button" name="vote" value="   '.__('Vote', 'poll-dude-domain').'   " class="Buttons" onclick="poll_vote(%POLL_ID%);" /></p>'.
-	'<p style="text-align: center;"><a href="#ViewPollResults" onclick="poll_result(%POLL_ID%); return false;" title="'.__('View Results Of This Poll', 'poll-dude-domain').'">'.__('View Results', 'poll-dude-domain').'</a></p>'.
-	'</div>');
-	add_option('poll_template_resultheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
-	'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
-	'<ul class="wp-polls-ul">');
-	add_option('poll_template_resultbody', '<li>%POLL_ANSWER% <small>(%POLL_ANSWER_PERCENTAGE%%'.__(',', 'poll-dude-domain').' %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')</small><div class="wp-polls-pollbar" style="width: %POLL_ANSWER_IMAGEWIDTH%%;" title="%POLL_ANSWER_TEXT% (%POLL_ANSWER_PERCENTAGE%% | %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')"></div></li>');
-	add_option('poll_template_resultbody2', '<li><strong><i>%POLL_ANSWER% <small>(%POLL_ANSWER_PERCENTAGE%%'.__(',', 'poll-dude-domain').' %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')</small></i></strong><div class="wp-polls-pollbar" style="width: %POLL_ANSWER_IMAGEWIDTH%%;" title="'.__('You Have Voted For This Choice', 'poll-dude-domain').' - %POLL_ANSWER_TEXT% (%POLL_ANSWER_PERCENTAGE%% | %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')"></div></li>');
-	add_option('polldude_template_resultbody', '<li>%POLL_ANSWER% <small>(%POLL_ANSWER_PERCENTAGE%%'.__(',', 'poll-dude-domain').' %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')</small><div class="wp-polls-pollbar" style="width: %POLL_ANSWER_IMAGEWIDTH%%;" title="%POLL_ANSWER_TEXT% (%POLL_ANSWER_PERCENTAGE%% | %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')"></div></li>');
-	add_option('polldude_template_resultbody2', '<li><strong><i>%POLL_ANSWER% <small>(%POLL_ANSWER_PERCENTAGE%%'.__(',', 'poll-dude-domain').' %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')</small></i></strong><div class="wp-polls-pollbar" style="width: %POLL_ANSWER_IMAGEWIDTH%%;" title="'.__('You Have Voted For This Choice', 'poll-dude-domain').' - %POLL_ANSWER_TEXT% (%POLL_ANSWER_PERCENTAGE%% | %POLL_ANSWER_VOTES% '.__('Votes', 'poll-dude-domain').')"></div></li>');
-	add_option('poll_template_resultfooter', '</ul>'.
-	'<p style="text-align: center;">'.__('Total Voters', 'poll-dude-domain').': <strong>%POLL_TOTALVOTERS%</strong></p>'.
-	'</div>');
-	add_option('poll_template_resultfooter2', '</ul>'.
-	'<p style="text-align: center;">'.__('Total Voters', 'poll-dude-domain').': <strong>%POLL_TOTALVOTERS%</strong></p>'.
-	'<p style="text-align: center;"><a href="#VotePoll" onclick="poll_booth(%POLL_ID%); return false;" title="'.__('Vote For This Poll', 'poll-dude-domain').'">'.__('Vote', 'poll-dude-domain').'</a></p>'.
-	'</div>');
+    /*
 	add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
 	add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));
 	*/
