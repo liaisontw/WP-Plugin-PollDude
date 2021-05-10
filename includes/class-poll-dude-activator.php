@@ -113,9 +113,7 @@ class Poll_Dude_Activator {
 			}
 		}
 		// Add In Options (16 Records)
-		add_option('poll_dude_template_voteheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
-		'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
-		'<ul class="wp-polls-ul">');
+		/*
 		add_option('poll_template_voteheader', '<p style="text-align: center;"><strong>%POLL_QUESTION%</strong></p>'.
 		'<div id="polls-%POLL_ID%-ans" class="wp-polls-ans">'.
 		'<ul class="wp-polls-ul">');
@@ -140,6 +138,7 @@ class Poll_Dude_Activator {
 		'</div>');
 		add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
 		add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));
+		*/
 		add_option('poll_currentpoll', 0);
 		add_option('poll_latestpoll', 1);
 		add_option('poll_archive_perpage', 5);
