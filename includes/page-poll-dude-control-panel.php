@@ -25,14 +25,13 @@ if(!empty($_POST['do'])) {
             check_admin_referer( 'wp-polls_edit-poll' );
 
             $text = $poll_dude->admin->poll_config('edit', $base_name);
-            //$text = poll_dude_poll_config('edit', $base_name);
             break;
     }
 }
 
 ### Determines Which Mode It Is
 switch($mode) {
-    // Poll Logging
+        // Poll Logging
     case 'logs':
         //require('polls-logs.php');
         break;
@@ -138,8 +137,15 @@ switch($mode) {
                                     _e('Closed', 'poll-dude-domain');
                                 }
                                 echo "</td>\n";
-                                echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</a></td>\n";
-                                echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
+                                //echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</a></td>\n";
+                                //echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
+                                echo "<td>\n";
+                                echo "<select onchange=\"javascript:location.href=this.value;\">\n";
+                                echo "<option>Action</option>";
+                                echo "<option value=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</option>";
+                                echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</option>";
+                                echo "</select>";
+                                echo "</td>\n";
                                 echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude-domain')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"delete\">".__('Delete', 'poll-dude-domain')."</a></td>\n";
                                 echo '</tr>';
                                 $i++;
