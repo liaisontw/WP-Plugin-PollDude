@@ -98,6 +98,7 @@ function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, non
 	}
 }
 
+
 //(function ($) {
 //	'use strict';
 

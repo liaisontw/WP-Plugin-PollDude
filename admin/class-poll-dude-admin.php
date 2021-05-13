@@ -106,6 +106,7 @@ class Poll_Dude_Admin {
 		 * class.
 		 */
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-admin.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( 'jquery-ui-sortable' );
 		//wp_enqueue_script('poll-dude-admin',   plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
 	}
 

@@ -1,3 +1,8 @@
+<script type="text/javascript">
+jQuery(document).ready(function ($) {
+    $("#poll_answers").sortable();
+});
+</script>
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.$poll_dude->utility->removeslashes($text).'</div>'; } else { echo '<div id="message" class="updated" style="display: none;"></div>'; } ?>
 <form method="post" action="<?php echo 
 	('edit' == $mode)? admin_url($current_page.'&amp;mode=edit&amp;id='.$poll_id)
@@ -31,7 +36,6 @@
 		<?php
 			if ('edit' != $mode) { 
 				$poll_noquestion = 2;
-
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
 					echo "<th width=\"20%\" scope=\"row\" valign=\"top\">".sprintf(__('Answer %s', 'poll-dude-domain'), number_format_i18n($i))."</th>\n";
