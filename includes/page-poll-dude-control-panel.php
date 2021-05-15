@@ -70,6 +70,7 @@ switch($mode) {
             <table class="widefat">
                 <thead>
                     <tr>
+                        <th><input id="cb-select-all" type="checkbox" name="pollq[]" value="1"></th>
                         <th><?php _e('ID', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Question', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Total Voters', 'poll-dude-domain'); ?></th>
@@ -113,6 +114,7 @@ switch($mode) {
                                     }
                                 }
                                 echo "<tr id=\"poll-$poll_id\" $style>\n";
+                                echo "<td><input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"poll_ans[]\" value=\"$polla_aid\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
                                 if($current_poll > 0) {

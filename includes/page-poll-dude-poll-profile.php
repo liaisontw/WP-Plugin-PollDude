@@ -30,9 +30,9 @@ jQuery(document).ready(function ($) {
                 <th width="20%" scope="row" valign="top" style="text-align: right">
 					<?php 
 						//_e('Answer No.', 'poll-dude-domain') 
-						if ('edit' == $mode) { 
-							echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"polla[]\" value=\"1\">\n";
-						}
+						//if ('edit' == $mode) { 
+						//	echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"polla[]\" value=\"1\">\n";
+						//}
 					?>
 				</th>
                 <th width="60%" scope="row" valign="top"><?php _e('Answer Text', 'poll-dude-domain') ?></th>
@@ -65,7 +65,7 @@ jQuery(document).ready(function ($) {
                         echo "<tr id=\"poll-answer-$polla_aid\">\n";
                         echo "<th width=\"20%\" scope=\"row\" valign=\"top\" style=\"text-align: right\">";
 						//echo sprintf(__('Answer %s', 'poll-dude-domain'), number_format_i18n($i));
-						echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"poll_ans[]\" value=\"$polla_aid\">";
+						//echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"poll_ans[]\" value=\"$polla_aid\">";
 						echo "</th>\n";
                         echo "<td width=\"60%\"><input type=\"text\" size=\"50\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
                         echo "<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"delete_poll_ans_dev($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude-domain')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" /></td>\n";
