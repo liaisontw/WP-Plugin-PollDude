@@ -106,7 +106,7 @@ switch($mode) {
                         <th colspan="7"><?php 
                             //wp_create_nonce('wp-polls_bulk-delete');
                             wp_nonce_field( 'wp-polls_bulk-delete' );
-                            echo "<input name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
                         ?></th>
                     </tr>
                     <tr>
@@ -207,7 +207,7 @@ switch($mode) {
                         <th><?php 
                             //wp_create_nonce('wp-polls_bulk-delete');
                             wp_nonce_field( 'wp-polls_bulk-delete' );
-                            echo "<input name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
                         ?></th>
                     </tr>
                 </tbody>
