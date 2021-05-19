@@ -99,35 +99,6 @@ function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, non
 }
 
 
-function delete_checked_answer(poll_id, poll_aid, poll_aid_vote, poll_confirm, nonce) {
-	delete_poll_ans_confirm = confirm(poll_confirm);
-	if (delete_poll_ans_confirm) {
-		global_poll_id = poll_id;
-		global_poll_aid = poll_aid;
-		global_poll_aid_votes = poll_aid_vote;
-		temp_vote_count = 0;
-		/*
-		jQuery(document).ready(function ($) {
-			$.ajax({
-				type: 'POST',
-				url: pollsAdminL10n.admin_ajax_url,
-				data: 'do=' + pollsAdminL10n.text_delete_poll_ans + '&pollq_id=' + poll_id + '&polla_aid=' + poll_aid + '&action=poll-dude-control&_ajax_nonce=' + nonce,
-				cache: false,
-				success: function (data) {
-					$('#message').html(data);
-					$('#message').show();
-					$('#poll_total_votes').html((parseInt($('#poll_total_votes').html()) - parseInt(global_poll_aid_votes)));
-					$('#pollq_totalvotes').val(temp_vote_count);
-					$('#poll-answer-' + global_poll_aid).remove();
-					check_totalvotes();
-					reorder_answer_num();
-				}
-			});
-		});
-		*/
-	}
-}
-
 //(function ($) {
 //	'use strict';
 

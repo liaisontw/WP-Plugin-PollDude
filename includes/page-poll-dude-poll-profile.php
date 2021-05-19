@@ -79,20 +79,7 @@ jQuery(document).ready(function ($) {
 		</tbody>
 		<tfoot>
 			<tr>
-				<td width="20%">
-					<input  type="button" 
-							value="<?php _e('Delete Selected Answer', 'poll-dude-domain') ?>" 
-							<?php
-								echo "onclick=\"";
-								if('edit' == $mode) {
-									delete_checked_answer($poll_id, $polla_aid, $polla_votes, sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude-domain')), esc_js( esc_attr( $polla_answers ) ) ), wp_create_nonce('wp-polls_delete-poll-answer'));
-								}else{
-									echo " ";
-								}
-								echo "\"";
-							?>
-							class="button" />
-				</td>
+				<td width="20%"></td>
 				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude-domain') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'add_poll_answer_edit();' ; ?>" class="button" /></td>
 				<td width="20%" align="<?php echo ('edit' != $mode)? '': $last_col_align; ?>">
 					<strong><?php ('edit' != $mode)? _e('', 'poll-dude-domain'): _e('Total Votes:', 'poll-dude-domain'); ?></strong> 

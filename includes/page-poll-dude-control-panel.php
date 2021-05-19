@@ -29,6 +29,34 @@ if(!empty($_POST['do'])) {
     }
 }
 
+if (isset($_POST['bulk_delete'])) {
+    global $poll_dude, $wpdb;
+    //check_ajax_referer('wp-polls_bulk-delete');
+    check_admin_referer( 'wp-polls_bulk-delete' );
+    for($i=0; $i<count($_POST['pollq']); $i++){
+        $pollq_id = $_POST['pollq'][$i];
+        
+        $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+        $poll_question_text = wp_kses_post( $poll_dude->utility->removeslashes($pollq_question));        
+        $delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
+        $delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
+        $delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+        $poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");        
+        
+        $error = false;
+        if(!$delete_poll_question) {
+            echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+            $error = true;
+        }
+        if(!$error) {
+            echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude-domain'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+        }
+                
+        update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
+        //do_action( 'wp_polls_delete_poll', $pollq_id );
+    }
+}
+
 ### Determines Which Mode It Is
 switch($mode) {
         // Poll Logging
@@ -54,6 +82,7 @@ switch($mode) {
         break;
     // Main Page
     default:
+        
         $polls = $wpdb->get_results( "SELECT * FROM $wpdb->pollsq  ORDER BY pollq_timestamp DESC" );
         $total_ans =  $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->pollsa" );
         $total_votes = 0;
@@ -67,17 +96,29 @@ switch($mode) {
             <h2><?php _e('Manage Polls', 'poll-dude-domain'); ?></h2>
             <h3><?php _e('Polls', 'poll-dude-domain'); ?></h3>
             <br style="clear" />
+            <form action="" method="post">
             <table class="widefat">
                 <thead>
                     <tr>
-                        <th><input id="cb-select-all" type="checkbox" name="pollq[]" value="1"></th>
+                        <th></th>
+                        <th><input id="cb-select-all1" type="checkbox" name="bulk_delete" value="all" style="width:10px; height:15px;" ></th>
+                        <th></th>
+                        <th colspan="7"><?php 
+                            //wp_create_nonce('wp-polls_bulk-delete');
+                            wp_nonce_field( 'wp-polls_bulk-delete' );
+                            echo "<input name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                        ?></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
                         <th><?php _e('ID', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Question', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Total Voters', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Start Date/Time', 'poll-dude-domain'); ?></th>
                         <th><?php _e('End Date/Time', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Status', 'poll-dude-domain'); ?></th>
-                        <th colspan="3"><?php _e('Action', 'poll-dude-domain'); ?></th>
+                        <th colspan="2"><?php _e('Action', 'poll-dude-domain'); ?></th>
                     </tr>
                 </thead>
                 <tbody id="manage_polls">
@@ -114,7 +155,8 @@ switch($mode) {
                                     }
                                 }
                                 echo "<tr id=\"poll-$poll_id\" $style>\n";
-                                echo "<td><input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"poll_ans[]\" value=\"$polla_aid\"></td>\n";
+                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude-domain')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude-domain')."</a></td>\n";
+                                echo "<td><input id=\"cb-select-$poll_id\" type=\"checkbox\" name=\"pollq[]\" value=\"$poll_id\"  style=\"width:10px; height:15px;\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
                                 if($current_poll > 0) {
@@ -142,13 +184,12 @@ switch($mode) {
                                 //echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</a></td>\n";
                                 //echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
                                 echo "<td>\n";
-                                echo "<select onchange=\"javascript:location.href=this.value;\">\n";
-                                echo "<option>Action</option>";
+                                echo "<select style=\"font-size:12px; height:10px;\" onchange=\"javascript:location.href=this.value;\">\n";
+                                echo "<option disabled selected value>Action</option>";
                                 echo "<option value=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</option>";
                                 echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</option>";
                                 echo "</select>";
                                 echo "</td>\n";
-                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude-domain')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"delete\">".__('Delete', 'poll-dude-domain')."</a></td>\n";
                                 echo '</tr>';
                                 $i++;
                                 $total_votes+= $poll_totalvotes;
@@ -159,8 +200,20 @@ switch($mode) {
                             echo '<tr><td colspan="9" align="center"><strong>'.__('No Polls Found', 'poll-dude-domain').'</strong></td></tr>';
                         }
                     ?>
+                    <tr>
+                        <th></th>
+                        <th><input id="cb-select-all2" type="checkbox" name="bulk_delete" value="all" style="width:10px; height:15px;" ></th>
+                        <th></th>
+                        <th><?php 
+                            //wp_create_nonce('wp-polls_bulk-delete');
+                            wp_nonce_field( 'wp-polls_bulk-delete' );
+                            echo "<input name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                        ?></th>
+                    </tr>
                 </tbody>
             </table>
+            </form>
+            
         </div>
         <p>&nbsp;</p>
 

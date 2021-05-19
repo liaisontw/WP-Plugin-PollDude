@@ -250,7 +250,7 @@ class Poll_Dude_Admin {
 					// Delete Poll
 					case __('Delete Poll', 'poll-dude-domain'):
 						check_ajax_referer('wp-polls_delete-poll');
-						echo 'Delete Poll';
+						//echo 'Delete Poll';
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
 						$delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
