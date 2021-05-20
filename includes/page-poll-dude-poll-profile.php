@@ -1,8 +1,3 @@
-<script type="text/javascript">
-jQuery(document).ready(function ($) {
-    $("#poll_answers").sortable();
-});
-</script>
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.$poll_dude->utility->removeslashes($text).'</div>'; } else { echo '<div id="message" class="updated" style="display: none;"></div>'; } ?>
 <form method="post" action="<?php echo 
 	('edit' == $mode)? admin_url($current_page.'&amp;mode=edit&amp;id='.$poll_id)
@@ -185,7 +180,7 @@ jQuery(document).ready(function ($) {
 		</tr>
 	</table>
 	<p style="text-align: center;">
-	<input type="submit" name="do" value="<?php ('edit' != $mode)? _e('Add Poll', 'poll-dude-domain'): _e('Edit Poll', 'poll-dude-domain'); ?>"  class="button-primary" />&nbsp;&nbsp;
+	<input id="add_edit" type="button" name="do" value="<?php ('edit' != $mode)? _e('Add Poll', 'poll-dude-domain'): _e('Edit Poll', 'poll-dude-domain'); ?>"  class="button-primary" />&nbsp;&nbsp;
 	<?php
 		if('edit'==$mode) {
 			if($poll_active == 1) {
