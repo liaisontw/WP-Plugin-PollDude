@@ -66,6 +66,8 @@ if (isset($_POST['bulk_delete'])) {
 switch($mode) {
         // Poll Logging
     case 'logs':
+
+        require_once('page-poll-dude-poll-logs.php');
         //require('polls-logs.php');
         break;
     // Edit A Poll
@@ -186,7 +188,8 @@ switch($mode) {
                                 }
                                 echo "</td>\n";
                                 //echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</a></td>\n";
-                                //echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
+                                echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
+                                /*
                                 echo "<td>\n";
                                 echo "<select style=\"font-size:12px; height:10px;\" onchange=\"javascript:location.href=this.value;\">\n";
                                 echo "<option disabled selected value>Action</option>";
@@ -194,6 +197,7 @@ switch($mode) {
                                 echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</option>";
                                 echo "</select>";
                                 echo "</td>\n";
+                                */
                                 echo '</tr>';
                                 $i++;
                                 $total_votes+= $poll_totalvotes;
@@ -220,50 +224,6 @@ switch($mode) {
         </div>
         <p>&nbsp;</p>
 
-        <!-- Polls Stats -->
-        <div class="wrap">
-            <h3><?php _e('Polls Stats:', 'poll-dude-domain'); ?></h3>
-            <br style="clear" />
-            <table class="widefat">
-            <tr>
-                <th><?php _e('Total Polls:', 'poll-dude-domain'); ?></th>
-                <td><?php echo number_format_i18n($i); ?></td>
-            </tr>
-            <tr class="alternate">
-                <th><?php _e('Total Polls\' Answers:', 'poll-dude-domain'); ?></th>
-                <td><?php echo number_format_i18n($total_ans); ?></td>
-            </tr>
-            <tr>
-                <th><?php _e('Total Votes Cast:', 'poll-dude-domain'); ?></th>
-                <td><?php echo number_format_i18n($total_votes); ?></td>
-            </tr>
-            <tr class="alternate">
-                <th><?php _e('Total Voters:', 'poll-dude-domain'); ?></th>
-                <td><?php echo number_format_i18n($total_voters); ?></td>
-            </tr>
-            </table>
-        </div>
-        <p>&nbsp;</p>
 
-        <!-- Delete Polls Logs -->
-        <div class="wrap">
-            <h3><?php _e('Polls Logs', 'poll-dude-domain'); ?></h3>
-            <br style="clear" />
-            <div align="center" id="poll_logs">
-            <?php
-                $poll_ips = (int) $wpdb->get_var( "SELECT COUNT(pollip_id) FROM $wpdb->pollsip" );
-                if($poll_ips > 0) {
-            ?>
-                <strong><?php _e('Are You Sure You Want To Delete All Polls Logs?', 'poll-dude-domain'); ?></strong><br /><br />
-                <input type="checkbox" name="delete_logs_yes" id="delete_logs_yes" value="yes" />&nbsp;<label for="delete_logs_yes"><?php _e('Yes', 'poll-dude-domain'); ?></label><br /><br />
-                <input type="button" value="<?php _e('Delete All Logs', 'poll-dude-domain'); ?>" class="button" onclick="delete_poll_logs('<?php echo esc_js(__('You are about to delete all poll logs. This action is not reversible.', 'poll-dude-domain')); ?>', '<?php echo wp_create_nonce('wp-polls_delete-polls-logs'); ?>');" />
-            <?php
-                } else {
-                    _e('No poll logs available.', 'poll-dude-domain');
-                }
-            ?>
-            </div>
-            <p><?php _e('Note: If your logging method is by IP and Cookie or by Cookie, users may still be unable to vote if they have voted before as the cookie is still stored in their computer.', 'poll-dude-domain'); ?></p>
-        </div>
 <?php
 } // End switch($mode)

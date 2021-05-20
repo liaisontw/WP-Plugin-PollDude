@@ -22,16 +22,9 @@
 	<table class="form-table">
 		<thead>
             <tr>
-                <th width="20%" scope="row" valign="top" style="text-align: right">
-					<?php 
-						//_e('Answer No.', 'poll-dude-domain') 
-						//if ('edit' == $mode) { 
-						//	echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"polla[]\" value=\"1\">\n";
-						//}
-					?>
-				</th>
                 <th width="60%" scope="row" valign="top"><?php _e('Answer Text', 'poll-dude-domain') ?></th>
                 <th width="20%" scope="row" valign="top" style="text-align: <?php echo $last_col_align; ?>;"><?php ('edit' != $mode)? _e('', 'poll-dude-domain'): _e('No. Of Votes', 'poll-dude-domain'); ?></th>
+				<!-- <th width="20%" scope="row" valign="top" style="text-align: right"></th> -->
             </tr>
         </thead>
 		<tbody id="poll_answers">
@@ -40,10 +33,8 @@
 				$poll_noquestion = 2;
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
-					echo "<th width=\"20%\" scope=\"row\" valign=\"top\">";
-					//echo sprintf(__('Answer %s', 'poll-dude-domain'), number_format_i18n($i));
-					echo "</th>\n";
 					echo "<td width=\"60%\"><input type=\"text\" size=\"50\" maxlength=\"200\" name=\"polla_answers[]\" />&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Remove', 'poll-dude-domain')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
+					echo "<th width=\"20%\" scope=\"row\" valign=\"top\"></th>\n";
 					echo "</tr>\n";
 				}
 			} else {
@@ -58,13 +49,10 @@
                         $polla_votes = (int) $poll_answer->polla_votes;
                         $pollip_answers[$polla_aid] = $polla_answers;
                         echo "<tr id=\"poll-answer-$polla_aid\">\n";
-                        echo "<th width=\"20%\" scope=\"row\" valign=\"top\" style=\"text-align: right\">";
-						//echo sprintf(__('Answer %s', 'poll-dude-domain'), number_format_i18n($i));
-						//echo "<input id=\"cb-select-$polla_aid\" type=\"checkbox\" name=\"poll_ans[]\" value=\"$polla_aid\">";
-						echo "</th>\n";
                         echo "<td width=\"60%\"><input type=\"text\" size=\"50\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
                         echo "<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"delete_poll_ans_dev($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude-domain')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" /></td>\n";
-                        echo "<td width=\"20%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"check_totalvotes();\" /></td>\n</tr>\n";
+                        echo "<td width=\"30%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"check_totalvotes();\" /></td>\n</tr>\n";
+						//echo "<th width=\"20%\" scope=\"row\" valign=\"top\" style=\"text-align: right\"></th>\n";
                         $poll_actual_totalvotes += $polla_votes;
                         $i++;
                     }
@@ -74,9 +62,10 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td width="20%"></td>
 				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude-domain') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'add_poll_answer_edit();' ; ?>" class="button" /></td>
-				<td width="20%" align="<?php echo ('edit' != $mode)? '': $last_col_align; ?>">
+			</tr>
+			<tr>
+                <td width="30%" align="<?php ('edit' != $mode)? '': '$last_col_align'; ?>">
 					<strong><?php ('edit' != $mode)? _e('', 'poll-dude-domain'): _e('Total Votes:', 'poll-dude-domain'); ?></strong> 
 					<strong id="poll_total_votes">
 						<?php echo ('edit' == $mode)? number_format_i18n($poll_actual_totalvotes): ''; ?>
@@ -86,11 +75,7 @@
                             echo $poll_actual_totalvotes.'" onblur="check_totalvotes();" />';
 						} ?>
 				</td>
-			</tr>
-			<tr>
-                <td width="20%">&nbsp;</td>
-                <td width="60%">&nbsp;</td>
-                <td width="20%" align="<?php echo $last_col_align; ?>">
+				<td width="30%" align="<?php ('edit' != $mode)? '': $last_col_align; ?>">
 					<strong><?php if ('edit' == $mode) { 
 									_e('Total Voters:', 'poll-dude-domain'); 
 									echo number_format_i18n($poll_totalvoters); 
@@ -100,6 +85,8 @@
 						echo '<input type="text" size="4" name="pollq_totalvoters" value="'.$poll_totalvoters.'" />';
 					}?>
 				</td>
+				<!--<td width="60%">&nbsp;</td> 
+					<td width="20%">&nbsp;</td> -->
             </tr>
 		</tfoot>
 	</table>
