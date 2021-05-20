@@ -64,11 +64,8 @@ if (isset($_POST['bulk_delete'])) {
 
 ### Determines Which Mode It Is
 switch($mode) {
-        // Poll Logging
-    case 'logs':
-
-        require_once('page-poll-dude-poll-logs.php');
-        //require('polls-logs.php');
+    case 'add':
+        require_once('page-poll-dude-add-form.php');
         break;
     // Edit A Poll
     case 'edit':
@@ -110,9 +107,12 @@ switch($mode) {
                         <th></th>
                         <th><input id="cb-select-all1" type="checkbox" name="delete_all" value="delete_all" style="width:10px; height:15px;" ></th>
                         <th></th>
-                        <th colspan="7"><?php 
+                        <th colspan="4"><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                        ?></th>
+                        <th colspan="2"><?php
+                        echo "<a href=\"$base_page&amp;mode=add\" class=\"button-secondary\">".__('Add New Poll', 'poll-dude-domain')."</a>\n";
                         ?></th>
                     </tr>
                     <tr>
