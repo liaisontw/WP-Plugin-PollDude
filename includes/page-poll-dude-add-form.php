@@ -25,6 +25,7 @@ if ( ! empty($_POST['do'] ) ) {
 		case __( 'Add Poll', 'poll-dude-domain' ):
 			check_admin_referer( 'wp-polls_add-poll' );
 
+			echo "Test\n";
 			$text = $poll_dude->admin->poll_config('add', $base_name);
 			//$text = poll_dude_poll_config('add', $base_name);
 			break;

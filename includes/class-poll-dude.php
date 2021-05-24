@@ -78,7 +78,7 @@ class Poll_Dude {
 		$this->name = 'poll-dude';
 		$this->load_dependencies();
 		$this->define_admin_hooks();
-		$this->set_locale();
+		//$this->set_locale();
 		$this->define_public_hooks();
 	}
 

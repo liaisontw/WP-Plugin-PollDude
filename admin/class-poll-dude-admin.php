@@ -61,6 +61,22 @@ class Poll_Dude_Admin {
 		if(in_array($hook_suffix, $admin_pages, true)) {			
 			$this->enqueue_scripts();
 			$this->enqueue_styles();
+			wp_localize_script('poll-dude', 'pollsAdminL10n', array(
+					'admin_ajax_url' => admin_url('admin-ajax.php'),
+					'text_direction' => is_rtl() ? 'right' : 'left',
+					'text_delete_poll' => __('Delete Poll', 'poll-dude-domain'),
+					'text_no_poll_logs' => __('No poll logs available.', 'poll-dude-domain'),
+					'text_delete_all_logs' => __('Delete All Logs', 'poll-dude-domain'),
+					'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'poll-dude-domain'),
+					'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'poll-dude-domain'),
+					'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'poll-dude-domain'),
+					'text_delete_poll_ans' => __('Delete Poll Answer', 'poll-dude-domain'),
+					'text_open_poll' => __('Open Poll', 'poll-dude-domain'),
+					'text_close_poll' => __('Close Poll', 'poll-dude-domain'),
+					'text_answer' => __('Ans', 'poll-dude-domain'),
+					'text_remove_poll_answer' => __('Remove', 'poll-dude-domain'),
+					'text_delete_poll_answer' => __('Delete', 'poll-dude-domain')
+			));
 		}
 	}
 
@@ -358,6 +374,7 @@ class Poll_Dude_Admin {
 					$text .= '<p style="color: red;">' . sprintf(__('Error In Adding Poll \'%s\'.', 'poll-dude-domain'), $pollq_question) . '</p>';
 				}
 				$polla_answers_new = isset( $_POST['polla_answers'] ) ? $_POST['polla_answers'] : array();
+				
 
 				$polla_qid = (int) $wpdb->insert_id;
 				if(empty($polla_answers_new)) {
@@ -425,31 +442,35 @@ class Poll_Dude_Admin {
 				
 				foreach($polla_answers_new as $polla_answer_new) {
 					$polla_answer_new = wp_kses_post( trim( $polla_answer_new ) );
-					$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
+					if ( ! empty( $polla_answer_new ) ) {
+						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
+							
+						$add_poll_answers = $wpdb->insert(
+							$wpdb->pollsa,
+							array(
+								'polla_qid'      => $polla_qid,
+								'polla_answers'  => $polla_answer_new,
+								'polla_votes'    => $polla_answer_new_vote
+							),
+							array(
+								'%d',
+								'%s',
+								'%d'
+							)
+						);
 						
-					$add_poll_answers = $wpdb->insert(
-						$wpdb->pollsa,
-						array(
-							'polla_qid'      => $polla_qid,
-							'polla_answers'  => $polla_answer_new,
-							'polla_votes'    => $polla_answer_new_vote
-						),
-						array(
-							'%d',
-							'%s',
-							'%d'
-						)
-					);
-					
-					if( ! $add_poll_answers ) {
-						$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'poll-dude-domain'), $polla_answer_new).'</p>';
-					} else {
-						if ('edit' === $mode) {
-							$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'poll-dude-domain'), $polla_answer_new).'</p>';
+						if( ! $add_poll_answers ) {
+							$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'poll-dude-domain'), $polla_answer_new).'</p>';
+						} else {
+							if ('edit' === $mode) {
+								$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'poll-dude-domain'), $polla_answer_new).'</p>';
+							}
 						}
+						
+						$i++;
+					}else {
+						$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude-domain' ) . '</p>';
 					}
-					
-					$i++;
 				}
 			}
 

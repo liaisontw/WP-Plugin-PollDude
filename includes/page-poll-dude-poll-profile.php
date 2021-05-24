@@ -64,7 +64,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude-domain') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'add_poll_answer_edit();' ; ?>" class="button" /></td>
+				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude-domain') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'poll_dude_add_answer_edit();' ; ?>" class="button" /></td>
 			</tr>
 			<tr>
                 <td width="30%" align="<?php ('edit' != $mode)? '': '$last_col_align'; ?>">
@@ -169,7 +169,7 @@
 		</tr>
 	</table>
 	<p style="text-align: center;">
-	<input id="add_edit" type="button" name="do" value="<?php ('edit' != $mode)? _e('Add Poll', 'poll-dude-domain'): _e('Edit Poll', 'poll-dude-domain'); ?>"  class="button-primary" />&nbsp;&nbsp;
+	<input id="add_edit" type="submit" name="do" value="<?php ('edit' != $mode)? _e('Add Poll', 'poll-dude-domain'): _e('Edit Poll', 'poll-dude-domain'); ?>"  class="button-primary" />&nbsp;&nbsp;
 	<?php
 		if('edit'==$mode) {
 			if($poll_active == 1) {
