@@ -164,6 +164,25 @@ class Poll_Dude_Shortcode {
 		do_action('wp_polls_display_pollvote');
 		global $wpdb;
 		
+		if(isset($_POST['g-recaptcha-response'])){
+          	$captcha=$_POST['g-recaptcha-response'];
+        }
+		if(isset($captcha)){
+			$secretKey = "6LeKHuAaAAAAAF5FM0kWSqHHXz8iU-g2MoFr0qSE";
+			$ip = $_SERVER['REMOTE_ADDR'];
+			// post request to server
+			$url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+			$response = file_get_contents($url);
+			$responseKeys = json_decode($response,true);
+			// should return JSON with success as true
+			if($responseKeys["success"]) {
+					echo '<h2>Thanks for posting comment</h2>';
+			} else {
+					echo '<h2>You are spammer ! Get the @$%K out</h2>';
+			}
+			unset($_POST['g-recaptcha-response']);
+		}
+
 		// Temp Poll Result
 		$temp_pollvote = '';
 		// Get Poll Question Data
@@ -191,9 +210,6 @@ class Poll_Dude_Shortcode {
 		//$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
 		
 		$template_question = "";
-		foreach ($_POST as $key => $value) {
-   			 $template_question .= '<p><strong>' . $key.':</strong> '.$value.'</p>';
-  		}
 		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
 		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
 		$template_question .="<ul class=\"wp-polls-ul\">";
@@ -242,7 +258,8 @@ class Poll_Dude_Shortcode {
 			}
 
 			
-			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+			//$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"submit\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\"  /></p>";
 			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
 			$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"6LeKHuAaAAAAABxP_a0ucZTX06tJw6de4iK2AiAe\"></div>";
 
@@ -250,7 +267,8 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
-			$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
+			$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
+			//$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>";
 			
 			if($display_loading) {
 				$poll_ajax_style = get_option('poll_ajax_style');

@@ -113,17 +113,8 @@ class Poll_Dude_Public {
 		 */
 		//wp_enqueue_script('poll-dude', plugins_url('poll-dude/public/js/poll-dude-public.js'), array('jquery'), POLL_DUDE_VERSION, true);
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-public.js', array( 'jquery' ), $this->version, true );
-		/*
-		$poll_ajax_style = get_option('poll_ajax_style');
-		wp_localize_script('poll-dude', 'pollsL10n', array(
-			'ajax_url' => admin_url('admin-ajax.php'),
-			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'wp-polls'),
-			'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
-			'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
-			'show_loading' => (int) $poll_ajax_style['loading'],
-			'show_fading' => (int) $poll_ajax_style['fading']
-		));
-		*/
+		wp_register_script('google-recaptcha','https://www.google.com/recaptcha/api.js');
+		wp_enqueue_script('google-recaptcha');
 	}
 
 }

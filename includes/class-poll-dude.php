@@ -59,6 +59,7 @@ class Poll_Dude {
 	public $utility;
 	public $shortcode;
 	public $admin;
+	public $recaptcha;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -124,14 +125,18 @@ class Poll_Dude {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-shortcodes.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/recaptchalib.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-poll-dude-public.php';
+		
 
 		$this->loader = new Poll_Dude_Loader();
 		$this->utility = new poll_dude\Poll_Dude_Utility();
 		if(isset($this->utility)){
 			$this->shortcode = new poll_dude\Poll_Dude_Shortcode($this->utility);
 		}
-
+		// your secret key
+		//$secret = "6LcePAATAAAAABjXaTsy7gwcbnbaF5XgJKwjSNwT";
+		//$this->recaptcha = new ReCaptcha($secret);
 	}
 
 	/**
