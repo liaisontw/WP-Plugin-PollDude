@@ -51,9 +51,11 @@ class Poll_Dude_Admin {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		add_action( 'admin_menu',                array($this, 'admin_menu') );
-		add_action( 'admin_enqueue_scripts',     array($this, 'admin_scripts') );
-		add_action( 'wp_ajax_poll-dude-control', array($this, 'control_panel') );
+		$this->cron_activate();
+		add_action( 'admin_menu',                	array($this, 'admin_menu') );
+		add_action( 'admin_enqueue_scripts',     	array($this, 'admin_scripts') );
+		add_action( 'wp_ajax_poll-dude-control', 	array($this, 'control_panel') );
+		add_action(	'poll_dude_cron', 				array($this, 'cron_update') );
 	}
 
 	public function admin_scripts($hook_suffix){
@@ -504,8 +506,7 @@ class Poll_Dude_Admin {
 				do_action( 'wp_polls_update_poll', $pollq_id );
 			}
 			
-			//cron_polls_place();
-			
+			$this->cron_activate();
 		}else{
 			$text .= '<p style="color: red;">' . __( 'Poll Question is empty.', 'poll-dude-domain' ) . '</p>';
 		}
@@ -513,6 +514,27 @@ class Poll_Dude_Admin {
 		return $text;
 	}
 
+	### Function: Cron Activate
+	public function cron_activate() {
+		wp_clear_scheduled_hook('poll_dude_cron');
+		if (!wp_next_scheduled('poll_dude_cron')) {
+			wp_schedule_event(time(), 'hourly', 'poll_dude_cron');
+		}
+	}
+
+	### Funcion: Check All Polls Status To Check If It Expires
 	
+	public function cron_update() {
+		global $wpdb;
+		// Close Poll
+		$close_polls = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_active = 0 WHERE pollq_expiry < '".current_time('timestamp')."' AND pollq_expiry != 0 AND pollq_active != 0");
+		// Open Future Polls
+		$active_polls = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_active = 1 WHERE pollq_timestamp <= '".current_time('timestamp')."' AND pollq_active = -1");
+		// Update Latest Poll If Future Poll Is Opened
+		if($active_polls) {
+			$update_latestpoll = update_option('poll_latestpoll', polls_latest_id());
+		}
+		return;
+	}	
 
 }
