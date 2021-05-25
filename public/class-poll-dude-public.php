@@ -66,7 +66,8 @@ class Poll_Dude_Public {
 			'text_valid' => __('Please choose a valid poll answer.', 'wp-polls'),
 			'text_multiple' => __('Maximum number of choices allowed: ', 'wp-polls'),
 			'show_loading' => (int) $poll_ajax_style['loading'],
-			'show_fading' => (int) $poll_ajax_style['fading']
+			'show_fading' => (int) $poll_ajax_style['fading'],
+			'g_recaptcha'=>__('Google reCaptcha V2', 'poll-dude')
 		));
 	}
 

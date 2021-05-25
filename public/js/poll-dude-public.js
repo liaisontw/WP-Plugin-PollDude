@@ -2,6 +2,30 @@
 pollsL10n.show_loading = parseInt(pollsL10n.show_loading);
 pollsL10n.show_fading = parseInt(pollsL10n.show_fading);
 
+function polldude_recaptcha(current_poll_id) {
+	jQuery(document).ready(function ($) {
+		//console.log('captcha response: ' + grecaptcha.getResponse());
+		poll_nonce = $('#poll_' + current_poll_id + '_nonce').val();
+		$.ajax({
+			type: 'POST',
+			url: pollsL10n.ajax_url,
+			data: 'action=poll-dude&view=recaptcha&poll_id=' + current_poll_id + '&poll_' + current_poll_id + '_nonce=' + poll_nonce + "&g-recaptcha-response=" + grecaptcha.getResponse(),
+			cache: false,
+			success: function (data) {
+				alert(data);
+				poll_vote(current_poll_id);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(xhr.responseText);
+				console.log(thrownError);
+			}
+		});
+	});
+	/*
+	*/
+}
+
 // When User Vote For Poll
 function poll_vote(current_poll_id) {
 	jQuery(document).ready(function ($) {
@@ -44,7 +68,6 @@ function poll_vote(current_poll_id) {
 function poll_process(current_poll_id, poll_answer_id) {
 	jQuery(document).ready(function ($) {
 		poll_nonce = $('#poll_' + current_poll_id + '_nonce').val();
-		console.log(poll_nonce);
 		if (pollsL10n.show_fading) {
 			$('#polls-' + current_poll_id).fadeTo('def', 0);
 			if (pollsL10n.show_loading) {

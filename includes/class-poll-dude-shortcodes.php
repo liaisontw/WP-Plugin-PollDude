@@ -1,5 +1,4 @@
 <?php
-namespace poll_dude;
 
 class Poll_Dude_Shortcode {
 
@@ -164,25 +163,6 @@ class Poll_Dude_Shortcode {
 		do_action('wp_polls_display_pollvote');
 		global $wpdb;
 		
-		if(isset($_POST['g-recaptcha-response'])){
-          	$captcha=$_POST['g-recaptcha-response'];
-        }
-		if(isset($captcha)){
-			$secretKey = "6LeKHuAaAAAAAF5FM0kWSqHHXz8iU-g2MoFr0qSE";
-			$ip = $_SERVER['REMOTE_ADDR'];
-			// post request to server
-			$url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-			$response = file_get_contents($url);
-			$responseKeys = json_decode($response,true);
-			// should return JSON with success as true
-			if($responseKeys["success"]) {
-					echo '<h2>Thanks for posting comment</h2>';
-			} else {
-					echo '<h2>You are spammer ! Get the @$%K out</h2>';
-			}
-			unset($_POST['g-recaptcha-response']);
-		}
-
 		// Temp Poll Result
 		$temp_pollvote = '';
 		// Get Poll Question Data
@@ -259,7 +239,7 @@ class Poll_Dude_Shortcode {
 
 			
 			//$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
-			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"submit\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\"  /></p>";
+			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
 			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
 			$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"6LeKHuAaAAAAABxP_a0ucZTX06tJw6de4iK2AiAe\"></div>";
 
@@ -545,6 +525,28 @@ class Poll_Dude_Shortcode {
 		return $this->display_pollresult($poll_id, $poll_aid_array, false);
 	}
 
+	public function polldude_recaptcha() {
+		if(isset($_POST['g-recaptcha-response'])){
+			$captcha=$_POST['g-recaptcha-response'];
+		}else{
+			throw new InvalidArgumentException(sprintf(__('Please click <I am not a robot>.', 'poll-dude')));
+		}
+		if(isset($captcha)){
+			$secretKey = "6LeKHuAaAAAAAF5FM0kWSqHHXz8iU-g2MoFr0qSE";
+			$ip = $_SERVER['REMOTE_ADDR'];
+			// post request to server
+			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
+			$response = file_get_contents($url);
+			$responseKeys = json_decode($response,true);
+			// should return JSON with success as true
+			if($responseKeys["success"]) {
+				_e('Recaptcha verify passed.', 'poll-dude');
+			} else {
+				_e('Recaptcha verify failed.', 'poll-dude');
+			}
+			unset($_POST['g-recaptcha-response']);
+		}
+	}
 
 	### Function: Vote Poll
 	
@@ -553,6 +555,7 @@ class Poll_Dude_Shortcode {
 		global $poll_dude;
 
 		if( isset( $_REQUEST['action'] ) && sanitize_key( $_REQUEST['action'] ) === 'poll-dude') {
+			//var_dump($_REQUEST);
 			// Load Headers
 			//polldude_textdomain();
 			header('Content-Type: text/html; charset='.get_option('blog_charset').'');
@@ -574,6 +577,13 @@ class Poll_Dude_Shortcode {
 
 			// Which View
 			switch( sanitize_key( $_REQUEST['view'] ) ) {
+				case 'recaptcha':
+					try {
+						$this->polldude_recaptcha();
+					} catch (Exception $e) {
+						echo $e->getMessage();
+					}
+					break;
 				// Poll Vote
 				case 'process':			
 					try {
