@@ -187,17 +187,7 @@ switch($mode) {
                                     _e('Closed', 'poll-dude-domain');
                                 }
                                 echo "</td>\n";
-                                //echo "<td><a href=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</a></td>\n";
                                 echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
-                                /*
-                                echo "<td>\n";
-                                echo "<select style=\"font-size:12px; height:10px;\" onchange=\"javascript:location.href=this.value;\">\n";
-                                echo "<option disabled selected value>Action</option>";
-                                echo "<option value=\"$base_page&amp;mode=logs&amp;id=$poll_id\" class=\"edit\">".__('Logs', 'poll-dude-domain')."</option>";
-                                echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</option>";
-                                echo "</select>";
-                                echo "</td>\n";
-                                */
                                 echo '</tr>';
                                 $i++;
                                 $total_votes+= $poll_totalvotes;
@@ -218,12 +208,8 @@ switch($mode) {
                         ?></th>
                     </tr>
                 </tbody>
-            </table>
-            </form>
-            
+            </form>         
         </div>
         <p>&nbsp;</p>
-
-
 <?php
 } // End switch($mode)
