@@ -29,7 +29,7 @@ function check_totalvotes() { temp_vote_count = 0; jQuery(document).ready(functi
 function add_poll_answer_add() {
 	jQuery(document).ready(function ($) {
 		//$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>');
-		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><td width="60%"><input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" />&nbsp;&nbsp;&nbsp;<input type="text" size="50" maxlength="200" name="polla_answers_new[]" /></td><td width="20%" align="' + pollsAdminL10n.text_direction + '">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>');
+		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><td width="60%"><input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" />&nbsp;&nbsp;&nbsp;<input type="text" size="50" maxlength="200" name="polla_answers_new[]" /></td></tr>');
 		count_poll_answer++;
 		//reorder_answer_num();
 	});
