@@ -33,7 +33,9 @@
 				$poll_noquestion = 2;
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
-					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\"#0000FF\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
+					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\""; 
+					echo "#0000FF"; 
+					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
 					//echo "<td width=\"20%\" scope=\"row\" valign=\"top\"></td>\n";
 					echo "</tr>\n";
 				}
@@ -51,8 +53,9 @@
                         echo "<tr id=\"poll-answer-$polla_aid\">\n";
                         echo "<td width=\"60%\">";
 						echo "<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
-						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\"#0000FF\" >";
-						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"delete_poll_ans_dev($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude-domain')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" />";
+						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\"";
+						echo "#0000FF";
+						echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude-domain')."\" onclick=\"delete_poll_ans_dev($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude-domain')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('wp-polls_delete-poll-answer')."');\" class=\"button\" />";
 						echo "</td>\n";
                         echo "<td width=\"20%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"check_totalvotes();\" /></td>\n</tr>\n";
 						//echo "<th width=\"20%\" scope=\"row\" valign=\"top\" style=\"text-align: right\"></th>\n";
