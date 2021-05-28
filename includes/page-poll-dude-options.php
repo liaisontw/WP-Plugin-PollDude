@@ -16,16 +16,18 @@ $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
 
 
 
+
 if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 	check_admin_referer('polldude_options');
     $update_pd_options          = array();
 	$update_pd_text             = array();
-    //$pd_recaptcha_enable    = isset( $_POST['enable_recaptcha'] ) ? $_POST['enable_recaptcha'] : $pd_recaptcha_enable;
+    //$pd_recaptcha_enable    = isset( $_POST['enable'] ) ? $_POST['enable'] : $pd_recaptcha_enable;
     $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? $poll_dude->utility->removeslashes( $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
     $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? $poll_dude->utility->removeslashes( $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
-    //$update_pd_options[]    = update_option('pd_recaptcha_enable', $pd_recaptcha_enable);
+    //$update_pd_options[]    = update_option('pd_recaptcha_enable', (int)$pd_recaptcha_enable);
     $update_pd_options[]    = update_option('pd_recaptcha_sitekey', $pd_recaptcha_sitekey);
     $update_pd_options[]    = update_option('pd_recaptcha_secretkey', $pd_recaptcha_secretkey);
+    //$update_pd_text[]       = __('reCaptcha Enable', 'poll-dude');
     $update_pd_text[]       = __('reCaptcha Sitekey', 'poll-dude');
     $update_pd_text[]       = __('reCaptcha Secretkey', 'poll-dude');
 
