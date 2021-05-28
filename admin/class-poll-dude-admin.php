@@ -129,23 +129,6 @@ class Poll_Dude_Admin {
 	}
 
 	public function admin_menu() {
-		//add_menu_page(
-		//	/* $page_title */__( 'Poll Dude', 'poll-dude-domain' ),
-		//	/* $menu_title */__( 'Poll Dude', 'poll-dude-domain' ),
-		//	/* $capability */'manage_options',
-		//	/* $menu_slug  */'poll_dude_manager',
-		//	/* $function   */'',
-		//	'dashicons-forms'
-		//);
-//
-		//add_submenu_page( 
-		//	/* $parent_slug */ 'poll_dude_manager', 
-		//	/* $page_title  */ __( 'Options', 'poll-dude-domain' ), 
-		//	/* $menu_title  */ __( 'Options', 'poll-dude-domain' ), 
-		//	/* $capability  */ 'manage_options', 
-		//	/* $menu_slug   */ plugin_dir_path( dirname( __FILE__ ) ) . '/includes/page-poll-dude-options.php'
-		//);
-
 		add_menu_page(
 			/* $page_title */__( 'Poll Dude', 'poll-dude-domain' ),
 			/* $menu_title */__( 'Poll Dude', 'poll-dude-domain' ),

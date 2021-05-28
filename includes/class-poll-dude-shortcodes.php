@@ -241,7 +241,7 @@ class Poll_Dude_Shortcode {
 			//$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
 			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
 			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
-			$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"6LeKHuAaAAAAABxP_a0ucZTX06tJw6de4iK2AiAe\"></div>";
+			$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
 
 			// Print Out Voting Form Footer Template
 			$temp_pollvote .= "\t\t$template_footer\n";
@@ -532,7 +532,7 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Please click <I am not a robot>.', 'poll-dude')));
 		}
 		if(isset($captcha)){
-			$secretKey = "6LeKHuAaAAAAAF5FM0kWSqHHXz8iU-g2MoFr0qSE";
+			$secretKey = get_option('pd_recaptcha_secretkey');
 			$ip = $_SERVER['REMOTE_ADDR'];
 			// post request to server
 			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);

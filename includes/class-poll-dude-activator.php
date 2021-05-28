@@ -112,46 +112,19 @@ class Poll_Dude_Activator {
 				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
 			}
 		}
-		add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
-		add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));
-
+		add_option('pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_');
+		add_option('pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('poll_currentpoll', 0);
 		add_option('poll_latestpoll', 1);
-		add_option('poll_archive_perpage', 5);
-		add_option('poll_ans_sortby', 'polla_aid');
-		add_option('poll_ans_sortorder', 'asc');
-		add_option('poll_ans_result_sortby', 'polla_votes');
-		add_option('poll_ans_result_sortorder', 'desc');
-		// Database Upgrade For WP-Polls 2.1
-		add_option('poll_logging_method', '3');
-		add_option('poll_allowtovote', '2');
-		// Database Upgrade For WP-Polls 2.12
-		add_option('poll_archive_url', site_url('pollsarchive'));
-		// Database Upgrade For WP-Polls 2.13
 		add_option('poll_bar', array('style' => 'default', 'background' => 'd8e1eb', 'border' => 'c8c8c8', 'height' => 8));
-		// Database Upgrade For WP-Polls 2.14
 		add_option('poll_close', 1);
-		// Database Upgrade For WP-Polls 2.20
 		add_option('poll_ajax_style', array('loading' => 1, 'fading' => 1));
-		add_option('poll_template_pollarchivelink', '<ul>'.
-		'<li><a href="%POLL_ARCHIVE_URL%">'.__('Polls Archive', 'poll-dude-domain').'</a></li>'.
-		'</ul>');
-		add_option('poll_archive_displaypoll', 2);
-		add_option('poll_template_pollarchiveheader', '');
-		add_option('poll_template_pollarchivefooter', '<p>'.__('Start Date:', 'poll-dude-domain').' %POLL_START_DATE%<br />'.__('End Date:', 'poll-dude-domain').' %POLL_END_DATE%</p>');
-
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->pollsq" );
 		if ( 0 === $pollq_totalvoters ) {
 			$wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvoters = pollq_totalvotes" );
 		}
 
-		// Database Upgrade For WP-Polls 2.30
 		add_option('poll_cookielog_expiry', 0);
-		add_option('poll_template_pollarchivepagingheader', '');
-		add_option('poll_template_pollarchivepagingfooter', '');
-		// Database Upgrade For WP-Polls 2.50
-		delete_option('poll_archive_show');
-
 		// Index
 		$index = $wpdb->get_results( "SHOW INDEX FROM $wpdb->pollsip;" );
 		$key_name = array();
@@ -188,6 +161,33 @@ class Poll_Dude_Activator {
 		if( ! $role->has_cap( 'manage_polls' ) ) {
 			$role->add_cap( 'manage_polls' );
 		}
+
+
+/*
+		add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
+		add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));	
+		add_option('poll_archive_perpage', 5);
+		add_option('poll_ans_sortby', 'polla_aid');
+		add_option('poll_ans_sortorder', 'asc');
+		add_option('poll_ans_result_sortby', 'polla_votes');
+		add_option('poll_ans_result_sortorder', 'desc');
+		// Database Upgrade For WP-Polls 2.1
+		add_option('poll_logging_method', '3');
+		add_option('poll_allowtovote', '2');
+		// Database Upgrade For WP-Polls 2.12
+		add_option('poll_archive_url', site_url('pollsarchive'));
+		
+		add_option('poll_template_pollarchivelink', '<ul>'.
+		'<li><a href="%POLL_ARCHIVE_URL%">'.__('Polls Archive', 'poll-dude-domain').'</a></li>'.
+		'</ul>');
+		add_option('poll_archive_displaypoll', 2);
+		add_option('poll_template_pollarchiveheader', '');
+		add_option('poll_template_pollarchivefooter', '<p>'.__('Start Date:', 'poll-dude-domain').' %POLL_START_DATE%<br />'.__('End Date:', 'poll-dude-domain').' %POLL_END_DATE%</p>');
+		add_option('poll_template_pollarchivepagingheader', '');
+		add_option('poll_template_pollarchivepagingfooter', '');
+		// Database Upgrade For WP-Polls 2.50
+		delete_option('poll_archive_show');
+*/
 		
 	}
 
