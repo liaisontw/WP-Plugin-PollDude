@@ -112,6 +112,7 @@ class Poll_Dude_Activator {
 				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
 			}
 		}
+		add_option('pd_recaptcha_enable', 0);
 		add_option('pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('poll_currentpoll', 0);

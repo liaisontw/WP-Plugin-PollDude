@@ -32,7 +32,6 @@ if(!empty($_POST['do'])) {
 if (isset($_POST['bulk_delete'])) {
     global $poll_dude, $wpdb;
     //check_ajax_referer('wp-polls_bulk-delete');
-    echo $_POST['delete_all']."\n";
     check_admin_referer( 'wp-polls_bulk-delete' );
     if(isset($_POST['delete_all'])){
         echo '<p style="color: green;">'.sprintf(__('Poll Deleted all', 'poll-dude-domain')).'</p>';
