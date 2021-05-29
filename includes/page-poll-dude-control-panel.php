@@ -8,11 +8,16 @@ if(!current_user_can('manage_polls')) {
 global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
+$option_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/page-poll-dude-options.php';
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
 $poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
 $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 );
 $text = '';
+//echo $base_page."<br>";
+//echo $option_page."<br>";
+
+
 
 
 
@@ -69,7 +74,7 @@ switch($mode) {
     // Edit A Poll
     case 'edit':
         $last_col_align = is_rtl() ? 'right' : 'left';
-        $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
+        $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
         $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
         $poll_noquestion = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(polla_aid) FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
         $poll_question_text = $poll_dude->utility->removeslashes($poll_question->pollq_question);
@@ -79,9 +84,10 @@ switch($mode) {
         $poll_expiry = trim($poll_question->pollq_expiry);
         $poll_multiple = (int) $poll_question->pollq_multiple;
         $poll_totalvoters = (int) $poll_question->pollq_totalvoters;
-
+        $poll_recaptcha = (int) $poll_question->pollq_recaptcha;
+        //echo $poll_recaptcha."\n";
+        
         require_once('page-poll-dude-poll-profile.php');
-
         break;
     // Main Page
     default:
@@ -106,9 +112,12 @@ switch($mode) {
                         <th></th>
                         <th><input id="cb-select-all1" type="checkbox" name="delete_all" value="delete_all" style="width:10px; height:15px;" ></th>
                         <th></th>
-                        <th colspan="4"><?php 
+                        <th colspan="2"><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                        ?></th>
+                        <th colspan="2"><?php
+                        echo "<a href=\"$option_page\" class=\"button-secondary\">".__('Set reCaptcha Key', 'poll-dude-domain')."</a>\n";
                         ?></th>
                         <th colspan="2"><?php
                         echo "<a href=\"$base_page&amp;mode=add\" class=\"button-secondary\">".__('Add New Poll', 'poll-dude-domain')."</a>\n";

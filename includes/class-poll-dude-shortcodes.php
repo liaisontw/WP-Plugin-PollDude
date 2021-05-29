@@ -161,12 +161,12 @@ class Poll_Dude_Shortcode {
 	### Function: Display Voting Form
 	public function display_pollvote($poll_id, $display_loading = true) { 
 		do_action('wp_polls_display_pollvote');
-		global $wpdb;
+		global $wpdb, $poll_dude;
 		
 		// Temp Poll Result
 		$temp_pollvote = '';
 		// Get Poll Question Data
-		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters FROM $wpdb->pollsq WHERE pollq_id = %d LIMIT 1", $poll_id ) );
+		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->pollsq WHERE pollq_id = %d LIMIT 1", $poll_id ) );
 
 		// Poll Question Variables
 		$poll_question_text = wp_kses_post( $this->removeslashes( $poll_question->pollq_question ) );
@@ -188,6 +188,7 @@ class Poll_Dude_Shortcode {
 			$ans_select = 'radio';
 		}
 		//$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
+		$poll_recaptcha = $poll_question->pollq_recaptcha;
 		
 		$template_question = "";
 		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
@@ -238,17 +239,24 @@ class Poll_Dude_Shortcode {
 			}
 
 			
-			//$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
-			$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+			if($poll_recaptcha){         
+				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+			}else{
+				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+			}
+			
 			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
-			$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
+			if($poll_recaptcha){
+				$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
+			}
 
 			// Print Out Voting Form Footer Template
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
-			$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
-			//$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>";
+			if($poll_recaptcha){
+				$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
+			}
 			
 			if($display_loading) {
 				$poll_ajax_style = get_option('poll_ajax_style');
@@ -555,9 +563,7 @@ class Poll_Dude_Shortcode {
 		global $poll_dude;
 
 		if( isset( $_REQUEST['action'] ) && sanitize_key( $_REQUEST['action'] ) === 'poll-dude') {
-			//var_dump($_REQUEST);
 			// Load Headers
-			//polldude_textdomain();
 			header('Content-Type: text/html; charset='.get_option('blog_charset').'');
 
 			// Get Poll ID
@@ -606,9 +612,5 @@ class Poll_Dude_Shortcode {
 		exit();
 	}
 
-    /*
-	add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
-	add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));
-	*/
 }
 

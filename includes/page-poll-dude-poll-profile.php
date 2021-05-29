@@ -11,6 +11,9 @@
 	<h2><?php ('edit' == $mode)? _e('Edit Poll', 'poll-dude-domain'): _e('Add Poll', 'poll-dude-domain'); ?></h2>
 	<!-- Poll Question -->
 	<h3><?php _e('Poll Question', 'poll-dude-domain'); ?></h3>
+	<input type="hidden" name="polldude_recaptcha" id="polldude_recaptcha" value="0"/>
+	<input type="checkbox" name="polldude_recaptcha" id="polldude_recaptcha" value="1" <?php echo ($poll_recaptcha)? "checked":""; ?>/>
+	<strong><?php _e('Enable reCaptcha', 'poll-dude-domain'); ?></strong>
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Question', 'poll-dude-domain') ?></th>

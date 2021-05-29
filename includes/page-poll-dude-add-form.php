@@ -15,6 +15,7 @@ $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 )
 $poll_active = 0;
 $poll_timestamp = 0;
 $last_col_align = is_rtl() ? 'right' : 'left';
+$poll_recaptcha = 0;
 
 
 ### Form Processing
@@ -24,10 +25,8 @@ if ( ! empty($_POST['do'] ) ) {
 		// Add Poll
 		case __( 'Add Poll', 'poll-dude-domain' ):
 			check_admin_referer( 'wp-polls_add-poll' );
-
-			echo "Test\n";
+			
 			$text = $poll_dude->admin->poll_config('add', $base_name);
-			//$text = poll_dude_poll_config('add', $base_name);
 			break;
 	}
 }

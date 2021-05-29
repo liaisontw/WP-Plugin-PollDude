@@ -314,6 +314,7 @@ class Poll_Dude_Admin {
 			$edit_polltimestamp = isset( $_POST['edit_polltimestamp'] ) && (int) sanitize_key( $_POST['edit_polltimestamp'] ) === 1 ? 1 : 0;
 			$pollq_expiry_no = isset( $_POST['pollq_expiry_no'] ) ? (int) sanitize_key( $_POST['pollq_expiry_no'] ) : 0;
 			$pollq_multiple_yes = isset( $_POST['pollq_multiple_yes'] ) ? (int) sanitize_key( $_POST['pollq_multiple_yes'] ) : 0;
+			$polldude_recaptcha = isset( $_POST['polldude_recaptcha'] ) ? (int) sanitize_key( $_POST['polldude_recaptcha'] ) : 0;
 
 			if(('edit' !== $mode)||($edit_polltimestamp === 1)) {
 				$pollq_timestamp = $poll_dude->utility->time_make('pollq_timestamp');
@@ -354,7 +355,8 @@ class Poll_Dude_Admin {
 							'pollq_active'          => $pollq_active,
 							'pollq_expiry'          => $pollq_expiry,
 							'pollq_multiple'        => $pollq_multiple,
-							'pollq_totalvoters'     => $pollq_totalvoters
+							'pollq_totalvoters'     => $pollq_totalvoters,
+							'pollq_recaptcha'       => $polldude_recaptcha
 							);
 			$pollq_format = array(
 								'%s',
@@ -362,6 +364,7 @@ class Poll_Dude_Admin {
 								'%d',
 								'%d',
 								'%s',
+								'%d',
 								'%d',
 								'%d'
 							); 
@@ -479,26 +482,17 @@ class Poll_Dude_Admin {
 
 			
 			// Update Lastest Poll ID To Poll Options
-			//$latest_pollid = poll_dude_latest_id();
 			$latest_pollid = $poll_dude->utility->latest_poll();
 			$update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
+			//$text .= '<p style="color: green;">$polldude_recaptcha='.$polldude_recaptcha.'</p>';
 			
 			if ('edit' !== $mode) {
-				//global $poll_dude;
-				//$base_name = $poll_dude->get_plugin_base();
 				$base_page = 'admin.php?page='.$base_name;
 				// If poll starts in the future use the correct poll ID
 				$latest_pollid = ( $latest_pollid < $polla_qid ) ? $polla_qid : $latest_pollid;
 				if ( empty( $text ) ) {
 					$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 				} 
-				/*
-				else {
-					if ( $add_poll_question ) {
-						$text .= '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) (Shortcode: %s) added successfully, but there are some errors with the Poll\'s Answers. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll-dude id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', '<input type="text" value=\'[poll id="' . $latest_pollid . '"]\' readonly="readonly" size="10" />', $base_page ) .'</p>';
-					}
-				}
-				*/
 				do_action( 'wp_polls_add_poll', $latest_pollid );
 			} else {
 				if(empty($text)) {

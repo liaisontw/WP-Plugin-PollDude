@@ -77,6 +77,7 @@ class Poll_Dude {
 			$this->version = '1.0.0';
 		}
 		$this->name = 'poll-dude';
+		$this->recaptcha = true;
 		$this->load_dependencies();
 		$this->define_admin_hooks();
 		//$this->set_locale();
@@ -227,6 +228,14 @@ class Poll_Dude {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	public function get_reCaptcha() {
+		return self::recaptcha;
+	}
+
+	public function set_reCaptcha($setting) {
+		$this->recaptcha = $setting;
 	}
 
 }
