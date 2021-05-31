@@ -15,7 +15,7 @@ $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 )
 $poll_active = 0;
 $poll_timestamp = 0;
 $last_col_align = is_rtl() ? 'right' : 'left';
-$poll_recaptcha = 0;
+$poll_recaptcha = 1;
 
 
 ### Form Processing

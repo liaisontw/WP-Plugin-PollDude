@@ -405,14 +405,19 @@ class Poll_Dude_Admin {
 					foreach($get_polla_aids as $get_polla_aid) {
 							$polla_aids[] = (int) $get_polla_aid->polla_aid;
 					}
+					$i = 0;
 					foreach($polla_aids as $polla_aid) {
 						$polla_answers = wp_kses_post( trim( $_POST['polla_aid-'.$polla_aid] ) );
 						$polla_votes = (int) sanitize_key($_POST['polla_votes-'.$polla_aid]);
+						$polla_color = ('edit' !== $mode)? "#0000FF" : $_POST['color_picker'][$i];
+						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude-domain'), $polla_color).'</p>';
+
 						$edit_poll_answer = $wpdb->update(
 							$wpdb->pollsa,
 							array(
 								'polla_answers' => $polla_answers,
-								'polla_votes'   => $polla_votes
+								'polla_votes'   => $polla_votes,
+								'polla_colors'  => $polla_color
 							),
 							array(
 								'polla_qid' => $pollq_id,
@@ -420,7 +425,8 @@ class Poll_Dude_Admin {
 							),
 							array(
 								'%s',
-								'%d'
+								'%d',
+								'%s'
 							),
 							array(
 								'%d',
@@ -432,6 +438,7 @@ class Poll_Dude_Admin {
 						} else {
 							$text .= '<p style="color: green">'.sprintf(__('Poll\'s Answer \'%s\' Edited Successfully.', 'poll-dude-domain'), $polla_answers ).'</p>';
 						}
+						$i++;
 					}
 				} else {
 					$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
@@ -450,18 +457,21 @@ class Poll_Dude_Admin {
 					$polla_answer_new = wp_kses_post( trim( $polla_answer_new ) );
 					if ( ! empty( $polla_answer_new ) ) {
 						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
+						$polla_color           = ('edit' !== $mode)? "#0000FF" : $_POST['color_picker'][$i];
 							
 						$add_poll_answers = $wpdb->insert(
 							$wpdb->pollsa,
 							array(
 								'polla_qid'      => $polla_qid,
 								'polla_answers'  => $polla_answer_new,
-								'polla_votes'    => $polla_answer_new_vote
+								'polla_votes'    => $polla_answer_new_vote,
+								'polla_colors'   => $polla_color
 							),
 							array(
 								'%d',
 								'%s',
-								'%d'
+								'%d',
+								'%s'
 							)
 						);
 						
@@ -484,7 +494,7 @@ class Poll_Dude_Admin {
 			// Update Lastest Poll ID To Poll Options
 			$latest_pollid = $poll_dude->utility->latest_poll();
 			$update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
-			//$text .= '<p style="color: green;">$polldude_recaptcha='.$polldude_recaptcha.'</p>';
+		
 			
 			if ('edit' !== $mode) {
 				$base_page = 'admin.php?page='.$base_name;

@@ -79,6 +79,7 @@ class Poll_Dude_Activator {
 								"polla_qid int(10) NOT NULL default '0'," .
 								"polla_answers varchar(200) character set utf8 NOT NULL default ''," .
 								"polla_votes int(10) NOT NULL default '0'," .
+								"polla_colors varchar(20) character set utf8 NOT NULL default '#0000FF'," .
 								"PRIMARY KEY  (polla_aid)" .
 								") $charset_collate;";
 		$create_table['pollsip'] = "CREATE TABLE $wpdb->pollsip (" .

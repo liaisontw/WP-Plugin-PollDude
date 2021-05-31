@@ -75,7 +75,7 @@ switch($mode) {
     case 'edit':
         $last_col_align = is_rtl() ? 'right' : 'left';
         $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
-        $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
+        $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes, polla_colors FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
         $poll_noquestion = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(polla_aid) FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
         $poll_question_text = $poll_dude->utility->removeslashes($poll_question->pollq_question);
         $poll_totalvotes = (int) $poll_question->pollq_totalvotes;
@@ -116,7 +116,7 @@ switch($mode) {
                             wp_nonce_field( 'wp-polls_bulk-delete' );
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
                         ?></th>
-                        <th colspan="2"><?php
+                        <th colspan="3"><?php
                         echo "<a href=\"$option_page\" class=\"button-secondary\">".__('Set reCaptcha Key', 'poll-dude-domain')."</a>\n";
                         ?></th>
                         <th colspan="2"><?php
@@ -129,6 +129,7 @@ switch($mode) {
                         <th><?php _e('ID', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Question', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Total Voters', 'poll-dude-domain'); ?></th>
+                        <th><?php _e('reCaptcha', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Start Date/Time', 'poll-dude-domain'); ?></th>
                         <th><?php _e('End Date/Time', 'poll-dude-domain'); ?></th>
                         <th><?php _e('Status', 'poll-dude-domain'); ?></th>
@@ -154,6 +155,7 @@ switch($mode) {
                                 } else {
                                     $poll_expiry_text = mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
                                 }
+                                $poll_recaptcha = $poll->pollq_recaptcha;
                                 if($i%2 == 0) {
                                     $style = 'class="alternate"';
                                 }  else {
@@ -184,6 +186,8 @@ switch($mode) {
                                 }
                                 echo wp_kses_post( $poll_question )."</td>\n";
                                 echo '<td>'.number_format_i18n($poll_totalvoters)."</td>\n";
+                                ($poll_recaptcha)? $recaptcha_status = 'Enable' : $recaptcha_status = 'Disable';
+                                echo "<td>$recaptcha_status</td>\n";
                                 echo "<td>$poll_date</td>\n";
                                 echo "<td>$poll_expiry_text</td>\n";
                                 echo '<td>';

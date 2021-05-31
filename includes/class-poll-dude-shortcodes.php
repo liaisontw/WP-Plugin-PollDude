@@ -324,7 +324,7 @@ class Poll_Dude_Shortcode {
 		$template_question .= "<ul class=\"wp-polls-ul\">";
 
 		// Get Poll Answers Data
-		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
+		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes, polla_colors FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
 		//list( $order_by, $sort_order ) = _polls_get_ans_result_sort();
 		//$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_question_id ) );
 		// If There Is Poll Question With Answers
@@ -342,6 +342,7 @@ class Poll_Dude_Shortcode {
 				$poll_answer_id = (int) $poll_answer->polla_aid;
 				$poll_answer_text = wp_kses_post( $this->removeslashes( $poll_answer->polla_answers ) );
 				$poll_answer_votes = (int) $poll_answer->polla_votes;
+				$poll_answer_color = $poll_answer->polla_colors;
 				// Calculate Percentage And Image Bar Width
 				$poll_answer_percentage = 0;
 				$poll_multiple_answer_percentage = 0;
@@ -369,15 +370,14 @@ class Poll_Dude_Shortcode {
 
 				//$poll_answer_imagewidth = 35;
 
+				$template_answer = "";
 				// Let User See What Options They Voted
 				if ( in_array( $poll_answer_id, $user_voted, true ) ) {
 					// Results Body Variables
-					//$template_answer = $this->removeslashes( get_option( 'poll_template_resultbody2' ) );
-					$template_answer = "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small></i></strong><div class=\"wp-polls-pollbar\" style=\"width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude-domain')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
+					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small></i></strong><div class=\"wp-polls-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude-domain')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
 				} else {
 					// Results Body Variables
-					//$template_answer = $this->removeslashes (get_option( 'poll_template_resultbody' ) );
-					$template_answer = "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small><div class=\"wp-polls-pollbar\" style=\"width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
+					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small><div class=\"wp-polls-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
 					
 				}
 
