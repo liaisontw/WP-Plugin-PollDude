@@ -110,7 +110,7 @@ switch($mode) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th><input id="cb-select-all1" type="checkbox" name="delete_all" value="delete_all" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th colspan="2"><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
@@ -212,7 +212,7 @@ switch($mode) {
                     ?>
                     <tr>
                         <th></th>
-                        <th><input id="cb-select-all2" type="checkbox" name="delete_all" value="delete_all" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
@@ -223,5 +223,36 @@ switch($mode) {
             </form>         
         </div>
         <p>&nbsp;</p>
+        <script>
+        
+        jQuery(document).ready(function () {
+            jQuery("#delete_all").click(function() {
+                if(jQuery("#delete_all").prop("checked")) {
+                    jQuery("#delete_all2").prop("checked", true);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", true);
+                    });
+                } else {
+                    jQuery("#delete_all2").prop("checked", false);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", false);
+                    });
+                }
+            });
+            jQuery("#delete_all2").click(function() {
+                if(jQuery("#delete_all2").prop("checked")) {
+                    jQuery("#delete_all").prop("checked", true);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", true);
+                    });
+                } else {
+                    jQuery("#delete_all").prop("checked", false);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", false);
+                    });
+                }
+            });
+        })
+        </script>
 <?php
 } // End switch($mode)
