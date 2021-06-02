@@ -8,7 +8,7 @@ if(!current_user_can('manage_polls')) {
 global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
-$current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
+$current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basename(__FILE__);
 $pd_recaptcha_sitekey   = get_option('pd_recaptcha_sitekey');
 $pd_recaptcha_secretkey = get_option('pd_recaptcha_secretkey');
 $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');

@@ -8,8 +8,8 @@ if(!current_user_can('manage_polls')) {
 global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
-$option_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/page-poll-dude-options.php';
-$current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/includes/'.basename(__FILE__);
+$option_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/page-poll-dude-options.php';
+$current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basename(__FILE__);
 $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) : '' );
 $poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
 $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 );
