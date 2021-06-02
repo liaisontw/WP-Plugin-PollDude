@@ -56,9 +56,7 @@ function add_poll_answer_edit() {
 function remove_poll_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); check_totalvotes(); reorder_answer_num() }) }
 function check_pollq_multiple() { jQuery(document).ready(function (a) { 1 == parseInt(a("#pollq_multiple_yes").val()) ? a("#pollq_multiple").attr("disabled", !1) : (a("#pollq_multiple").val(1), a("#pollq_multiple").attr("disabled", !0)) }) } 
 function check_polltimestamp() { jQuery(document).ready(function (a) { a("#edit_polltimestamp").is(":checked") ? a("#pollq_timestamp").show() : a("#pollq_timestamp").hide() }) };
-//function check_recaptcha() { jQuery(document).ready(function (a) { a("#enable_recaptcha").is(":checked") ? a("#recaptcha_key").show() : a("#recaptcha_key").hide() }) };
 function check_recaptcha() { jQuery(document).ready(function (a) { a("#enable_recaptcha").is(":checked") ? a("#recaptcha_key input").prop('disabled', false) : a("#recaptcha_key input").prop('disabled', true); }) };
-//function check_recaptcha() { jQuery(document).ready(function (a) { a("#enable_recaptcha").is(":checked") ? a("#recaptcha_key").prop('disabled', false) : a("#recaptcha_key").prop('disabled', true); }) };
 function check_pollexpiry() { jQuery(document).ready(function (a) { a("#pollq_expiry_no").is(":checked") ? a("#pollq_expiry").hide() : a("#pollq_expiry").show() }) };
 // Delete Poll
 function delete_poll_dev(poll_id, poll_confirm, nonce) {
@@ -104,6 +102,67 @@ function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, non
 	}
 }
 
+function checkbox_all1() { 
+	jQuery(document).ready(function (a) { 
+		if (a("#delete_all").prop("checked")) {
+			a("#delete_all2").prop("checked", true);
+			a("input[name='pollq[]']").each(function() {
+				a(this).prop("checked", true);
+			});
+		} else {
+			a("#delete_all2").prop("checked", false);
+			a("input[name='pollq[]']").each(function() {
+				a(this).prop("checked", false);
+			});
+		}
+	}) 
+};
+
+function checkbox_all2() { 
+	jQuery(document).ready(function (a) { 
+		if (a("#delete_all2").prop("checked")) {
+			a("#delete_all").prop("checked", true);
+			a("input[name='pollq[]']").each(function() {
+				a(this).prop("checked", true);
+			});
+		} else {
+			a("#delete_all").prop("checked", false);
+			a("input[name='pollq[]']").each(function() {
+				a(this).prop("checked", false);
+			});
+		}
+	}) 
+};
+/*
+jQuery(document).ready(function () {
+            jQuery("#delete_all").click(function() {
+                if(jQuery("#delete_all").prop("checked")) {
+                    jQuery("#delete_all2").prop("checked", true);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", true);
+                    });
+                } else {
+                    jQuery("#delete_all2").prop("checked", false);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", false);
+                    });
+                }
+            });
+            jQuery("#delete_all2").click(function() {
+                if(jQuery("#delete_all2").prop("checked")) {
+                    jQuery("#delete_all").prop("checked", true);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", true);
+                    });
+                } else {
+                    jQuery("#delete_all").prop("checked", false);
+                    jQuery("input[name='pollq[]']").each(function() {
+                        jQuery(this).prop("checked", false);
+                    });
+                }
+            });
+        })
+*/
 
 //(function ($) {
 //	'use strict';

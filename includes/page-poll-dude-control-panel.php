@@ -36,34 +36,31 @@ if(!empty($_POST['do'])) {
 
 if (isset($_POST['bulk_delete'])) {
     global $poll_dude, $wpdb;
-    //check_ajax_referer('wp-polls_bulk-delete');
+
     check_admin_referer( 'wp-polls_bulk-delete' );
-    if(isset($_POST['delete_all'])){
-        echo '<p style="color: green;">'.sprintf(__('Poll Deleted all', 'poll-dude-domain')).'</p>';
-    } else {
-        for($i=0; $i<count($_POST['pollq']); $i++){
-            $pollq_id = $_POST['pollq'][$i];
-            
-            $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
-            $poll_question_text = wp_kses_post( $poll_dude->utility->removeslashes($pollq_question));        
-            $delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
-            $delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
-            $delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
-            $poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");        
-            
-            $error = false;
-            if(!$delete_poll_question) {
-                echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
-                $error = true;
-            }
-            if(!$error) {
-                echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude-domain'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
-            }
-                    
-            update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
-            //do_action( 'wp_polls_delete_poll', $pollq_id );
+    for($i=0; $i<count($_POST['pollq']); $i++){
+        $pollq_id = $_POST['pollq'][$i];
+        
+        $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+        $poll_question_text = wp_kses_post( $poll_dude->utility->removeslashes($pollq_question));        
+        $delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
+        $delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
+        $delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+        $poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");        
+        
+        $error = false;
+        if(!$delete_poll_question) {
+            echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+            $error = true;
         }
+        if(!$error) {
+            echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude-domain'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+        }
+                
+        update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
+        //do_action( 'wp_polls_delete_poll', $pollq_id );
     }
+
 }
 
 ### Determines Which Mode It Is
@@ -110,7 +107,7 @@ switch($mode) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" onclick="checkbox_all1();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th colspan="2"><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
@@ -212,7 +209,7 @@ switch($mode) {
                     ?>
                     <tr>
                         <th></th>
-                        <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" onclick="checkbox_all2();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
@@ -223,36 +220,5 @@ switch($mode) {
             </form>         
         </div>
         <p>&nbsp;</p>
-        <script>
-        
-        jQuery(document).ready(function () {
-            jQuery("#delete_all").click(function() {
-                if(jQuery("#delete_all").prop("checked")) {
-                    jQuery("#delete_all2").prop("checked", true);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", true);
-                    });
-                } else {
-                    jQuery("#delete_all2").prop("checked", false);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", false);
-                    });
-                }
-            });
-            jQuery("#delete_all2").click(function() {
-                if(jQuery("#delete_all2").prop("checked")) {
-                    jQuery("#delete_all").prop("checked", true);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", true);
-                    });
-                } else {
-                    jQuery("#delete_all").prop("checked", false);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", false);
-                    });
-                }
-            });
-        })
-        </script>
 <?php
 } // End switch($mode)
