@@ -37,7 +37,7 @@ class Poll_Dude {
 	 * @access   protected
 	 * @var      Poll_Dude_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
-	protected $loader;
+	//protected $loader;
 
 	/**
 	 * The unique identifier of this plugin.
@@ -59,7 +59,7 @@ class Poll_Dude {
 	public $utility;
 	public $shortcode;
 	public $admin;
-	public $recaptcha;
+	//public $recaptcha;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -77,10 +77,9 @@ class Poll_Dude {
 			$this->version = '1.0.0';
 		}
 		$this->name = 'poll-dude';
-		$this->recaptcha = true;
+		//$this->recaptcha = true;
 		$this->load_dependencies();
 		$this->define_admin_hooks();
-		//$this->set_locale();
 		$this->define_public_hooks();
 	}
 
@@ -108,13 +107,13 @@ class Poll_Dude {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-loader.php';
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-i18n.php';
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-poll-dude-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
@@ -129,14 +128,11 @@ class Poll_Dude {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-poll-dude-public.php';
 		
 
-		$this->loader = new Poll_Dude_Loader();
+		//$this->loader = new Poll_Dude_Loader();
 		$this->utility = new poll_dude\Poll_Dude_Utility();
 		if(isset($this->utility)){
 			$this->shortcode = new Poll_Dude_Shortcode($this->utility);
 		}
-		// your secret key
-		//$secret = "6LcePAATAAAAABjXaTsy7gwcbnbaF5XgJKwjSNwT";
-		//$this->recaptcha = new ReCaptcha($secret);
 	}
 
 	/**
@@ -163,11 +159,7 @@ class Poll_Dude {
 	 */
 	private function define_admin_hooks() {
 
-		//$plugin_admin = new POLL_DUDE_NAME_SPACE\Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
 		$this->admin = new Poll_Dude_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		//$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
-		//$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 
 	}
 
@@ -182,8 +174,6 @@ class Poll_Dude {
 
 		$plugin_public = new Poll_Dude_Public( $this->get_plugin_name(), $this->get_version() );
 
-		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 	}
 
 	/**
@@ -191,9 +181,11 @@ class Poll_Dude {
 	 *
 	 * @since    1.0.0
 	 */
+	/*
 	public function run() {
 		$this->loader->run();
 	}
+	*/
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
@@ -212,9 +204,11 @@ class Poll_Dude {
 	 * @since     1.0.0
 	 * @return    Plugin_Name_Loader    Orchestrates the hooks of the plugin.
 	 */
+	/*
 	public function get_loader() {
 		return $this->loader;
 	}
+	*/
 
 	public function admin() {
 		return $this->admin;
@@ -229,13 +223,4 @@ class Poll_Dude {
 	public function get_version() {
 		return $this->version;
 	}
-
-	public function get_reCaptcha() {
-		return self::recaptcha;
-	}
-
-	public function set_reCaptcha($setting) {
-		$this->recaptcha = $setting;
-	}
-
 }

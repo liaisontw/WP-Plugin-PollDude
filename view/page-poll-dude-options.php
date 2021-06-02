@@ -21,13 +21,10 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 	check_admin_referer('polldude_options');
     $update_pd_options          = array();
 	$update_pd_text             = array();
-    //$pd_recaptcha_enable    = isset( $_POST['enable'] ) ? $_POST['enable'] : $pd_recaptcha_enable;
     $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? $poll_dude->utility->removeslashes( $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
     $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? $poll_dude->utility->removeslashes( $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
-    //$update_pd_options[]    = update_option('pd_recaptcha_enable', (int)$pd_recaptcha_enable);
     $update_pd_options[]    = update_option('pd_recaptcha_sitekey', $pd_recaptcha_sitekey);
     $update_pd_options[]    = update_option('pd_recaptcha_secretkey', $pd_recaptcha_secretkey);
-    //$update_pd_text[]       = __('reCaptcha Enable', 'poll-dude');
     $update_pd_text[]       = __('reCaptcha Sitekey', 'poll-dude');
     $update_pd_text[]       = __('reCaptcha Secretkey', 'poll-dude');
 
@@ -51,11 +48,11 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 
 
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade"><p>'.$text.'</p></div>'; } ?>
-<h2><?php _e('Poll Options', 'poll-dude-domain'); ?></h2>
+<h2><?php _e('Poll Options', 'poll-dude'); ?></h2>
 <div class="wrap">
 <!--
     <input type="checkbox" name="enable_recaptcha" value="1" onclick="check_recaptcha();" />
-    <?php _e('Enable reCaptcha', 'poll-dude-domain'); ?>
+    <?php _e('Enable reCaptcha', 'poll-dude'); ?>
     <br style="clear" />
 -->
     <form  id="recaptcha_key" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
@@ -85,7 +82,7 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
             </tbody>
         </table>
         <p class="submit">
-            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Keys', 'poll-dude-domain'); ?>"/>
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Keys', 'poll-dude'); ?>"/>
         </p>        
     </form>
 </div>

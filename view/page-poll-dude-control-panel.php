@@ -14,9 +14,6 @@ $mode       = ( isset( $_GET['mode'] ) ? sanitize_key( trim( $_GET['mode'] ) ) :
 $poll_id    = ( isset( $_GET['id'] ) ? (int) sanitize_key( $_GET['id'] ) : 0 );
 $poll_aid   = ( isset( $_GET['aid'] ) ? (int) sanitize_key( $_GET['aid'] ) : 0 );
 $text = '';
-//echo $base_page."<br>";
-//echo $option_page."<br>";
-
 
 
 
@@ -26,7 +23,7 @@ if(!empty($_POST['do'])) {
     // Decide What To Do
     switch($_POST['do']) {
         // Edit Poll
-        case __('Edit Poll', 'poll-dude-domain'):
+        case __('Edit Poll', 'poll-dude'):
             check_admin_referer( 'wp-polls_edit-poll' );
 
             $text = $poll_dude->admin->poll_config('edit', $base_name);
@@ -50,11 +47,11 @@ if (isset($_POST['bulk_delete'])) {
         
         $error = false;
         if(!$delete_poll_question) {
-            echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+            echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
             $error = true;
         }
         if(!$error) {
-            echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude-domain'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+            echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
         }
                 
         update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
@@ -82,7 +79,6 @@ switch($mode) {
         $poll_multiple = (int) $poll_question->pollq_multiple;
         $poll_totalvoters = (int) $poll_question->pollq_totalvoters;
         $poll_recaptcha = (int) $poll_question->pollq_recaptcha;
-        //echo $poll_recaptcha."\n";
         
         require_once('page-poll-dude-poll-profile.php');
         break;
@@ -99,8 +95,8 @@ switch($mode) {
 
         <!-- Manage Polls -->
         <div class="wrap">
-            <h2><?php _e('Manage Polls', 'poll-dude-domain'); ?></h2>
-            <h3><?php _e('Polls', 'poll-dude-domain'); ?></h3>
+            <h2><?php _e('Manage Polls', 'poll-dude'); ?></h2>
+            <h3><?php _e('Polls', 'poll-dude'); ?></h3>
             <br style="clear" />
             <form action="" method="post">
             <table class="widefat">
@@ -111,26 +107,26 @@ switch($mode) {
                         <th></th>
                         <th colspan="2"><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
-                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude')." \" />\n";
                         ?></th>
                         <th colspan="3"><?php
-                        echo "<a href=\"$option_page\" class=\"button-secondary\">".__('Set reCaptcha Key', 'poll-dude-domain')."</a>\n";
+                        echo "<a href=\"$option_page\" class=\"button-secondary\">".__('Set reCaptcha Key', 'poll-dude')."</a>\n";
                         ?></th>
                         <th colspan="2"><?php
-                        echo "<a href=\"$base_page&amp;mode=add\" class=\"button-secondary\">".__('Add New Poll', 'poll-dude-domain')."</a>\n";
+                        echo "<a href=\"$base_page&amp;mode=add\" class=\"button-secondary\">".__('Add New Poll', 'poll-dude')."</a>\n";
                         ?></th>
                     </tr>
                     <tr>
                         <th></th>
                         <th></th>
-                        <th><?php _e('ID', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('Question', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('Total Voters', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('reCaptcha', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('Start Date/Time', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('End Date/Time', 'poll-dude-domain'); ?></th>
-                        <th><?php _e('Status', 'poll-dude-domain'); ?></th>
-                        <th colspan="2"><?php _e('Action', 'poll-dude-domain'); ?></th>
+                        <th><?php _e('ID', 'poll-dude'); ?></th>
+                        <th><?php _e('Question', 'poll-dude'); ?></th>
+                        <th><?php _e('Total Voters', 'poll-dude'); ?></th>
+                        <th><?php _e('reCaptcha', 'poll-dude'); ?></th>
+                        <th><?php _e('Start Date/Time', 'poll-dude'); ?></th>
+                        <th><?php _e('End Date/Time', 'poll-dude'); ?></th>
+                        <th><?php _e('Status', 'poll-dude'); ?></th>
+                        <th colspan="2"><?php _e('Action', 'poll-dude'); ?></th>
                     </tr>
                 </thead>
                 <tbody id="manage_polls">
@@ -142,15 +138,15 @@ switch($mode) {
                             foreach($polls as $poll) {
                                 $poll_id = (int) $poll->pollq_id;
                                 $poll_question = $poll_dude->utility->removeslashes($poll->pollq_question);
-                                $poll_date = mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll->pollq_timestamp));
+                                $poll_date = mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll->pollq_timestamp));
                                 $poll_totalvotes = (int) $poll->pollq_totalvotes;
                                 $poll_totalvoters = (int) $poll->pollq_totalvoters;
                                 $poll_active = (int) $poll->pollq_active;
                                 $poll_expiry = trim($poll->pollq_expiry);
                                 if(empty($poll_expiry)) {
-                                    $poll_expiry_text  = __('No Expiry', 'poll-dude-domain');
+                                    $poll_expiry_text  = __('No Expiry', 'poll-dude');
                                 } else {
-                                    $poll_expiry_text = mysql2date(sprintf(__('%s @ %s', 'poll-dude-domain'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
+                                    $poll_expiry_text = mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
                                 }
                                 $poll_recaptcha = $poll->pollq_recaptcha;
                                 if($i%2 == 0) {
@@ -168,17 +164,17 @@ switch($mode) {
                                     }
                                 }
                                 echo "<tr id=\"poll-$poll_id\" $style>\n";
-                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude-domain')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude-domain')."</a></td>\n";
+                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude')."</a></td>\n";
                                 echo "<td><input id=\"cb-select-$poll_id\" type=\"checkbox\" name=\"pollq[]\" value=\"$poll_id\"  style=\"width:10px; height:15px;\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
                                 if($current_poll > 0) {
                                     if($current_poll === $poll_id) {
-                                        echo '<strong>'.__('Displayed:', 'poll-dude-domain').'</strong> ';
+                                        echo '<strong>'.__('Displayed:', 'poll-dude').'</strong> ';
                                     }
                                 } elseif($current_poll === 0) {
                                     if($poll_id === $latest_poll) {
-                                        echo '<strong>'.__('Displayed:', 'poll-dude-domain').'</strong> ';
+                                        echo '<strong>'.__('Displayed:', 'poll-dude').'</strong> ';
                                     }
                                 }
                                 echo wp_kses_post( $poll_question )."</td>\n";
@@ -189,14 +185,14 @@ switch($mode) {
                                 echo "<td>$poll_expiry_text</td>\n";
                                 echo '<td>';
                                 if($poll_active === 1) {
-                                    _e('Open', 'poll-dude-domain');
+                                    _e('Open', 'poll-dude');
                                 } elseif($poll_active === -1) {
-                                    _e('Future', 'poll-dude-domain');
+                                    _e('Future', 'poll-dude');
                                 } else {
-                                    _e('Closed', 'poll-dude-domain');
+                                    _e('Closed', 'poll-dude');
                                 }
                                 echo "</td>\n";
-                                echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude-domain')."</a></td>\n";
+                                echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude')."</a></td>\n";
                                 echo '</tr>';
                                 $i++;
                                 $total_votes+= $poll_totalvotes;
@@ -204,7 +200,7 @@ switch($mode) {
 
                             }
                         } else {
-                            echo '<tr><td colspan="9" align="center"><strong>'.__('No Polls Found', 'poll-dude-domain').'</strong></td></tr>';
+                            echo '<tr><td colspan="9" align="center"><strong>'.__('No Polls Found', 'poll-dude').'</strong></td></tr>';
                         }
                     ?>
                     <tr>
@@ -213,7 +209,7 @@ switch($mode) {
                         <th></th>
                         <th><?php 
                             wp_nonce_field( 'wp-polls_bulk-delete' );
-                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude-domain')." \" />\n";
+                            echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude')." \" />\n";
                         ?></th>
                     </tr>
                 </tbody>

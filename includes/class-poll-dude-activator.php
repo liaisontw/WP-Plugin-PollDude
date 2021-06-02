@@ -36,13 +36,13 @@ class Poll_Dude_Activator {
 			if( 0 < count( $ms_sites ) ) {
 				foreach ( $ms_sites as $ms_site ) {
 					switch_to_blog( $ms_site['blog_id'] );
-					//poll_dude_activate();
+					
 					self::activation();
 					restore_current_blog();
 				}
 			}
 		} else {
-			//poll_dude_activate();
+			
 			self::activation();
 		}
 	}
@@ -104,14 +104,14 @@ class Poll_Dude_Activator {
 		// If Install, Insert 1st Poll Question With 5 Poll Answers
 		if ( empty( $first_poll ) ) {
 			// Insert Poll Question (1 Record)
-			$insert_pollq = $wpdb->insert( $wpdb->pollsq, array( 'pollq_question' => __( 'How Is My Site?', 'poll-dude-domain' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
+			$insert_pollq = $wpdb->insert( $wpdb->pollsq, array( 'pollq_question' => __( 'How Is My Site?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
 			if ( $insert_pollq ) {
 				// Insert Poll Answers  (5 Records)
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Good', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Excellent', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Bad', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Can Be Improved', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude-domain' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Good', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Excellent', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Bad', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Can Be Improved', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
 			}
 		}
 		add_option('pd_recaptcha_enable', 0);
@@ -164,33 +164,6 @@ class Poll_Dude_Activator {
 		if( ! $role->has_cap( 'manage_polls' ) ) {
 			$role->add_cap( 'manage_polls' );
 		}
-
-
-/*
-		add_option('poll_template_disable', __('Sorry, there are no polls available at the moment.', 'poll-dude-domain'));
-		add_option('poll_template_error', __('An error has occurred when processing your poll.', 'poll-dude-domain'));	
-		add_option('poll_archive_perpage', 5);
-		add_option('poll_ans_sortby', 'polla_aid');
-		add_option('poll_ans_sortorder', 'asc');
-		add_option('poll_ans_result_sortby', 'polla_votes');
-		add_option('poll_ans_result_sortorder', 'desc');
-		// Database Upgrade For WP-Polls 2.1
-		add_option('poll_logging_method', '3');
-		add_option('poll_allowtovote', '2');
-		// Database Upgrade For WP-Polls 2.12
-		add_option('poll_archive_url', site_url('pollsarchive'));
-		
-		add_option('poll_template_pollarchivelink', '<ul>'.
-		'<li><a href="%POLL_ARCHIVE_URL%">'.__('Polls Archive', 'poll-dude-domain').'</a></li>'.
-		'</ul>');
-		add_option('poll_archive_displaypoll', 2);
-		add_option('poll_template_pollarchiveheader', '');
-		add_option('poll_template_pollarchivefooter', '<p>'.__('Start Date:', 'poll-dude-domain').' %POLL_START_DATE%<br />'.__('End Date:', 'poll-dude-domain').' %POLL_END_DATE%</p>');
-		add_option('poll_template_pollarchivepagingheader', '');
-		add_option('poll_template_pollarchivepagingfooter', '');
-		// Database Upgrade For WP-Polls 2.50
-		delete_option('poll_archive_show');
-*/
 		
 	}
 
