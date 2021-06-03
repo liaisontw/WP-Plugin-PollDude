@@ -28,20 +28,25 @@ function check_totalvotes() { temp_vote_count = 0; jQuery(document).ready(functi
 // Add Poll's Answer In Add Poll Page
 function add_poll_answer_add() {
 	jQuery(document).ready(function ($) {
-		//$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>');
-		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers_new[]" /><input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\"#0000FF\" >&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td></tr>');
+		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers[]" /><input type="color" id="color_picker" name="color_picker[]" value="#0000FF" >&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td></tr>');
 		count_poll_answer++;
-		//reorder_answer_num();
+		reorder_answer_num();
 	});
 }
 function remove_poll_answer_add(a) { jQuery(document).ready(function (c) { c("#poll-answer-" + a).remove(); reorder_answer_num() }) }
 // Add Poll's Answer In Edit Poll Page
 function poll_dude_add_answer_edit() {
 	jQuery(document).ready(function ($) {
-		$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers_new[]" /><input type=\"color\" id=\"color_picker\" name=\"color_picker\" value=\"#0000FF\" >&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td><td width="20%" align="' + pollsAdminL10n.text_direction + '">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>');
-		//$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td></tr>');
+		$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '">\
+			<td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers_new[]" />\
+			<input type="color" id="color_picker" name="color_picker[]" value="#0000FF" >&nbsp;&nbsp;&nbsp;\
+			<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" \
+			onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td>\
+			<td width="20%" align="' + pollsAdminL10n.text_direction + '">0 \
+			<input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td>\
+			</tr>');
 		count_poll_answer_new++;
-		//reorder_answer_num();
+		reorder_answer_num();
 	});
 }
 /*
