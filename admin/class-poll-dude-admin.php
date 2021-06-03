@@ -56,6 +56,11 @@ class Poll_Dude_Admin {
 		add_action( 'admin_enqueue_scripts',     	array($this, 'admin_scripts') );
 		add_action( 'wp_ajax_poll-dude-control', 	array($this, 'control_panel') );
 		add_action(	'poll_dude_cron', 				array($this, 'cron_update') );
+		add_action( 'plugins_loaded',  				array($this, 'set_textdomain') );
+	}
+
+	public function set_textdomain() {
+		load_plugin_textdomain( 'poll-dude' );
 	}
 
 	public function admin_scripts($hook_suffix){
@@ -66,18 +71,18 @@ class Poll_Dude_Admin {
 			wp_localize_script('poll-dude', 'pollsAdminL10n', array(
 					'admin_ajax_url' => admin_url('admin-ajax.php'),
 					'text_direction' => is_rtl() ? 'right' : 'left',
-					'text_delete_poll' => __('Delete Poll', 'poll-dude-domain'),
-					'text_no_poll_logs' => __('No poll logs available.', 'poll-dude-domain'),
-					'text_delete_all_logs' => __('Delete All Logs', 'poll-dude-domain'),
-					'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'poll-dude-domain'),
-					'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'poll-dude-domain'),
-					'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'poll-dude-domain'),
-					'text_delete_poll_ans' => __('Delete Poll Answer', 'poll-dude-domain'),
-					'text_open_poll' => __('Open Poll', 'poll-dude-domain'),
-					'text_close_poll' => __('Close Poll', 'poll-dude-domain'),
-					'text_answer' => __('Ans', 'poll-dude-domain'),
-					'text_remove_poll_answer' => __('Remove', 'poll-dude-domain'),
-					'text_delete_poll_answer' => __('Delete', 'poll-dude-domain')
+					'text_delete_poll' => __('Delete Poll', 'poll-dude'),
+					'text_no_poll_logs' => __('No poll logs available.', 'poll-dude'),
+					'text_delete_all_logs' => __('Delete All Logs', 'poll-dude'),
+					'text_checkbox_delete_all_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs.', 'poll-dude'),
+					'text_delete_poll_logs' => __('Delete Logs For This Poll Only', 'poll-dude'),
+					'text_checkbox_delete_poll_logs' => __('Please check the \\\'Yes\\\' checkbox if you want to delete all logs for this poll ONLY.', 'poll-dude'),
+					'text_delete_poll_ans' => __('Delete Poll Answer', 'poll-dude'),
+					'text_open_poll' => __('Open Poll', 'poll-dude'),
+					'text_close_poll' => __('Close Poll', 'poll-dude'),
+					'text_answer' => __('Ans', 'poll-dude'),
+					'text_remove_poll_answer' => __('Remove', 'poll-dude'),
+					'text_delete_poll_answer' => __('Delete', 'poll-dude')
 			));
 		}
 	}
@@ -130,8 +135,8 @@ class Poll_Dude_Admin {
 
 	public function admin_menu() {
 		add_menu_page(
-			/* $page_title */__( 'Poll Dude', 'poll-dude-domain' ),
-			/* $menu_title */__( 'Poll Dude', 'poll-dude-domain' ),
+			/* $page_title */__( 'Poll Dude', 'poll-dude' ),
+			/* $menu_title */__( 'Poll Dude', 'poll-dude' ),
 			/* $capability */'manage_options',
 			/* $menu_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
 			/* $function   */'',
@@ -141,16 +146,16 @@ class Poll_Dude_Admin {
 
 		add_submenu_page( 
 			/* $parent_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
-			/* $page_title  */ __( 'Add Poll', 'poll-dude-domain' ), 
-			/* $menu_title  */ __( 'Add Poll', 'poll-dude-domain' ), 
+			/* $page_title  */ __( 'Add Poll', 'poll-dude' ), 
+			/* $menu_title  */ __( 'Add Poll', 'poll-dude' ), 
 			/* $capability  */ 'manage_options', 
 			/* $menu_slug   */ plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-add-form.php'
 		);
 
 		add_submenu_page( 
 			/* $parent_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
-			/* $page_title  */ __( 'Poll Control', 'poll-dude-domain' ), 
-			/* $menu_title  */ __( 'Poll Control', 'poll-dude-domain' ), 
+			/* $page_title  */ __( 'Poll Control', 'poll-dude' ), 
+			/* $menu_title  */ __( 'Poll Control', 'poll-dude' ), 
 			/* $capability  */ 'manage_options', 
 			/* $menu_slug   */ plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-control-panel.php'
 		);
@@ -171,33 +176,33 @@ class Poll_Dude_Admin {
 				// Decide What To Do
 				switch($_POST['do']) {
 					// Delete Polls Logs
-					case __('Delete All Logs', 'poll-dude-domain'):
+					case __('Delete All Logs', 'poll-dude'):
 						check_ajax_referer('wp-polls_delete-polls-logs');
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
 							$delete_logs = $wpdb->query("DELETE FROM $wpdb->pollsip");
 							if($delete_logs) {
-								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude-domain').'</p>';
+								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude').'</p>';
 							} else {
-								echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'poll-dude-domain').'</p>';
+								echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'poll-dude').'</p>';
 							}
 						}
 						break;
 					// Delete Poll Logs For Individual Poll
-					case __('Delete Logs For This Poll Only', 'poll-dude-domain'):
+					case __('Delete Logs For This Poll Only', 'poll-dude'):
 						check_ajax_referer('wp-polls_delete-poll-logs');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
 							$delete_logs = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 							if( $delete_logs ) {
-								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 							} else {
-								echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+								echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 							}
 						}
 						break;
 					// Delete Poll's Answer
-					case __('Delete Poll Answer', 'poll-dude-domain'):
+					case __('Delete Poll Answer', 'poll-dude'):
 						check_ajax_referer('wp-polls_delete-poll-answer');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$polla_aid = (int) sanitize_key( $_POST['polla_aid'] );
@@ -208,14 +213,13 @@ class Poll_Dude_Admin {
 						$delete_pollip = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id, 'pollip_aid' => $polla_aid ), array( '%d', '%d' ) );
 						$update_pollq_totalvotes = $wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes - $polla_votes) WHERE pollq_id = $pollq_id" );
 						if($delete_polla_answers) {
-							//echo '<p style="color: green;">'.sprintf(__('Poll Answer \'%s\' Deleted Successfully.', 'poll-dude-domain'), $polla_answers).'</p>';
-							echo '<p style="color: green;">'.sprintf(__('Poll Answer Deleted Successfully.', 'poll-dude-domain')).'</p>';
+							echo '<p style="color: green;">'.sprintf(__('Poll Answer Deleted Successfully.', 'poll-dude')).'</p>';
 						} else {
-							echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll Answer \'%s\'.', 'poll-dude-domain'), $polla_answers).'</p>';
+							echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll Answer \'%s\'.', 'poll-dude'), $polla_answers).'</p>';
 						}
 						break;
 					// Open Poll
-					case __('Open Poll', 'poll-dude-domain'):
+					case __('Open Poll', 'poll-dude'):
 						check_ajax_referer('wp-polls_open-poll');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
@@ -235,13 +239,13 @@ class Poll_Dude_Admin {
 							)
 						);
 						if( $open_poll ) {
-							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Opened', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Opened', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						} else {
-							echo '<p style="color: red;">'.sprintf(__('Error Opening Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: red;">'.sprintf(__('Error Opening Poll \'%s\'', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 						break;
 					// Close Poll
-					case __('Close Poll', 'poll-dude-domain'):
+					case __('Close Poll', 'poll-dude-'):
 						check_ajax_referer('wp-polls_close-poll');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
@@ -261,13 +265,13 @@ class Poll_Dude_Admin {
 							)
 						);
 						if( $close_poll ) {
-							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Closed', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Is Now Closed', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						} else {
-							echo '<p style="color: red;">'.sprintf(__('Error Closing Poll \'%s\'', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: red;">'.sprintf(__('Error Closing Poll \'%s\'', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 						break;
 					// Delete Poll
-					case __('Delete Poll', 'poll-dude-domain'):
+					case __('Delete Poll', 'poll-dude'):
 						check_ajax_referer('wp-polls_delete-poll');
 						//echo 'Delete Poll';
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
@@ -277,10 +281,10 @@ class Poll_Dude_Admin {
 						$delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 						$poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");
 						if(!$delete_poll_question) {
-							echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 						if(empty($text)) {
-							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'poll-dude-domain'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
+							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 								
 						update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
@@ -377,14 +381,14 @@ class Poll_Dude_Admin {
 					$pollq_format
 				);
 				if ( ! $add_poll_question ) {
-					$text .= '<p style="color: red;">' . sprintf(__('Error In Adding Poll \'%s\'.', 'poll-dude-domain'), $pollq_question) . '</p>';
+					$text .= '<p style="color: red;">' . sprintf(__('Error In Adding Poll \'%s\'.', 'poll-dude'), $pollq_question) . '</p>';
 				}
 				$polla_answers_new = isset( $_POST['polla_answers'] ) ? $_POST['polla_answers'] : array();
 				
 
 				$polla_qid = (int) $wpdb->insert_id;
 				if(empty($polla_answers_new)) {
-					$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude-domain' ) . '</p>';
+					$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude' ) . '</p>';
 				}
 			}else{
 				// Update Poll's Question
@@ -396,7 +400,7 @@ class Poll_Dude_Admin {
 					array('%d')
 				);
 				if( ! $edit_poll_question ) {
-					$text = '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Question \'%s\'.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
+					$text = '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Question \'%s\'.', 'poll-dude'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 				}
 				// Update Polls' Answers
 				$polla_aids = array();
@@ -410,7 +414,7 @@ class Poll_Dude_Admin {
 						$polla_answers = wp_kses_post( trim( $_POST['polla_aid-'.$polla_aid] ) );
 						$polla_votes = (int) sanitize_key($_POST['polla_votes-'.$polla_aid]);
 						$polla_color = $_POST['color_picker'][$i];
-						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude-domain'), $polla_color).'</p>';
+						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 
 						$edit_poll_answer = $wpdb->update(
 							$wpdb->pollsa,
@@ -434,14 +438,14 @@ class Poll_Dude_Admin {
 							)
 						);
 						if( ! $edit_poll_answer ) {
-							$text .= '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Answer \'%s\'.', 'poll-dude-domain'), $polla_answers ).'</p>';
+							$text .= '<p style="color: blue">'.sprintf(__('No Changes Had Been Made To Poll\'s Answer \'%s\'.', 'poll-dude'), $polla_answers ).'</p>';
 						} else {
-							$text .= '<p style="color: green">'.sprintf(__('Poll\'s Answer \'%s\' Edited Successfully.', 'poll-dude-domain'), $polla_answers ).'</p>';
+							$text .= '<p style="color: green">'.sprintf(__('Poll\'s Answer \'%s\' Edited Successfully.', 'poll-dude'), $polla_answers ).'</p>';
 						}
 						$i++;
 					}
 				} else {
-					$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
+					$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 				}
 				$polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
 				$polla_qid = $pollq_id;
@@ -459,7 +463,7 @@ class Poll_Dude_Admin {
 					if ( ! empty( $polla_answer_new ) ) {
 						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
 						$polla_color = $_POST['color_picker'][$i];
-						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude-domain'), $polla_color).'</p>';
+						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 							
 						$add_poll_answers = $wpdb->insert(
 							$wpdb->pollsa,
@@ -478,16 +482,16 @@ class Poll_Dude_Admin {
 						);
 						
 						if( ! $add_poll_answers ) {
-							$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'poll-dude-domain'), $polla_answer_new).'</p>';
+							$text .= '<p style="color: red;">'.sprintf(__('Error In Adding Poll\'s Answer \'%s\'.', 'poll-dude'), $polla_answer_new).'</p>';
 						} else {
 							if ('edit' === $mode) {
-								$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'poll-dude-domain'), $polla_answer_new).'</p>';
+								$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'poll-dude'), $polla_answer_new).'</p>';
 							}
 						}
 						
 						$i++;
 					}else {
-						$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude-domain' ) . '</p>';
+						$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude' ) . '</p>';
 					}
 				}
 			}
@@ -504,19 +508,19 @@ class Poll_Dude_Admin {
 				// If poll starts in the future use the correct poll ID
 				$latest_pollid = ( $latest_pollid < $polla_qid ) ? $polla_qid : $latest_pollid;
 				if ( empty( $text ) ) {
-					$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude-domain' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
+					$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 				} 
 				do_action( 'wp_polls_add_poll', $latest_pollid );
 			} else {
 				if(empty($text)) {
-					$text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'poll-dude-domain'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
+					$text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'poll-dude'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 				}
 				do_action( 'wp_polls_update_poll', $pollq_id );
 			}
 			
 			$this->cron_activate();
 		}else{
-			$text .= '<p style="color: red;">' . __( 'Poll Question is empty.', 'poll-dude-domain' ) . '</p>';
+			$text .= '<p style="color: red;">' . __( 'Poll Question is empty.', 'poll-dude' ) . '</p>';
 		}
 
 		return $text;

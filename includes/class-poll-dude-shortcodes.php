@@ -240,12 +240,12 @@ class Poll_Dude_Shortcode {
 
 			
 			if($poll_recaptcha){         
-				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
 			}else{
-				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude-domain')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
 			}
 			
-			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude-domain').'\">".__('View Results', 'poll-dude-domain')."</a></p></div>";
+			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
 			if($poll_recaptcha){
 				$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
 			}
@@ -374,10 +374,10 @@ class Poll_Dude_Shortcode {
 				// Let User See What Options They Voted
 				if ( in_array( $poll_answer_id, $user_voted, true ) ) {
 					// Results Body Variables
-					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small></i></strong><div class=\"wp-polls-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude-domain')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
+					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small></i></strong><div class=\"wp-polls-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 				} else {
 					// Results Body Variables
-					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude-domain').")</small><div class=\"wp-polls-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude-domain').")\"></div></li>";
+					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small><div class=\"wp-polls-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 					
 				}
 
@@ -403,10 +403,10 @@ class Poll_Dude_Shortcode {
 			}
 			// Results Footer Variables
 			if ( ! empty( $user_voted ) || $poll_question_active === 0 || ! $this->vote_allow() ) {
-				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude-domain').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p></div>";
+				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p></div>";
 			}else{
-				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude-domain').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p>";
-				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"poll_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude-domain')."">"".__('Vote', 'poll-dude-domain')."</a></p></div>";
+				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p>";
+				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"poll_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude-domain')."</a></p></div>";
 			}
 
 			// Print Out Results Footer Template

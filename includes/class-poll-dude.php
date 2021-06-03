@@ -59,7 +59,6 @@ class Poll_Dude {
 	public $utility;
 	public $shortcode;
 	public $admin;
-	//public $recaptcha;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -77,7 +76,6 @@ class Poll_Dude {
 			$this->version = '1.0.0';
 		}
 		$this->name = 'poll-dude';
-		//$this->recaptcha = true;
 		$this->load_dependencies();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
