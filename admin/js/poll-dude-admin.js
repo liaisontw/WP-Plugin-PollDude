@@ -1,13 +1,6 @@
 
 var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, count_poll_answer_new = 0, count_poll_answer = 3; 
-//function delete_poll_dev(a, c, d) { if (delete_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#poll-" + global_poll_id).remove() } }) }) }
-function delete_poll_logs(a, c) { (delete_poll_logs_confirm = confirm(a)) && jQuery(document).ready(function (a) { a("#delete_logs_yes").is(":checked") ? a.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_all_logs + "&delete_logs_yes=yes&action=poll-dude-control&_ajax_nonce=" + c, cache: !1, success: function (b) { a("#message").html(b); a("#message").show(); a("#poll_logs").html(pollsAdminL10n.text_no_poll_logs) } }) : alert(pollsAdminL10n.text_checkbox_delete_all_logs) }) }
-function delete_this_poll_logs(a, c, d) {
-	(delete_poll_logs_confirm = confirm(c)) && jQuery(document).ready(function (b) {
-		b("#delete_logs_yes").is(":checked") ? (global_poll_id = a, b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_poll_logs + "&pollq_id=" + a + "&delete_logs_yes=yes&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#poll_logs").html(pollsAdminL10n.text_no_poll_logs); b("#poll_logs_display").hide(); b("#poll_logs_display_none").show() } })) :
-		alert(pollsAdminL10n.text_checkbox_delete_poll_logs)
-	})
-}
+
 /*
 function delete_poll_ans(a, c, d, b, e) {
 	if (delete_poll_ans_confirm = confirm(b)) global_poll_id = a, global_poll_aid = c, global_poll_aid_votes = d, temp_vote_count = 0, jQuery(document).ready(function (b) {
@@ -138,66 +131,4 @@ function checkbox_all2() {
 		}
 	}) 
 };
-/*
-jQuery(document).ready(function () {
-            jQuery("#delete_all").click(function() {
-                if(jQuery("#delete_all").prop("checked")) {
-                    jQuery("#delete_all2").prop("checked", true);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", true);
-                    });
-                } else {
-                    jQuery("#delete_all2").prop("checked", false);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", false);
-                    });
-                }
-            });
-            jQuery("#delete_all2").click(function() {
-                if(jQuery("#delete_all2").prop("checked")) {
-                    jQuery("#delete_all").prop("checked", true);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", true);
-                    });
-                } else {
-                    jQuery("#delete_all").prop("checked", false);
-                    jQuery("input[name='pollq[]']").each(function() {
-                        jQuery(this).prop("checked", false);
-                    });
-                }
-            });
-        })
-*/
 
-//(function ($) {
-//	'use strict';
-
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
-
-//})(jQuery);

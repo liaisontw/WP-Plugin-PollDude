@@ -24,7 +24,7 @@ if(!empty($_POST['do'])) {
     switch($_POST['do']) {
         // Edit Poll
         case __('Edit Poll', 'poll-dude'):
-            check_admin_referer( 'wp-polls_edit-poll' );
+            check_admin_referer( 'polldude_edit-poll' );
 
             $text = $poll_dude->admin->poll_config('edit', $base_name);
             break;
@@ -34,7 +34,7 @@ if(!empty($_POST['do'])) {
 if (isset($_POST['bulk_delete'])) {
     global $poll_dude, $wpdb;
 
-    check_admin_referer( 'wp-polls_bulk-delete' );
+    check_admin_referer( 'polldude_bulk-delete' );
     for($i=0; $i<count($_POST['pollq']); $i++){
         $pollq_id = $_POST['pollq'][$i];
         
@@ -106,7 +106,7 @@ switch($mode) {
                         <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" onclick="checkbox_all1();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th colspan="2"><?php 
-                            wp_nonce_field( 'wp-polls_bulk-delete' );
+                            wp_nonce_field( 'polldude_bulk-delete' );
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude')." \" />\n";
                         ?></th>
                         <th colspan="3"><?php
@@ -164,7 +164,7 @@ switch($mode) {
                                     }
                                 }
                                 echo "<tr id=\"poll-$poll_id\" $style>\n";
-                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude')), esc_js($poll_question))."', '".wp_create_nonce('wp-polls_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude')."</a></td>\n";
+                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude')), esc_js($poll_question))."', '".wp_create_nonce('polldude_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude')."</a></td>\n";
                                 echo "<td><input id=\"cb-select-$poll_id\" type=\"checkbox\" name=\"pollq[]\" value=\"$poll_id\"  style=\"width:10px; height:15px;\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
@@ -208,7 +208,7 @@ switch($mode) {
                         <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" onclick="checkbox_all2();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th><?php 
-                            wp_nonce_field( 'wp-polls_bulk-delete' );
+                            wp_nonce_field( 'polldude_bulk-delete' );
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude')." \" />\n";
                         ?></th>
                     </tr>

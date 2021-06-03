@@ -173,12 +173,12 @@ class Poll_Dude_Shortcode {
 		$poll_question_id = (int) $poll_question->pollq_id;
 		$poll_question_totalvotes = (int) $poll_question->pollq_totalvotes;
 		$poll_question_totalvoters = (int) $poll_question->pollq_totalvoters;
-		$poll_start_date = mysql2date(sprintf(__('%s @ %s', 'wp-polls'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_question->pollq_timestamp));
+		$poll_start_date = mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_question->pollq_timestamp));
 		$poll_expiry = trim($poll_question->pollq_expiry);
 		if(empty($poll_expiry)) {
-			$poll_end_date  = __('No Expiry', 'wp-polls');
+			$poll_end_date  = __('No Expiry', 'poll-dude');
 		} else {
-			$poll_end_date  = mysql2date(sprintf(__('%s @ %s', 'wp-polls'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
+			$poll_end_date  = mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
 		}
 		if( (int)$poll_question->pollq_multiple ) {
 			$poll_multiple_ans = (int)$poll_question->pollq_multiple;
@@ -260,9 +260,11 @@ class Poll_Dude_Shortcode {
 			
 			if($display_loading) {
 				$poll_ajax_style = get_option('poll_ajax_style');
+				/*
 				if((int) $poll_ajax_style['loading'] === 1) {
 					$temp_pollvote .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
 				}
+				*/
 			}
 			
 		} else {
@@ -310,12 +312,12 @@ class Poll_Dude_Shortcode {
 		$poll_question_totalvotes = (int) $poll_question->pollq_totalvotes;
 		$poll_question_totalvoters = (int) $poll_question->pollq_totalvoters;
 		$poll_question_active = (int) $poll_question->pollq_active;
-		$poll_start_date = mysql2date( sprintf( __( '%s @ %s', 'wp-polls' ), get_option( 'date_format' ), get_option( 'time_format' ) ), gmdate( 'Y-m-d H:i:s', $poll_question->pollq_timestamp ) );
+		$poll_start_date = mysql2date( sprintf( __( '%s @ %s', 'poll-dude' ), get_option( 'date_format' ), get_option( 'time_format' ) ), gmdate( 'Y-m-d H:i:s', $poll_question->pollq_timestamp ) );
 		$poll_expiry = trim( $poll_question->pollq_expiry );
 		if ( empty( $poll_expiry ) ) {
-			$poll_end_date  = __( 'No Expiry', 'wp-polls' );
+			$poll_end_date  = __( 'No Expiry', 'poll-dude' );
 		} else {
-			$poll_end_date  = mysql2date( sprintf( __( '%s @ %s', 'wp-polls' ), get_option( 'date_format' ), get_option( 'time_format' ) ), gmdate( 'Y-m-d H:i:s', $poll_expiry ) );
+			$poll_end_date  = mysql2date( sprintf( __( '%s @ %s', 'poll-dude' ), get_option( 'date_format' ), get_option( 'time_format' ) ), gmdate( 'Y-m-d H:i:s', $poll_expiry ) );
 		}
 		$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
 
@@ -415,9 +417,11 @@ class Poll_Dude_Shortcode {
 			$temp_pollresult .= "</div>\n";
 			
 			if ( $display_loading ) { $poll_ajax_style = get_option( 'poll_ajax_style' );
+				/*
 				if ( (int) $poll_ajax_style['loading'] === 1 ) {
 					$temp_pollresult .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
 				}
+				*/
 			}
 			
 		} else {
@@ -437,31 +441,31 @@ class Poll_Dude_Shortcode {
 		$is_real = count( array_intersect( $poll_aid_array, $polla_aids ) ) === count( $poll_aid_array );
 
 		if( !$is_real ) {
-			throw new InvalidArgumentException(sprintf(__('Invalid Answer to Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('Invalid Answer to Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		if (!$poll_dude->utility->vote_allow()) {
-			throw new InvalidArgumentException(sprintf(__('User is not allowed to vote for Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('User is not allowed to vote for Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		if (empty($poll_aid_array)) {
-			throw new InvalidArgumentException(sprintf(__('No anwsers given for Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('No anwsers given for Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		if($poll_id === 0) {
-			throw new InvalidArgumentException(sprintf(__('Invalid Poll ID. Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('Invalid Poll ID. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		$is_poll_open = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->pollsq WHERE pollq_id = %d AND pollq_active = 1", $poll_id ) );
 
 		if ($is_poll_open === 0) {
-			throw new InvalidArgumentException(sprintf(__( 'Poll ID #%s is closed', 'wp-polls' ), $poll_id ));
+			throw new InvalidArgumentException(sprintf(__( 'Poll ID #%s is closed', 'poll-dude' ), $poll_id ));
 		}
 
 		//$check_voted = check_voted($poll_id);
 		$is_voted = $poll_dude->utility->is_voted($poll_id);
 		if ( !empty( $is_voted ) ) {
-			throw new InvalidArgumentException(sprintf(__('You Had Already Voted For This Poll. Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('You Had Already Voted For This Poll. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		if (!empty($user_identity)) {
@@ -469,7 +473,7 @@ class Poll_Dude_Shortcode {
 		} elseif ( ! empty( $_COOKIE['comment_author_' . COOKIEHASH] ) ) {
 			$pollip_user = $_COOKIE['comment_author_' . COOKIEHASH];
 		} else {
-			$pollip_user = __('Guest', 'wp-polls');
+			$pollip_user = __('Guest', 'poll-dude');
 		}
 
 		$pollip_user = sanitize_text_field( $pollip_user );
@@ -499,7 +503,7 @@ class Poll_Dude_Shortcode {
 
 		$vote_q = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes+" . count( $poll_aid_array ) . "), pollq_totalvoters = (pollq_totalvoters + 1) WHERE pollq_id = $poll_id AND pollq_active = 1");
 		if (!$vote_q) {
-			throw new InvalidArgumentException(sprintf(__('Unable To Update Poll Total Votes And Poll Total Voters. Poll ID #%s', 'wp-polls'), $poll_id));
+			throw new InvalidArgumentException(sprintf(__('Unable To Update Poll Total Votes And Poll Total Voters. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
 		foreach ($poll_aid_array as $polla_aid) {
@@ -571,13 +575,13 @@ class Poll_Dude_Shortcode {
 
 			// Ensure Poll ID Is Valid
 			if($poll_id === 0) {
-				_e('Invalid Poll ID', 'wp-polls');
+				_e('Invalid Poll ID', 'poll-dude');
 				exit();
 			}
 
 			// Verify Referer
 			if( ! check_ajax_referer( 'poll_'.$poll_id.'-nonce', 'poll_'.$poll_id.'_nonce', false ) ) {
-				_e('Failed To Verify Referrer', 'wp-polls');
+				_e('Failed To Verify Referrer', 'poll-dude');
 				exit();
 			}
 
