@@ -12,21 +12,37 @@ $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basenam
 $pd_recaptcha_sitekey   = get_option('pd_recaptcha_sitekey');
 $pd_recaptcha_secretkey = get_option('pd_recaptcha_secretkey');
 $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
+$pd_default_color       = get_option('$pd_default_color');
 
 
 
 
 
-if( isset($_POST['Submit']) && $_POST['Submit'] ) {
-	check_admin_referer('polldude_options');
+if( isset($_POST['Submit']) ) {
     $update_pd_options          = array();
-	$update_pd_text             = array();
-    $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? $poll_dude->utility->removeslashes( $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
-    $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? $poll_dude->utility->removeslashes( $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
-    $update_pd_options[]    = update_option('pd_recaptcha_sitekey', $pd_recaptcha_sitekey);
-    $update_pd_options[]    = update_option('pd_recaptcha_secretkey', $pd_recaptcha_secretkey);
-    $update_pd_text[]       = __('reCaptcha Sitekey', 'poll-dude');
-    $update_pd_text[]       = __('reCaptcha Secretkey', 'poll-dude');
+    $update_pd_text             = array();
+
+    switch($_POST['Submit']) {
+        case __('Set Color', 'poll-dude'):
+            check_admin_referer('polldude_color');
+
+            $pd_default_color   = isset( $_POST['default_color'] ) ? $_POST['default_color'] : $pd_default_color;
+            $update_pd_options[]    = update_option('pd_default_color', $pd_default_color);
+            $update_pd_text[]       = __('Default Voted Bar Color', 'poll-dude');
+        
+            break;
+	    case __('Set Keys', 'poll-dude'):
+            check_admin_referer('polldude_recaptcha');
+            
+            $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? $poll_dude->utility->removeslashes( $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
+            $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? $poll_dude->utility->removeslashes( $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
+            $update_pd_options[]    = update_option('pd_recaptcha_sitekey', $pd_recaptcha_sitekey);
+            $update_pd_options[]    = update_option('pd_recaptcha_secretkey', $pd_recaptcha_secretkey);
+            $update_pd_text[]       = __('reCaptcha Sitekey', 'poll-dude');
+            $update_pd_text[]       = __('reCaptcha Secretkey', 'poll-dude');
+        
+            break;
+    }
 
     $i=0;
 	$text = '';
@@ -40,8 +56,7 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
 		$text = '<p style="color: red;">'.__('No Option Updated', 'poll-dude').'</p>';
 	}
     
-    $poll_dude->admin->cron_activate();
-    
+    $poll_dude->admin->cron_activate();   
 }
 
 ?>
@@ -56,33 +71,53 @@ if( isset($_POST['Submit']) && $_POST['Submit'] ) {
     <br style="clear" />
 -->
     <form  id="recaptcha_key" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
-        <?php wp_nonce_field('polldude_options'); ?>
+        <?php wp_nonce_field('polldude_recaptcha'); ?>
         <table class="form-table">
             <tbody>
-                    <tr class="form-field form-required">
-                        <th valign="top" scope="row">
-                            <label for="sitekey">
-                            reCaptcha Site Key            
-                            </label>
-                        </th>
-                        <td>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="sitekey">
+                        reCaptcha Site Key            
+                        </label>
+                    </th>
+                    <td>
                         <input type="text" name="sitekey" id="sitekey" aria-required="true" size="40" value="<?php echo get_option('pd_recaptcha_sitekey'); ?>" >
-                        </td>
-                    </tr>
-                    <tr class="form-field form-required">
-                        <th valign="top" scope="row">
-                            <label for="secretkey">
-                            reCaptcha Secret Key            
-                            </label>
-                        </th>
-                        <td>
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="secretkey">
+                        reCaptcha Secret Key            
+                        </label>
+                    </th>
+                    <td>
                         <input type="text" name="secretkey" id="secretkey" aria-required="true" size="40" value="<?php echo get_option('pd_recaptcha_secretkey'); ?>" >
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <p class="submit">
             <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Keys', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
+    <form  id="default_color" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+        <?php wp_nonce_field('polldude_color'); ?>
+        <table class="form-table">
+            <tbody>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="default_color">
+                        Default Voted Bar Color
+                        </label>
+                    </th>
+                    <td>
+                        <input type="color" name="default_color" id="default_color" value="<?php echo get_option('pd_default_color'); ?>" >
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Color', 'poll-dude'); ?>"/>
         </p>        
     </form>
 </div>

@@ -37,9 +37,8 @@
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
 					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\""; 
-					echo "#0000FF"; 
+					echo get_option('pd_default_color');
 					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
-					//echo "<td width=\"20%\" scope=\"row\" valign=\"top\"></td>\n";
 					echo "</tr>\n";
 				}
 			} else {

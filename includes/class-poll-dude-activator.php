@@ -117,9 +117,10 @@ class Poll_Dude_Activator {
 		add_option('pd_recaptcha_enable', 0);
 		add_option('pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_');
+		add_option('pd_default_color', '#b0c3d4');
 		add_option('poll_currentpoll', 0);
 		add_option('poll_latestpoll', 1);
-		add_option('poll_bar', array('style' => 'default', 'background' => 'd8e1eb', 'border' => 'c8c8c8', 'height' => 8));
+		add_option('poll_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
 		add_option('poll_close', 1);
 		add_option('poll_ajax_style', array('loading' => 1, 'fading' => 1));
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->pollsq" );

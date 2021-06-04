@@ -175,6 +175,7 @@ class Poll_Dude_Admin {
 
 				// Decide What To Do
 				switch($_POST['do']) {
+					/*
 					// Delete Polls Logs
 					case __('Delete All Logs', 'poll-dude'):
 						check_ajax_referer('polldude_delete-polls-logs');
@@ -201,6 +202,7 @@ class Poll_Dude_Admin {
 							}
 						}
 						break;
+					*/
 					// Delete Poll's Answer
 					case __('Delete Poll Answer', 'poll-dude'):
 						check_ajax_referer('polldude_delete-poll-answer');
