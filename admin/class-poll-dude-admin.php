@@ -57,6 +57,13 @@ class Poll_Dude_Admin {
 		add_action( 'wp_ajax_poll-dude-control', 	array($this, 'control_panel') );
 		add_action(	'poll_dude_cron', 				array($this, 'cron_update') );
 		add_action( 'plugins_loaded',  				array($this, 'set_textdomain') );
+		add_action( 'widgets_init', 				array($this, 'widget_init') );
+	}
+
+	### Function: Init Widget
+	public function widget_init() {
+		$this->set_textdomain();
+		register_widget('WP_Widget_Polldude');
 	}
 
 	public function set_textdomain() {
