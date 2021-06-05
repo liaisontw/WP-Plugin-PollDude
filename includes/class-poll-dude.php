@@ -214,6 +214,10 @@ class Poll_Dude {
 		return $this->admin;
 	}
 
+	public function shortcode() {
+		return $this->shortcode;
+	}
+
 	/**
 	 * Retrieve the version number of the plugin.
 	 *

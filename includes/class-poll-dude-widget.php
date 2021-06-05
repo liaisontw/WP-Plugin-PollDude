@@ -10,17 +10,16 @@
 
 	// Display Widget
 	public function widget( $args, $instance ) {
+		global $wpdb, $poll_dude;
+
 		$title = apply_filters( 'widget_title', esc_attr( $instance['title'] ) );
 		$poll_id = (int) $instance['poll_id'];
-		$display_pollarchive = (int) $instance['display_pollarchive'];
+		//$display_pollarchive = (int) $instance['display_pollarchive'];
 		echo $args['before_widget'];
 		if( ! empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
-		get_poll( $poll_id );
-		if( $display_pollarchive ) {
-			display_polls_archive_link();
-		}
+		$poll_dude->shortcode->get_poll( $poll_id, true, false );
 		echo $args['after_widget'];
 	}
 
@@ -32,13 +31,14 @@
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['poll_id'] = (int) $new_instance['poll_id'];
-		$instance['display_pollarchive'] = (int) $new_instance['display_pollarchive'];
+		//$instance['display_pollarchive'] = (int) $new_instance['display_pollarchive'];
 		return $instance;
 	}
 
 	// DIsplay Widget Control Form
 	public function form($instance) {
-		global $wpdb;
+		global $wpdb, $poll_dude;
+		
 		$instance = wp_parse_args((array) $instance, array('title' => __('Polls', 'poll-dude'), 'poll_id' => 0, 'display_pollarchive' => 1));
 		$title = esc_attr($instance['title']);
 		$poll_id = (int) $instance['poll_id'];
@@ -58,7 +58,7 @@
 					$polls = $wpdb->get_results("SELECT pollq_id, pollq_question FROM $wpdb->pollsq ORDER BY pollq_id DESC");
 					if($polls) {
 						foreach($polls as $poll) {
-							$pollq_question = wp_kses_post( removeslashes( $poll->pollq_question ) );
+							$pollq_question = wp_kses_post( $poll_dude->utility->removeslashes( $poll->pollq_question ) );
 							$pollq_id = (int) $poll->pollq_id;
 							if($pollq_id === $poll_id) {
 								echo "<option value=\"$pollq_id\" selected=\"selected\">$pollq_question</option>\n";

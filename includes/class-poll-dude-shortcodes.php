@@ -6,7 +6,7 @@ class Poll_Dude_Shortcode {
     {
 		$this->utility = $utility;
 		add_shortcode('poll_dude'                             , array($this, 'poll_dude_shortcode'));
-		add_shortcode('page_polls'                            , array($this, 'poll_dude_page_shortcode'));
+		//add_shortcode('page_polls'                            , array($this, 'poll_dude_page_shortcode'));
 		add_action(   'wp_ajax_poll-dude'                     , array($this, 'poll_dude_vote'));
 		add_action(   'wp_ajax_nopriv_poll-dude'              , array($this, 'poll_dude_vote'));
     }
@@ -27,10 +27,12 @@ class Poll_Dude_Shortcode {
 		return str_replace( array_keys( $variables ), array_values( $variables ), $template ) ;
 	}
 
+	/*
     ### Function: Short Code For Inserting Polls Archive Into Page
 	public function poll_page_shortcode($atts) {
 		return $this->polls_archive();
 	}
+	*/
 
 	### Function: Short Code For Inserting Polls Into Posts
 	public function poll_dude_shortcode( $atts ) {
@@ -44,14 +46,14 @@ class Poll_Dude_Shortcode {
 		}
 
 		if( $attributes['type'] === 'vote' ) {
-			return $this->get_poll( $id, false );
+			return $this->get_poll( $id, false, true );
 		} elseif( $attributes['type'] === 'result' ) {
 			return $this->display_pollresult( $id );
 		}	
 	}
 
 	### Function: Get Poll
-	public function get_poll($temp_poll_id = 0, $display = true) {
+	public function get_poll($temp_poll_id = 0, $display = true, $recaptcha = true) {
 		global $wpdb, $polls_loaded;
 		// Poll Result Link
 		if(isset($_GET['pollresult'])) {
@@ -143,15 +145,15 @@ class Poll_Dude_Shortcode {
 			} elseif( $poll_close === 3 || ! $this->vote_allow() ) {
 				$disable_poll_js = '<script type="text/javascript">jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")});</script>';
 				if($display) {
-					echo $this->display_pollvote($poll_id).$disable_poll_js;
+					echo $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 				} else {
-					return $this->display_pollvote($poll_id).$disable_poll_js;
+					return $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 				}
 			} elseif( $poll_active === 1 ) {
 				if($display) {
-					echo $this->display_pollvote($poll_id);
+					echo $this->display_pollvote($poll_id, $display, $recaptcha);
 				} else {
-					return $this->display_pollvote($poll_id);
+					return $this->display_pollvote($poll_id, $display, $recaptcha);
 				}
 			}
 		}
@@ -159,7 +161,7 @@ class Poll_Dude_Shortcode {
 
 	
 	### Function: Display Voting Form
-	public function display_pollvote($poll_id, $display_loading = true) { 
+	public function display_pollvote($poll_id, $display_loading = true, $recaptcha = true) { 
 		do_action('wp_polls_display_pollvote');
 		global $wpdb, $poll_dude;
 		
@@ -240,21 +242,25 @@ class Poll_Dude_Shortcode {
 
 			
 			if($poll_recaptcha){         
-				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+				if($recaptcha){
+					$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+				}
 			}else{
 				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
 			}
 			
-			$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
-			if($poll_recaptcha){
-				$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
+			if($recaptcha){
+				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
+				if($poll_recaptcha){
+					$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
+				}
 			}
 
 			// Print Out Voting Form Footer Template
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
-			if($poll_recaptcha){
+			if($poll_recaptcha && $recaptcha){
 				$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
 			}
 			
@@ -544,12 +550,16 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Please click <I am not a robot>.', 'poll-dude')));
 		}
 		if(isset($captcha)){
+			//echo "$captcha".$captcha."\n";
 			$secretKey = get_option('pd_recaptcha_secretkey');
+			//echo "$secretKey".$secretKey."\n";
 			$ip = $_SERVER['REMOTE_ADDR'];
+			//echo "$ip".$ip."\n";
 			// post request to server
 			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
 			$response = file_get_contents($url);
 			$responseKeys = json_decode($response,true);
+			var_dump($responseKeys);
 			// should return JSON with success as true
 			if($responseKeys["success"]) {
 				_e('Recaptcha verify passed.', 'poll-dude');
