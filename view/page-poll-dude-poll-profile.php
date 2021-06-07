@@ -181,10 +181,10 @@
 		if('edit'==$mode) {
 			if($poll_active == 1) {
 				$poll_open_display = 'none';
-				$poll_close_display = 'inline';
+				$pd_close_display = 'inline';
 			} else {
 				$poll_open_display = 'inline';
-				$poll_close_display = 'none';
+				$pd_close_display = 'none';
 			}
     
 			echo '<input type="button" class="button" name="do" id="close_poll" value="';
@@ -192,7 +192,7 @@
 			echo '" onclick="closing_poll('.$poll_id.',';
 			printf(esc_js(__('You are about to CLOSE this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); 
 			echo ', '.wp_create_nonce('polldude_close-poll');
-			echo ');" style="display: '.$poll_close_display.';" />';
+			echo ');" style="display: '.$pd_close_display.';" />';
 			echo '<input type="button" class="button" name="do" id="open_poll" value="';
 			_e('Open Poll', 'poll-dude');
 			echo '" onclick="opening_poll(';

@@ -55,7 +55,7 @@
 					<option value="0"<?php selected(0, $poll_id); ?>><?php _e('Display Latest Poll', 'poll-dude'); ?></option>
 					<optgroup>&nbsp;</optgroup>
 					<?php
-					$polls = $wpdb->get_results("SELECT pollq_id, pollq_question FROM $wpdb->pollsq ORDER BY pollq_id DESC");
+					$polls = $wpdb->get_results("SELECT pollq_id, pollq_question FROM $wpdb->polldude_q ORDER BY pollq_id DESC");
 					if($polls) {
 						foreach($polls as $poll) {
 							$pollq_question = wp_kses_post( $poll_dude->utility->removeslashes( $poll->pollq_question ) );

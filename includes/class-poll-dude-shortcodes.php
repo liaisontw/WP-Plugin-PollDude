@@ -63,7 +63,7 @@ class Poll_Dude_Shortcode {
 		}
 		$temp_poll_id = (int) $temp_poll_id;
 		// Check Whether Poll Is Disabled
-		if((int) get_option('poll_currentpoll') === -1) {
+		if((int) get_option('pd_currentpoll') === -1) {
 			if($display) {
 				echo $this->removeslashes(get_option('poll_template_disable'));
 				return '';
@@ -77,13 +77,13 @@ class Poll_Dude_Shortcode {
 			switch($temp_poll_id) {
 				// Random Poll
 				case -2:
-					$poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY RAND() LIMIT 1");
+					$poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->polldude_q WHERE pollq_active = 1 ORDER BY RAND() LIMIT 1");
 					break;
 				// Latest Poll
 				case 0:
 					// Random Poll
-					if((int) get_option('poll_currentpoll') === -2) {
-						$random_poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY RAND() LIMIT 1");
+					if((int) get_option('pd_currentpoll') === -2) {
+						$random_poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->polldude_q WHERE pollq_active = 1 ORDER BY RAND() LIMIT 1");
 						$poll_id = (int) $random_poll_id;
 						if($pollresult_id > 0) {
 							$poll_id = $pollresult_id;
@@ -91,12 +91,12 @@ class Poll_Dude_Shortcode {
 							$poll_id = (int) $_POST['poll_id'];
 						}
 					// Current Poll ID Is Not Specified
-					} elseif((int) get_option('poll_currentpoll') === 0) {
+					} elseif((int) get_option('pd_currentpoll') === 0) {
 						// Get Lastest Poll ID
-						$poll_id = (int) get_option('poll_latestpoll');
+						$poll_id = (int) get_option('pd_latestpoll');
 					} else {
 						// Get Current Poll ID
-						$poll_id = (int) get_option('poll_currentpoll');
+						$poll_id = (int) get_option('pd_currentpoll');
 					}
 					break;
 				// Take Poll ID From Arguments
@@ -122,27 +122,27 @@ class Poll_Dude_Shortcode {
 			}
 		// Check Whether User Has Voted
 		} else {
-			$poll_active = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_active FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
+			$poll_active = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_active FROM $wpdb->polldude_q WHERE pollq_id = %d", $poll_id ) );
 			$poll_active = (int) $poll_active;
 			$is_voted = $this->is_voted( $poll_id );
-			$poll_close = 0;
+			$pd_close = 0;
 			if( $poll_active === 0 ) {
-				$poll_close = (int) get_option( 'poll_close' );
+				$pd_close = (int) get_option( 'pd_close' );
 			}
-			if( $poll_close === 2 ) {
+			if( $pd_close === 2 ) {
 				if( $display ) {
 					echo '';
 				} else {
 					return '';
 				}
 			}
-			if( $poll_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
+			if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
 				if($display) {
 					echo $this->display_pollresult($poll_id, $is_voted);
 				} else {
 					return $this->display_pollresult($poll_id, $is_voted);
 				}
-			} elseif( $poll_close === 3 || ! $this->vote_allow() ) {
+			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				$disable_poll_js = '<script type="text/javascript">jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")});</script>';
 				if($display) {
 					echo $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
@@ -168,7 +168,7 @@ class Poll_Dude_Shortcode {
 		// Temp Poll Result
 		$temp_pollvote = '';
 		// Get Poll Question Data
-		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->pollsq WHERE pollq_id = %d LIMIT 1", $poll_id ) );
+		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d LIMIT 1", $poll_id ) );
 
 		// Poll Question Variables
 		$poll_question_text = wp_kses_post( $this->removeslashes( $poll_question->pollq_question ) );
@@ -200,8 +200,8 @@ class Poll_Dude_Shortcode {
 
 		// Get Poll Answers Data
 		//list($order_by, $sort_order) = _polls_get_ans_sort();
-		//$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_question_id ) );
-		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
+		//$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_question_id ) );
+		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
 		// If There Is Poll Question With Answers
 		
 		if($poll_question && $poll_answers) {
@@ -240,13 +240,13 @@ class Poll_Dude_Shortcode {
 				}
 			}
 
-			
+			$template_footer = "";
 			if($poll_recaptcha){         
 				if($recaptcha){
-					$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
+					$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
 				}
 			}else{
-				$template_footer = "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+				$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
 			}
 			
 			if($recaptcha){
@@ -265,9 +265,9 @@ class Poll_Dude_Shortcode {
 			}
 			
 			if($display_loading) {
-				$poll_ajax_style = get_option('poll_ajax_style');
+				$pd_ajax_style = get_option('pd_ajax_style');
 				/*
-				if((int) $poll_ajax_style['loading'] === 1) {
+				if((int) $pd_ajax_style['loading'] === 1) {
 					$temp_pollvote .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
 				}
 				*/
@@ -307,7 +307,7 @@ class Poll_Dude_Shortcode {
 		$poll_least_votes = 0;
 		$poll_least_percentage = 0;
 		// Get Poll Question Data
-		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_active, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters FROM $wpdb->pollsq WHERE pollq_id = %d LIMIT 1", $poll_id ) );
+		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_active, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters FROM $wpdb->polldude_q WHERE pollq_id = %d LIMIT 1", $poll_id ) );
 		// No poll could be loaded from the database
 		if ( ! $poll_question ) {
 			return $this->removeslashes( get_option( 'poll_template_disable' ) );
@@ -332,9 +332,9 @@ class Poll_Dude_Shortcode {
 		$template_question .= "<ul class=\"wp-polls-ul\">";
 
 		// Get Poll Answers Data
-		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes, polla_colors FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
+		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes, polla_colors FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
 		//list( $order_by, $sort_order ) = _polls_get_ans_result_sort();
-		//$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_question_id ) );
+		//$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_question_id ) );
 		// If There Is Poll Question With Answers
 		if ( $poll_question && $poll_answers ) {
 			// Store The Percentage Of The Poll
@@ -422,9 +422,9 @@ class Poll_Dude_Shortcode {
 			$temp_pollresult .= "\t\t<input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"wp-polls-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" />\n";
 			$temp_pollresult .= "</div>\n";
 			
-			if ( $display_loading ) { $poll_ajax_style = get_option( 'poll_ajax_style' );
+			if ( $display_loading ) { $pd_ajax_style = get_option( 'pd_ajax_style' );
 				/*
-				if ( (int) $poll_ajax_style['loading'] === 1 ) {
+				if ( (int) $pd_ajax_style['loading'] === 1 ) {
 					$temp_pollresult .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
 				}
 				*/
@@ -443,7 +443,7 @@ class Poll_Dude_Shortcode {
 
 		do_action('wp_polls_vote_poll');
 
-		$polla_aids = $wpdb->get_col( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
+		$polla_aids = $wpdb->get_col( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->polldude_a WHERE polla_qid = %d", $poll_id ) );
 		$is_real = count( array_intersect( $poll_aid_array, $polla_aids ) ) === count( $poll_aid_array );
 
 		if( !$is_real ) {
@@ -462,7 +462,7 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Invalid Poll ID. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
-		$is_poll_open = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->pollsq WHERE pollq_id = %d AND pollq_active = 1", $poll_id ) );
+		$is_poll_open = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->polldude_q WHERE pollq_id = %d AND pollq_active = 1", $poll_id ) );
 
 		if ($is_poll_open === 0) {
 			throw new InvalidArgumentException(sprintf(__( 'Poll ID #%s is closed', 'poll-dude' ), $poll_id ));
@@ -491,7 +491,7 @@ class Poll_Dude_Shortcode {
 
 		// Only Create Cookie If User Choose Logging Method 1 Or 3
 		if ( $poll_logging_method === 1 || $poll_logging_method === 3 ) {
-			$cookie_expiry = (int) get_option('poll_cookielog_expiry');
+			$cookie_expiry = (int) get_option('pd_cookielog_expiry');
 			if ($cookie_expiry === 0) {
 				$cookie_expiry = YEAR_IN_SECONDS;
 			}
@@ -500,14 +500,14 @@ class Poll_Dude_Shortcode {
 
 		$i = 0;
 		foreach ($poll_aid_array as $polla_aid) {
-			$update_polla_votes = $wpdb->query( "UPDATE $wpdb->pollsa SET polla_votes = (polla_votes + 1) WHERE polla_qid = $poll_id AND polla_aid = $polla_aid" );
+			$update_polla_votes = $wpdb->query( "UPDATE $wpdb->polldude_a SET polla_votes = (polla_votes + 1) WHERE polla_qid = $poll_id AND polla_aid = $polla_aid" );
 			if (!$update_polla_votes) {
 				unset($poll_aid_array[$i]);
 			}
 			$i++;
 		}
 
-		$vote_q = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes+" . count( $poll_aid_array ) . "), pollq_totalvoters = (pollq_totalvoters + 1) WHERE pollq_id = $poll_id AND pollq_active = 1");
+		$vote_q = $wpdb->query("UPDATE $wpdb->polldude_q SET pollq_totalvotes = (pollq_totalvotes+" . count( $poll_aid_array ) . "), pollq_totalvoters = (pollq_totalvoters + 1) WHERE pollq_id = $poll_id AND pollq_active = 1");
 		if (!$vote_q) {
 			throw new InvalidArgumentException(sprintf(__('Unable To Update Poll Total Votes And Poll Total Voters. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
@@ -516,7 +516,7 @@ class Poll_Dude_Shortcode {
 			// Log Ratings In DB If User Choose Logging Method 2, 3 or 4
 			if ( $poll_logging_method > 1 ){
 				$wpdb->insert(
-					$wpdb->pollsip,
+					$wpdb->polldude_ip,
 					array(
 						'pollip_qid'       => $poll_id,
 						'pollip_aid'       => $polla_aid,

@@ -38,12 +38,12 @@ if (isset($_POST['bulk_delete'])) {
     for($i=0; $i<count($_POST['pollq']); $i++){
         $pollq_id = $_POST['pollq'][$i];
         
-        $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+        $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
         $poll_question_text = wp_kses_post( $poll_dude->utility->removeslashes($pollq_question));        
-        $delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
-        $delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
-        $delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
-        $poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");        
+        $delete_poll_question = $wpdb->delete( $wpdb->polldude_q, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
+        $delete_poll_answers =  $wpdb->delete( $wpdb->polldude_a, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
+        $delete_poll_ip =	   $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+        $poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'pd_latestpoll'");        
         
         $error = false;
         if(!$delete_poll_question) {
@@ -54,7 +54,7 @@ if (isset($_POST['bulk_delete'])) {
             echo '<p style="color: green;">'.sprintf(__('Poll \'%d\' \'%s\' Deleted Successfully', 'poll-dude'), $pollq_id, wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
         }
                 
-        update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
+        update_option( 'pd_latestpoll', $poll_dude->utility->latest_poll() );
         //do_action( 'wp_polls_delete_poll', $pollq_id );
     }
 
@@ -68,9 +68,9 @@ switch($mode) {
     // Edit A Poll
     case 'edit':
         $last_col_align = is_rtl() ? 'right' : 'left';
-        $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->pollsq WHERE pollq_id = %d", $poll_id ) );
-        $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes, polla_colors FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
-        $poll_noquestion = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(polla_aid) FROM $wpdb->pollsa WHERE polla_qid = %d", $poll_id ) );
+        $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d", $poll_id ) );
+        $poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers, polla_votes, polla_colors FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY polla_aid ASC", $poll_id ) );
+        $poll_noquestion = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(polla_aid) FROM $wpdb->polldude_a WHERE polla_qid = %d", $poll_id ) );
         $poll_question_text = $poll_dude->utility->removeslashes($poll_question->pollq_question);
         $poll_totalvotes = (int) $poll_question->pollq_totalvotes;
         $poll_timestamp = $poll_question->pollq_timestamp;
@@ -85,8 +85,8 @@ switch($mode) {
     // Main Page
     default:
         
-        $polls = $wpdb->get_results( "SELECT * FROM $wpdb->pollsq  ORDER BY pollq_timestamp DESC" );
-        $total_ans =  $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->pollsa" );
+        $polls = $wpdb->get_results( "SELECT * FROM $wpdb->polldude_q  ORDER BY pollq_timestamp DESC" );
+        $total_ans =  $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->polldude_a" );
         $total_votes = 0;
         $total_voters = 0;
 ?>
@@ -133,8 +133,8 @@ switch($mode) {
                     <?php
                         if($polls) {
                             $i = 0;
-                            $current_poll = (int) get_option('poll_currentpoll');
-                            $latest_poll = (int) get_option('poll_latestpoll');
+                            $current_poll = (int) get_option('pd_currentpoll');
+                            $latest_poll = (int) get_option('pd_latestpoll');
                             foreach($polls as $poll) {
                                 $poll_id = (int) $poll->pollq_id;
                                 $poll_question = $poll_dude->utility->removeslashes($poll->pollq_question);

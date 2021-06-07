@@ -62,7 +62,7 @@ class Poll_Dude_Activator {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$create_table = array();
-		$create_table['pollsq'] = "CREATE TABLE $wpdb->pollsq (".
+		$create_table['polldude_q'] = "CREATE TABLE $wpdb->polldude_q (".
 								"pollq_id int(10) NOT NULL auto_increment," .
 								"pollq_question varchar(200) character set utf8 NOT NULL default ''," .
 								"pollq_timestamp varchar(20) NOT NULL default ''," .
@@ -74,7 +74,7 @@ class Poll_Dude_Activator {
 								"pollq_recaptcha tinyint(1) NOT NULL default '1',".
 								"PRIMARY KEY  (pollq_id)" .
 								") $charset_collate;";
-		$create_table['pollsa'] = "CREATE TABLE $wpdb->pollsa (" .
+		$create_table['polldude_a'] = "CREATE TABLE $wpdb->polldude_a (" .
 								"polla_aid int(10) NOT NULL auto_increment," .
 								"polla_qid int(10) NOT NULL default '0'," .
 								"polla_answers varchar(200) character set utf8 NOT NULL default ''," .
@@ -82,7 +82,7 @@ class Poll_Dude_Activator {
 								"polla_colors varchar(20) character set utf8 NOT NULL default '#0000FF'," .
 								"PRIMARY KEY  (polla_aid)" .
 								") $charset_collate;";
-		$create_table['pollsip'] = "CREATE TABLE $wpdb->pollsip (" .
+		$create_table['polldude_ip'] = "CREATE TABLE $wpdb->polldude_ip (" .
 								"pollip_id int(10) NOT NULL auto_increment," .
 								"pollip_qid int(10) NOT NULL default '0'," .
 								"pollip_aid int(10) NOT NULL default '0'," .
@@ -96,41 +96,41 @@ class Poll_Dude_Activator {
 								"KEY pollip_qid (pollip_qid)," .
 								"KEY pollip_ip_qid (pollip_ip, pollip_qid)" .
 								") $charset_collate;";
-		dbDelta( $create_table['pollsq'] );
-		dbDelta( $create_table['pollsa'] );
-		dbDelta( $create_table['pollsip'] );
+		dbDelta( $create_table['polldude_q'] );
+		dbDelta( $create_table['polldude_a'] );
+		dbDelta( $create_table['polldude_ip'] );
 		// Check Whether It is Install Or Upgrade
-		$first_poll = $wpdb->get_var( "SELECT pollq_id FROM $wpdb->pollsq LIMIT 1" );
+		$first_poll = $wpdb->get_var( "SELECT pollq_id FROM $wpdb->polldude_q LIMIT 1" );
 		// If Install, Insert 1st Poll Question With 5 Poll Answers
 		if ( empty( $first_poll ) ) {
 			// Insert Poll Question (1 Record)
-			$insert_pollq = $wpdb->insert( $wpdb->pollsq, array( 'pollq_question' => __( 'How Is My Site?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
+			$insert_pollq = $wpdb->insert( $wpdb->polldude_q, array( 'pollq_question' => __( 'How Is My Site?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
 			if ( $insert_pollq ) {
 				// Insert Poll Answers  (5 Records)
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Good', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Excellent', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Bad', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Can Be Improved', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->pollsa, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Good', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Excellent', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Bad', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Can Be Improved', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
 			}
 		}
 		add_option('pd_recaptcha_enable', 0);
 		add_option('pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_');
 		add_option('pd_default_color', '#b0c3d4');
-		add_option('poll_currentpoll', 0);
-		add_option('poll_latestpoll', 1);
-		add_option('poll_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
-		add_option('poll_close', 1);
-		add_option('poll_ajax_style', array('loading' => 1, 'fading' => 1));
-		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->pollsq" );
+		add_option('pd_currentpoll', 0);
+		add_option('pd_latestpoll', 1);
+		add_option('pd_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
+		add_option('pd_close', 1);
+		add_option('pd_ajax_style', array('loading' => 1, 'fading' => 1));
+		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->polldude_q" );
 		if ( 0 === $pollq_totalvoters ) {
-			$wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvoters = pollq_totalvotes" );
+			$wpdb->query( "UPDATE $wpdb->polldude_q SET pollq_totalvoters = pollq_totalvotes" );
 		}
 
-		add_option('poll_cookielog_expiry', 0);
+		add_option('pd_cookielog_expiry', 0);
 		// Index
-		$index = $wpdb->get_results( "SHOW INDEX FROM $wpdb->pollsip;" );
+		$index = $wpdb->get_results( "SHOW INDEX FROM $wpdb->polldude_ip;" );
 		$key_name = array();
 		if( count( $index ) > 0 ) {
 			foreach( $index as $i ) {
@@ -138,26 +138,26 @@ class Poll_Dude_Activator {
 			}
 		}
 		if ( ! in_array( 'pollip_ip', $key_name, true ) ) {
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip ADD INDEX pollip_ip (pollip_ip);" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip ADD INDEX pollip_ip (pollip_ip);" );
 		}
 		if ( ! in_array( 'pollip_qid', $key_name, true ) ) {
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip ADD INDEX pollip_qid (pollip_qid);" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip ADD INDEX pollip_qid (pollip_qid);" );
 		}
 		if ( ! in_array( 'pollip_ip_qid_aid', $key_name, true ) ) {
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip ADD INDEX pollip_ip_qid_aid (pollip_ip, pollip_qid, pollip_aid);" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip ADD INDEX pollip_ip_qid_aid (pollip_ip, pollip_qid, pollip_aid);" );
 		}
 		// No longer needed index
 		if ( in_array( 'pollip_ip_qid', $key_name, true ) ) {
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip DROP INDEX pollip_ip_qid;" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip DROP INDEX pollip_ip_qid;" );
 		}
 
-		// Change column datatype for wp_pollsip
-		$col_pollip_qid = $wpdb->get_row( "DESCRIBE $wpdb->pollsip pollip_qid" );
+		// Change column datatype for wp_polldude_ip
+		$col_pollip_qid = $wpdb->get_row( "DESCRIBE $wpdb->polldude_ip pollip_qid" );
 		if( 'varchar(10)' === $col_pollip_qid->Type ) {
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip MODIFY COLUMN pollip_qid int(10) NOT NULL default '0';" );
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip MODIFY COLUMN pollip_aid int(10) NOT NULL default '0';" );
-			$wpdb->query( "ALTER TABLE $wpdb->pollsip MODIFY COLUMN pollip_timestamp int(10) NOT NULL default '0';" );
-			$wpdb->query( "ALTER TABLE $wpdb->pollsq MODIFY COLUMN pollq_expiry int(10) NOT NULL default '0';" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip MODIFY COLUMN pollip_qid int(10) NOT NULL default '0';" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip MODIFY COLUMN pollip_aid int(10) NOT NULL default '0';" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_ip MODIFY COLUMN pollip_timestamp int(10) NOT NULL default '0';" );
+			$wpdb->query( "ALTER TABLE $wpdb->polldude_q MODIFY COLUMN pollq_expiry int(10) NOT NULL default '0';" );
 		}
 
 		// Set 'manage_polls' Capabilities To Administrator

@@ -57,14 +57,14 @@ class Poll_Dude_Public {
 		$this->enqueue_styles();
 		$this->enqueue_scripts();
 		
-		$poll_ajax_style = get_option('poll_ajax_style');
+		$pd_ajax_style = get_option('pd_ajax_style');
 		wp_localize_script('poll-dude', 'pollsL10n', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'poll-dude'),
 			'text_valid' => __('Please choose a valid poll answer.', 'poll-dude'),
 			'text_multiple' => __('Maximum number of choices allowed: ', 'poll-dude'),
-			'show_loading' => (int) $poll_ajax_style['loading'],
-			'show_fading' => (int) $poll_ajax_style['fading'],
+			'show_loading' => (int) $pd_ajax_style['loading'],
+			'show_fading' => (int) $pd_ajax_style['fading'],
 			'g_recaptcha'=>__('Google reCaptcha V2', 'poll-dude')
 		));
 	}

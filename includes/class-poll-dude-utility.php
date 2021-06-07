@@ -65,7 +65,7 @@ class Poll_Dude_Utility {
     ### Funcion: Get Latest Poll ID
     public function latest_poll() {
         global $wpdb;
-	    $poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->pollsq WHERE pollq_active = 1 ORDER BY pollq_timestamp DESC LIMIT 1");
+	    $poll_id = $wpdb->get_var("SELECT pollq_id FROM $wpdb->polldude_q WHERE pollq_active = 1 ORDER BY pollq_timestamp DESC LIMIT 1");
 	    return (int) $poll_id;
     }
 
@@ -140,13 +140,13 @@ class Poll_Dude_Utility {
     ### Function: Check Voted By IP
     public function voted_ip( $poll_id ) {
         global $wpdb;
-        $log_expiry = (int) get_option( 'poll_cookielog_expiry' );
+        $log_expiry = (int) get_option( 'pd_cookielog_expiry' );
         $log_expiry_sql = '';
         if( $log_expiry > 0 ) {
             $log_expiry_sql = ' AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
         }
         // Check IP From IP Logging Database
-        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, $this->hash_ipaddr(), $this->get_ipaddr() ) . $log_expiry_sql );
+        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND (pollip_ip = %s OR pollip_ip = %s)", $poll_id, $this->hash_ipaddr(), $this->get_ipaddr() ) . $log_expiry_sql );
         if( $get_voted_aids ) {
             return $get_voted_aids;
         }
@@ -161,14 +161,14 @@ class Poll_Dude_Utility {
         if ( ! is_user_logged_in() ) {
             return 1;
         }
-        $pollsip_userid = (int) $user_ID;
-        $log_expiry = (int) get_option( 'poll_cookielog_expiry' );
+        $polldude_ip_userid = (int) $user_ID;
+        $log_expiry = (int) get_option( 'pd_cookielog_expiry' );
         $log_expiry_sql = '';
         if( $log_expiry > 0 ) {
             $log_expiry_sql = 'AND (' . current_time('timestamp') . '-(pollip_timestamp+0)) < ' . $log_expiry;
         }
         // Check User ID From IP Logging Database
-        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->pollsip WHERE pollip_qid = %d AND pollip_userid = %d", $poll_id, $pollsip_userid ) . $log_expiry_sql );
+        $get_voted_aids = $wpdb->get_col( $wpdb->prepare( "SELECT pollip_aid FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_userid = %d", $poll_id, $polldude_ip_userid ) . $log_expiry_sql );
         if($get_voted_aids) {
             return $get_voted_aids;
         } else {

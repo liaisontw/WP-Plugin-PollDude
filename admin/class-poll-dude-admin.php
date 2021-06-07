@@ -75,7 +75,7 @@ class Poll_Dude_Admin {
 		if(in_array($hook_suffix, $admin_pages, true)) {			
 			$this->enqueue_scripts();
 			$this->enqueue_styles();
-			wp_localize_script('poll-dude', 'pollsAdminL10n', array(
+			wp_localize_script('poll-dude', 'polldude_adminL10n', array(
 					'admin_ajax_url' => admin_url('admin-ajax.php'),
 					'text_direction' => is_rtl() ? 'right' : 'left',
 					'text_delete_poll' => __('Delete Poll', 'poll-dude'),
@@ -187,7 +187,7 @@ class Poll_Dude_Admin {
 					case __('Delete All Logs', 'poll-dude'):
 						check_ajax_referer('polldude_delete-polls-logs');
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->query("DELETE FROM $wpdb->pollsip");
+							$delete_logs = $wpdb->query("DELETE FROM $wpdb->polldude_ip");
 							if($delete_logs) {
 								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude').'</p>';
 							} else {
@@ -199,9 +199,9 @@ class Poll_Dude_Admin {
 					case __('Delete Logs For This Poll Only', 'poll-dude'):
 						check_ajax_referer('polldude_delete-poll-logs');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+							$delete_logs = $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 							if( $delete_logs ) {
 								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 							} else {
@@ -215,12 +215,12 @@ class Poll_Dude_Admin {
 						check_ajax_referer('polldude_delete-poll-answer');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$polla_aid = (int) sanitize_key( $_POST['polla_aid'] );
-						$poll_answers = $wpdb->get_row( $wpdb->prepare( "SELECT polla_votes, polla_answers FROM $wpdb->pollsa WHERE polla_aid = %d AND polla_qid = %d", $polla_aid, $pollq_id ) );
+						$poll_answers = $wpdb->get_row( $wpdb->prepare( "SELECT polla_votes, polla_answers FROM $wpdb->polldude_a WHERE polla_aid = %d AND polla_qid = %d", $polla_aid, $pollq_id ) );
 						$polla_votes = (int) $poll_answers->polla_votes;
 						$polla_answers = wp_kses_post( $poll_dude->utility->removeslashes( trim( $poll_answers->polla_answers ) ) );
-						$delete_polla_answers = $wpdb->delete( $wpdb->pollsa, array( 'polla_aid' => $polla_aid, 'polla_qid' => $pollq_id ), array( '%d', '%d' ) );
-						$delete_pollip = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id, 'pollip_aid' => $polla_aid ), array( '%d', '%d' ) );
-						$update_pollq_totalvotes = $wpdb->query( "UPDATE $wpdb->pollsq SET pollq_totalvotes = (pollq_totalvotes - $polla_votes) WHERE pollq_id = $pollq_id" );
+						$delete_polla_answers = $wpdb->delete( $wpdb->polldude_a, array( 'polla_aid' => $polla_aid, 'polla_qid' => $pollq_id ), array( '%d', '%d' ) );
+						$delete_pollip = $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id, 'pollip_aid' => $polla_aid ), array( '%d', '%d' ) );
+						$update_pollq_totalvotes = $wpdb->query( "UPDATE $wpdb->polldude_q SET pollq_totalvotes = (pollq_totalvotes - $polla_votes) WHERE pollq_id = $pollq_id" );
 						if($delete_polla_answers) {
 							echo '<p style="color: green;">'.sprintf(__('Poll Answer Deleted Successfully.', 'poll-dude')).'</p>';
 						} else {
@@ -231,9 +231,9 @@ class Poll_Dude_Admin {
 					case __('Open Poll', 'poll-dude'):
 						check_ajax_referer('polldude_open-poll');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
 						$open_poll = $wpdb->update(
-							$wpdb->pollsq,
+							$wpdb->polldude_q,
 							array(
 								'pollq_active' => 1
 							),
@@ -257,9 +257,9 @@ class Poll_Dude_Admin {
 					case __('Close Poll', 'poll-dude-'):
 						check_ajax_referer('polldude_close-poll');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
+						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
 						$close_poll = $wpdb->update(
-							$wpdb->pollsq,
+							$wpdb->polldude_q,
 							array(
 								'pollq_active' => 0
 							),
@@ -284,11 +284,11 @@ class Poll_Dude_Admin {
 						check_ajax_referer('polldude_delete-poll');
 						//echo 'Delete Poll';
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->pollsq WHERE pollq_id = %d", $pollq_id ) );
-						$delete_poll_question = $wpdb->delete( $wpdb->pollsq, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
-						$delete_poll_answers =  $wpdb->delete( $wpdb->pollsa, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
-						$delete_poll_ip =	   $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
-						$poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'poll_latestpoll'");
+						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
+						$delete_poll_question = $wpdb->delete( $wpdb->polldude_q, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
+						$delete_poll_answers =  $wpdb->delete( $wpdb->polldude_a, array( 'polla_qid' => $pollq_id ), array( '%d' ) );
+						$delete_poll_ip =	   $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+						$poll_option_lastestpoll = $wpdb->get_var("SELECT option_value FROM $wpdb->options WHERE option_name = 'pd_latestpoll'");
 						if(!$delete_poll_question) {
 							echo '<p style="color: red;">'.sprintf(__('Error In Deleting Poll \'%s\' Question', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
@@ -296,7 +296,7 @@ class Poll_Dude_Admin {
 							echo '<p style="color: green;">'.sprintf(__('Poll \'%s\' Deleted Successfully', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						}
 								
-						update_option( 'poll_latestpoll', $poll_dude->utility->latest_poll() );
+						update_option( 'pd_latestpoll', $poll_dude->utility->latest_poll() );
 						do_action( 'wp_polls_delete_poll', $pollq_id );
 						
 						break;
@@ -385,7 +385,7 @@ class Poll_Dude_Admin {
 			if('edit' !== $mode) {
 				// Insert Poll		
 				$add_poll_question = $wpdb->insert(
-					$wpdb->pollsq,
+					$wpdb->polldude_q,
 					$pollq_data,
 					$pollq_format
 				);
@@ -402,7 +402,7 @@ class Poll_Dude_Admin {
 			}else{
 				// Update Poll's Question
 				$edit_poll_question = $wpdb->update(
-					$wpdb->pollsq,
+					$wpdb->polldude_q,
 					$pollq_data,
 					array('pollq_id' => $pollq_id),
 					$pollq_format,
@@ -413,7 +413,7 @@ class Poll_Dude_Admin {
 				}
 				// Update Polls' Answers
 				$polla_aids = array();
-				$get_polla_aids = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->pollsa WHERE polla_qid = %d ORDER BY polla_aid ASC", $pollq_id ) );
+				$get_polla_aids = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY polla_aid ASC", $pollq_id ) );
 				if($get_polla_aids) {
 					foreach($get_polla_aids as $get_polla_aid) {
 							$polla_aids[] = (int) $get_polla_aid->polla_aid;
@@ -426,7 +426,7 @@ class Poll_Dude_Admin {
 						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 
 						$edit_poll_answer = $wpdb->update(
-							$wpdb->pollsa,
+							$wpdb->polldude_a,
 							array(
 								'polla_answers' => $polla_answers,
 								'polla_votes'   => $polla_votes,
@@ -472,10 +472,10 @@ class Poll_Dude_Admin {
 					if ( ! empty( $polla_answer_new ) ) {
 						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
 						$polla_color = $_POST['color_picker'][$i];
-						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
+						//$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 							
 						$add_poll_answers = $wpdb->insert(
-							$wpdb->pollsa,
+							$wpdb->polldude_a,
 							array(
 								'polla_qid'      => $polla_qid,
 								'polla_answers'  => $polla_answer_new,
@@ -495,6 +495,7 @@ class Poll_Dude_Admin {
 						} else {
 							if ('edit' === $mode) {
 								$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Answer \'%s\' Added Successfully.', 'poll-dude'), $polla_answer_new).'</p>';
+								$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 							}
 						}
 						
@@ -509,13 +510,14 @@ class Poll_Dude_Admin {
 			
 			// Update Lastest Poll ID To Poll Options
 			$latest_pollid = $poll_dude->utility->latest_poll();
-			$update_latestpoll = update_option('poll_latestpoll', $latest_pollid);
+			$update_latestpoll = update_option('pd_latestpoll', $latest_pollid);
 		
 			
 			if ('edit' !== $mode) {
 				$base_page = 'admin.php?page='.$base_name;
 				// If poll starts in the future use the correct poll ID
 				$latest_pollid = ( $latest_pollid < $polla_qid ) ? $polla_qid : $latest_pollid;
+				//$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 				if ( empty( $text ) ) {
 					$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 				} 
@@ -548,12 +550,12 @@ class Poll_Dude_Admin {
 	public function cron_update() {
 		global $wpdb;
 		// Close Poll
-		$close_polls = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_active = 0 WHERE pollq_expiry < '".current_time('timestamp')."' AND pollq_expiry != 0 AND pollq_active != 0");
+		$close_polls = $wpdb->query("UPDATE $wpdb->polldude_q SET pollq_active = 0 WHERE pollq_expiry < '".current_time('timestamp')."' AND pollq_expiry != 0 AND pollq_active != 0");
 		// Open Future Polls
-		$active_polls = $wpdb->query("UPDATE $wpdb->pollsq SET pollq_active = 1 WHERE pollq_timestamp <= '".current_time('timestamp')."' AND pollq_active = -1");
+		$active_polls = $wpdb->query("UPDATE $wpdb->polldude_q SET pollq_active = 1 WHERE pollq_timestamp <= '".current_time('timestamp')."' AND pollq_active = -1");
 		// Update Latest Poll If Future Poll Is Opened
 		if($active_polls) {
-			$update_latestpoll = update_option('poll_latestpoll', polls_latest_id());
+			$update_latestpoll = update_option('pd_latestpoll', polls_latest_id());
 		}
 		return;
 	}	

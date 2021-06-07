@@ -45,9 +45,9 @@ define( 'POLL_DUDE_VERSION', '1.0.0' );
 
 // polldude Table Name
 global $wpdb;
-$wpdb->pollsq   = $wpdb->prefix.'pollsq';
-$wpdb->pollsa   = $wpdb->prefix.'pollsa';
-$wpdb->pollsip  = $wpdb->prefix.'pollsip';
+$wpdb->polldude_q   = $wpdb->prefix.'polldude_q';
+$wpdb->polldude_a   = $wpdb->prefix.'polldude_a';
+$wpdb->polldude_ip  = $wpdb->prefix.'polldude_ip';
 
 require_once plugin_dir_path(__FILE__) . '/includes/class-poll-dude.php';
 global $poll_dude;
