@@ -250,7 +250,7 @@ class Poll_Dude_Shortcode {
 					$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" /></p>";
 				}
 			}else{
-				$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"poll_vote($poll_question_id);\" /></p>";
+				$template_footer .= "</ul><p style=\"text-align: center;\"><input type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" /></p>";
 			}
 			
 			if($recaptcha){
@@ -441,7 +441,7 @@ class Poll_Dude_Shortcode {
 		return apply_filters( 'wp_polls_result_markup', $temp_pollresult );
 	}
 
-	public function vote_poll_process($poll_id, $poll_aid_array = [])
+	public function vote_polldude_process($poll_id, $poll_aid_array = [])
 	{
 		global $wpdb, $user_identity, $user_ID, $poll_dude;
 
@@ -612,7 +612,7 @@ class Poll_Dude_Shortcode {
 				case 'process':			
 					try {
 						$poll_aid_array = array_unique( array_map('intval', array_map('sanitize_key', explode( ',', $_POST["poll_$poll_id"] ) ) ) );
-						echo $this->vote_poll_process($poll_id, $poll_aid_array);
+						echo $this->vote_polldude_process($poll_id, $poll_aid_array);
 					} catch (Exception $e) {
 						echo $e->getMessage();
 					}
