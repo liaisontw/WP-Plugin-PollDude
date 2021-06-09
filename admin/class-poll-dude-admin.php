@@ -75,7 +75,7 @@ class Poll_Dude_Admin {
 		if(in_array($hook_suffix, $admin_pages, true)) {			
 			$this->enqueue_scripts();
 			$this->enqueue_styles();
-			wp_localize_script('poll-dude', 'pollsAdminL10n', array(
+			wp_localize_script('poll-dude', 'pdAdminL10n', array(
 					'admin_ajax_url' => admin_url('admin-ajax.php'),
 					'text_direction' => is_rtl() ? 'right' : 'left',
 					'text_delete_poll' => __('Delete Poll', 'poll-dude'),

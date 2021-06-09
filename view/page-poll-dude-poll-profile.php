@@ -38,7 +38,7 @@
 					echo "<tr id=\"poll-answer-$i\">\n";
 					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\""; 
 					echo get_option('pd_default_color');
-					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"remove_poll_answer_add(".$i.");\" class=\"button\" /></td>\n";
+					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_remove_answer_add_form(".$i.");\" class=\"button\" /></td>\n";
 					echo "</tr>\n";
 				}
 			} else {
@@ -58,9 +58,9 @@
 						echo "<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
 						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\"$poll_colors\">";
 						//echo "#0000FF \">";
-						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"delete_poll_ans_dev($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('polldude_delete-poll-answer')."');\" class=\"button\" />";
+						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_delete_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('polldude_delete-poll-answer')."');\" class=\"button\" />";
 						echo "</td>\n";
-                        echo "<td width=\"20%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"check_totalvotes();\" /></td>\n</tr>\n";
+                        echo "<td width=\"20%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"pd_totalvotes();\" /></td>\n</tr>\n";
 						//echo "<th width=\"20%\" scope=\"row\" valign=\"top\" style=\"text-align: right\"></th>\n";
                         $poll_actual_totalvotes += $polla_votes;
                         $i++;
@@ -71,7 +71,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude') ?>" onclick="<?php echo ('edit' != $mode)? 'add_poll_answer_add();' : 'poll_dude_add_answer_edit();' ; ?>" class="button" /></td>
+				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude') ?>" onclick="<?php echo ('edit' != $mode)? 'pd_add_answer_add_form();' : 'pd_add_answer_edit();' ; ?>" class="button" /></td>
 			</tr>
 			<tr>
                 <td width="30%" align="<?php ('edit' != $mode)? '': '$last_col_align'; ?>">
@@ -81,7 +81,7 @@
 					</strong> 
 						<?php if ('edit' == $mode) { 
 							echo '<input type="text" size="4" readonly="readonly" id="pollq_totalvotes" name="pollq_totalvotes" value="';
-                            echo $poll_actual_totalvotes.'" onblur="check_totalvotes();" />';
+                            echo $poll_actual_totalvotes.'" onblur="pd_totalvotes();" />';
 						} ?>
 				</td>
 				<td width="30%" align="<?php ('edit' != $mode)? '': $last_col_align; ?>">
@@ -105,7 +105,7 @@
 		<tr>
 			<th width="40%" scope="row" valign="top"><?php _e('Allows Users To Select More Than One Answer?', 'poll-dude'); ?></th>
 			<td width="60%">
-				<select name="pollq_multiple_yes" id="pollq_multiple_yes" size="1" onchange="check_pollq_multiple();">
+				<select name="pollq_multiple_yes" id="pollq_multiple_yes" size="1" onchange="pd_is_multiple_answer();">
 					<option value="0"<?php if('edit'==$mode) { selected('0', $poll_multiple); }?>><?php _e('No', 'poll-dude'); ?></option>
                     <option value="1"<?php if('edit'==$mode) { if($poll_multiple > 0) { echo ' selected="selected"'; } } ?>><?php _e('Yes', 'poll-dude'); ?></option>
 				</select>
@@ -139,7 +139,7 @@
 						$poll_timestamp = current_time('timestamp');					
 					}
 					echo mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('time_format'), get_option('date_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)).'<br />';
-					echo '<input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="check_polltimestamp()" />&nbsp;<label for="edit_polltimestamp">';
+					echo '<input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="pd_check_timestamp()" />&nbsp;<label for="edit_polltimestamp">';
 					_e('Edit Start Date/Time', 'poll-dude'); 
 					echo '</label><br />';
 					//poll_dude_time_select($poll_timestamp, 'pollq_timestamp', 'none');
@@ -160,7 +160,7 @@
 						echo '<br />';
 					}
                 ?>
-				<input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" onclick="check_pollexpiry();" <?php if(('edit'!=$mode) || empty($poll_expiry)) { echo 'checked="checked"'; } ?> />
+				<input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" onclick="pd_check_expiry();" <?php if(('edit'!=$mode) || empty($poll_expiry)) { echo 'checked="checked"'; } ?> />
                 <label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'poll-dude'); ?></label><br />
                 <?php
 					if(('edit'!=$mode) || empty($poll_expiry)) {
@@ -189,13 +189,13 @@
     
 			echo '<input type="button" class="button" name="do" id="close_poll" value="';
 			_e('Close Poll', 'poll-dude'); 
-			echo '" onclick="closing_poll('.$poll_id.',';
+			echo '" onclick="pd_close_poll('.$poll_id.',';
 			printf(esc_js(__('You are about to CLOSE this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); 
 			echo ', '.wp_create_nonce('polldude_close-poll');
 			echo ');" style="display: '.$pd_close_display.';" />';
 			echo '<input type="button" class="button" name="do" id="open_poll" value="';
 			_e('Open Poll', 'poll-dude');
-			echo '" onclick="opening_poll(';
+			echo '" onclick="pd_open_poll(';
 			echo $poll_id;
 			echo ', ';
 			printf(esc_js(__('You are about to OPEN this poll \'%s\'.', 'poll-dude-')), esc_attr( esc_js( $poll_question_text ) ) );

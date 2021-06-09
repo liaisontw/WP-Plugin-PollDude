@@ -66,7 +66,7 @@ if( isset($_POST['Submit']) ) {
 <h2><?php _e('Poll Options', 'poll-dude'); ?></h2>
 <div class="wrap">
 <!--
-    <input type="checkbox" name="enable_recaptcha" value="1" onclick="check_recaptcha();" />
+    <input type="checkbox" name="enable_recaptcha" value="1" onclick="pd_check_recaptcha();" />
     <?php _e('Enable reCaptcha', 'poll-dude'); ?>
     <br style="clear" />
 -->

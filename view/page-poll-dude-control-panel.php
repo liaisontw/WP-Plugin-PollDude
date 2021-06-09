@@ -103,7 +103,7 @@ switch($mode) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" onclick="checkbox_all1();" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" onclick="pd_checkall_top();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th colspan="2"><?php 
                             wp_nonce_field( 'polldude_bulk-delete' );
@@ -164,7 +164,7 @@ switch($mode) {
                                     }
                                 }
                                 echo "<tr id=\"poll-$poll_id\" $style>\n";
-                                echo "<td><a href=\"#DeletePoll\" onclick=\"delete_poll_dev($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude')), esc_js($poll_question))."', '".wp_create_nonce('polldude_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude')."</a></td>\n";
+                                echo "<td><a href=\"#DeletePoll\" onclick=\"pd_delete_poll($poll_id, '".sprintf(esc_js(__('You are about to delete this poll, \'%s\'.', 'poll-dude')), esc_js($poll_question))."', '".wp_create_nonce('polldude_delete-poll')."');\" class=\"button\">".__('Delete', 'poll-dude')."</a></td>\n";
                                 echo "<td><input id=\"cb-select-$poll_id\" type=\"checkbox\" name=\"pollq[]\" value=\"$poll_id\"  style=\"width:10px; height:15px;\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
@@ -205,7 +205,7 @@ switch($mode) {
                     ?>
                     <tr>
                         <th></th>
-                        <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" onclick="checkbox_all2();" style="width:10px; height:15px;" ></th>
+                        <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" onclick="pd_checkall_bottom();" style="width:10px; height:15px;" ></th>
                         <th></th>
                         <th><?php 
                             wp_nonce_field( 'polldude_bulk-delete' );

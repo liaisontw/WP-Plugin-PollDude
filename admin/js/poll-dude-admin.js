@@ -5,65 +5,70 @@ var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, count_po
 function delete_poll_ans(a, c, d, b, e) {
 	if (delete_poll_ans_confirm = confirm(b)) global_poll_id = a, global_poll_aid = c, global_poll_aid_votes = d, temp_vote_count = 0, jQuery(document).ready(function (b) {
 		b.ajax({
-			type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_delete_poll_ans + "&pollq_id=" + a + "&polla_aid=" + c + "&action=poll-dude-control&_ajax_nonce=" + e, cache: !1, success: function (a) {
+			type: "POST", url: pdAdminL10n.admin_ajax_url, data: "do=" + pdAdminL10n.text_delete_poll_ans + "&pollq_id=" + a + "&polla_aid=" + c + "&action=poll-dude-control&_ajax_nonce=" + e, cache: !1, success: function (a) {
 				b("#message").html(a); b("#message").show(); b("#poll_total_votes").html(parseInt(b("#poll_total_votes").html()) - parseInt(global_poll_aid_votes));
-				b("#pollq_totalvotes").val(temp_vote_count); b("#poll-answer-" + global_poll_aid).remove(); check_totalvotes(); reorder_answer_num()
+				b("#pollq_totalvotes").val(temp_vote_count); b("#poll-answer-" + global_poll_aid).remove(); pd_totalvotes(); pd_reorder_answer()
 			}
 		})
 	})
 }
 */
-function opening_poll(a, c, d) { if (open_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_open_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#open_poll").hide(); b("#close_poll").show() } }) }) }
-function closing_poll(a, c, d) { if (close_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pollsAdminL10n.admin_ajax_url, data: "do=" + pollsAdminL10n.text_close_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#open_poll").show(); b("#close_poll").hide() } }) }) }
-function reorder_answer_num() { jQuery(document).ready(function (a) { var c = a("#pollq_multiple"), d = c.val(), b = a("> option", c).size(); c.empty(); a("#poll_answers tr > th").each(function (b) { a(this).text(pollsAdminL10n.text_answer + " " + (b + 1)); a(c).append('<option value="' + (b + 1) + '">' + (b + 1) + "</option>") }); if (1 < d) { var e = a("> option", c).size(); d <= e ? a("> option", c).eq(d - 1).attr("selected", "selected") : d == b && a("> option", c).eq(e - 1).attr("selected", "selected") } }) }
-function check_totalvotes() { temp_vote_count = 0; jQuery(document).ready(function (a) { a("#poll_answers tr td input[size=4]").each(function (c) { temp_vote_count = isNaN(a(this).val()) ? temp_vote_count + 0 : temp_vote_count + parseInt(a(this).val()) }); a("#pollq_totalvotes").val(temp_vote_count) }) }
-//function add_poll_answer_add() { jQuery(document).ready(function (a) { a("#poll_answers").append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_add(' + count_poll_answer + ');" class="button" /></td></tr>'); count_poll_answer++; reorder_answer_num() }) }
+function pd_open_poll(a, c, d) { if (open_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pdAdminL10n.admin_ajax_url, data: "do=" + pdAdminL10n.text_open_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#open_poll").hide(); b("#close_poll").show() } }) }) }
+function pd_close_poll(a, c, d) { if (close_poll_confirm = confirm(c)) global_poll_id = a, jQuery(document).ready(function (b) { b.ajax({ type: "POST", url: pdAdminL10n.admin_ajax_url, data: "do=" + pdAdminL10n.text_close_poll + "&pollq_id=" + a + "&action=poll-dude-control&_ajax_nonce=" + d, cache: !1, success: function (a) { b("#message").html(a); b("#message").show(); b("#open_poll").show(); b("#close_poll").hide() } }) }) }
+function pd_reorder_answer() { jQuery(document).ready(function (a) { var c = a("#pollq_multiple"), d = c.val(), b = a("> option", c).size(); c.empty(); a("#poll_answers tr > th").each(function (b) { a(this).text(pdAdminL10n.text_answer + " " + (b + 1)); a(c).append('<option value="' + (b + 1) + '">' + (b + 1) + "</option>") }); if (1 < d) { var e = a("> option", c).size(); d <= e ? a("> option", c).eq(d - 1).attr("selected", "selected") : d == b && a("> option", c).eq(e - 1).attr("selected", "selected") } }) }
+function pd_totalvotes() { temp_vote_count = 0; jQuery(document).ready(function (a) { a("#poll_answers tr td input[size=4]").each(function (c) { temp_vote_count = isNaN(a(this).val()) ? temp_vote_count + 0 : temp_vote_count + parseInt(a(this).val()) }); a("#pollq_totalvotes").val(temp_vote_count) }) }
+//function pd_add_answer_add_form() { jQuery(document).ready(function (a) { a("#poll_answers").append('<tr id="poll-answer-' + count_poll_answer + '"><th width="20%" scope="row" valign="top"></th><td width="80%"><input type="text" size="50" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pdAdminL10n.text_remove_poll_answer + '" onclick="pd_remove_answer_add_form(' + count_poll_answer + ');" class="button" /></td></tr>'); count_poll_answer++; pd_reorder_answer() }) }
 // Add Poll's Answer In Add Poll Page
-function add_poll_answer_add() {
+function pd_add_answer_add_form() {
 	jQuery(document).ready(function ($) {
-		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '"><td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers[]" /><input type="color" id="color_picker" name="color_picker[]" value="#0000FF" >&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td></tr>');
+		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '">\
+			<td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers[]" />\
+			<input type="color" id="color_picker" name="color_picker[]" value="#b0c3d4" >&nbsp;&nbsp;&nbsp;\
+			<input type="button" value="' + pdAdminL10n.text_delete_poll_answer + '" \
+			onclick="pd_remove_answer_add_form(' + count_poll_answer + ');" class="button" /></td></tr>');
 		count_poll_answer++;
-		reorder_answer_num();
+		pd_reorder_answer();
 	});
 }
-function remove_poll_answer_add(a) { jQuery(document).ready(function (c) { c("#poll-answer-" + a).remove(); reorder_answer_num() }) }
+function pd_remove_answer_add_form(a) { jQuery(document).ready(function (c) { c("#poll-answer-" + a).remove(); pd_reorder_answer(); }) }
+function pd_remove_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); pd_totalvotes(); pd_reorder_answer();  }) }
 // Add Poll's Answer In Edit Poll Page
-function poll_dude_add_answer_edit() {
+function pd_add_answer_edit() {
 	jQuery(document).ready(function ($) {
 		$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '">\
 			<td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers_new[]" />\
-			<input type="color" id="color_picker" name="color_picker[]" value="#0000FF" >&nbsp;&nbsp;&nbsp;\
-			<input type="button" value="' + pollsAdminL10n.text_delete_poll_answer + '" \
-			onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td>\
-			<td width="20%" align="' + pollsAdminL10n.text_direction + '">0 \
-			<input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td>\
+			<input type="color" id="color_picker" name="color_picker[]" value="#b0c3d4" >&nbsp;&nbsp;&nbsp;\
+			<input type="button" value="' + pdAdminL10n.text_delete_poll_answer + '" \
+			onclick="pd_remove_answer_edit(' + count_poll_answer_new + ');" class="button" /></td>\
+			<td width="20%" align="' + pdAdminL10n.text_direction + '">0 \
+			<input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="pd_totalvotes();" /></td>\
 			</tr>');
 		count_poll_answer_new++;
-		reorder_answer_num();
+		pd_reorder_answer();
 	});
 }
 /*
 function add_poll_answer_edit() {
 	jQuery(document).ready(function (a) {
-		a("#poll_answers").append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><th width="20%" scope="row" valign="top"></th><td width="60%"><input type="text" size="50" maxlength="200" name="polla_answers_new[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pollsAdminL10n.text_remove_poll_answer + '" onclick="remove_poll_answer_edit(' + count_poll_answer_new + ');" class="button" /></td><td width="20%" align="' + pollsAdminL10n.text_direction + '">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="check_totalvotes();" /></td></tr>'); 
+		a("#poll_answers").append('<tr id="poll-answer-new-' + count_poll_answer_new + '"><th width="20%" scope="row" valign="top"></th><td width="60%"><input type="text" size="50" maxlength="200" name="polla_answers_new[]" />&nbsp;&nbsp;&nbsp;<input type="button" value="' + pdAdminL10n.text_remove_poll_answer + '" onclick="pd_remove_answer_edit(' + count_poll_answer_new + ');" class="button" /></td><td width="20%" align="' + pdAdminL10n.text_direction + '">0 <input type="text" size="4" name="polla_answers_new_votes[]" value="0" onblur="pd_totalvotes();" /></td></tr>'); 
 		count_poll_answer_new++; 
-		reorder_answer_num()
+		pd_reorder_answer()
 	})
 } 
 */
-function remove_poll_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); check_totalvotes(); reorder_answer_num() }) }
-function check_pollq_multiple() { jQuery(document).ready(function (a) { 1 == parseInt(a("#pollq_multiple_yes").val()) ? a("#pollq_multiple").attr("disabled", !1) : (a("#pollq_multiple").val(1), a("#pollq_multiple").attr("disabled", !0)) }) } 
-function check_polltimestamp() { jQuery(document).ready(function (a) { a("#edit_polltimestamp").is(":checked") ? a("#pollq_timestamp").show() : a("#pollq_timestamp").hide() }) };
-function check_recaptcha() { jQuery(document).ready(function (a) { a("#enable_recaptcha").is(":checked") ? a("#recaptcha_key input").prop('disabled', false) : a("#recaptcha_key input").prop('disabled', true); }) };
-function check_pollexpiry() { jQuery(document).ready(function (a) { a("#pollq_expiry_no").is(":checked") ? a("#pollq_expiry").hide() : a("#pollq_expiry").show() }) };
+function pd_remove_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); pd_totalvotes(); pd_reorder_answer() }) }
+function pd_is_multiple_answer() { jQuery(document).ready(function (a) { 1 == parseInt(a("#pollq_multiple_yes").val()) ? a("#pollq_multiple").attr("disabled", !1) : (a("#pollq_multiple").val(1), a("#pollq_multiple").attr("disabled", !0)) }) } 
+function pd_check_timestamp() { jQuery(document).ready(function (a) { a("#edit_polltimestamp").is(":checked") ? a("#pollq_timestamp").show() : a("#pollq_timestamp").hide() }) };
+function pd_check_recaptcha() { jQuery(document).ready(function (a) { a("#enable_recaptcha").is(":checked") ? a("#recaptcha_key input").prop('disabled', false) : a("#recaptcha_key input").prop('disabled', true); }) };
+function pd_check_expiry() { jQuery(document).ready(function (a) { a("#pollq_expiry_no").is(":checked") ? a("#pollq_expiry").hide() : a("#pollq_expiry").show() }) };
 // Delete Poll
-function delete_poll_dev(poll_id, poll_confirm, nonce) {
+function pd_delete_poll(poll_id, poll_confirm, nonce) {
 	delete_poll_confirm = confirm(poll_confirm);
 	if (delete_poll_confirm) {
 		global_poll_id = poll_id;
 		jQuery(document).ready(function ($) {
 			$.ajax({
-				type: 'POST', url: pollsAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll + '&pollq_id=' + poll_id + '&action=poll-dude-control&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+				type: 'POST', url: pdAdminL10n.admin_ajax_url, data: 'do=' + pdAdminL10n.text_delete_poll + '&pollq_id=' + poll_id + '&action=poll-dude-control&_ajax_nonce=' + nonce, cache: false, success: function (data) {
 					$('#message').html(data);
 					$('#message').show();
 					$('#poll-' + global_poll_id).remove();
@@ -73,7 +78,7 @@ function delete_poll_dev(poll_id, poll_confirm, nonce) {
 	}
 }
 // Delete Poll Answer
-function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, nonce) {
+function pd_delete_ans(poll_id, poll_aid, poll_aid_vote, poll_confirm, nonce) {
 	delete_poll_ans_confirm = confirm(poll_confirm);
 	if (delete_poll_ans_confirm) {
 		global_poll_id = poll_id;
@@ -83,8 +88,8 @@ function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, non
 		jQuery(document).ready(function ($) {
 			$.ajax({
 				type: 'POST', 
-				url: pollsAdminL10n.admin_ajax_url, 
-				data: 'do=' + pollsAdminL10n.text_delete_poll_ans + '&pollq_id=' + poll_id + '&polla_aid=' + poll_aid + '&action=poll-dude-control&_ajax_nonce=' + nonce, 
+				url: pdAdminL10n.admin_ajax_url, 
+				data: 'do=' + pdAdminL10n.text_delete_poll_ans + '&pollq_id=' + poll_id + '&polla_aid=' + poll_aid + '&action=poll-dude-control&_ajax_nonce=' + nonce, 
 				cache: false, 
 				success: function (data) {
 					$('#message').html(data);
@@ -92,15 +97,15 @@ function delete_poll_ans_dev(poll_id, poll_aid, poll_aid_vote, poll_confirm, non
 					$('#poll_total_votes').html((parseInt($('#poll_total_votes').html()) - parseInt(global_poll_aid_votes)));
 					$('#pollq_totalvotes').val(temp_vote_count);
 					$('#poll-answer-' + global_poll_aid).remove();
-					check_totalvotes();
-					reorder_answer_num();
+					pd_totalvotes();
+					pd_reorder_answer();
 				}
 			});
 		});
 	}
 }
 
-function checkbox_all1() { 
+function pd_checkall_top() { 
 	jQuery(document).ready(function (a) { 
 		if (a("#delete_all").prop("checked")) {
 			a("#delete_all2").prop("checked", true);
@@ -116,7 +121,7 @@ function checkbox_all1() {
 	}) 
 };
 
-function checkbox_all2() { 
+function pd_checkall_bottom() { 
 	jQuery(document).ready(function (a) { 
 		if (a("#delete_all2").prop("checked")) {
 			a("#delete_all").prop("checked", true);

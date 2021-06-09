@@ -58,7 +58,7 @@ class Poll_Dude_Public {
 		$this->enqueue_scripts();
 		
 		$pd_ajax_style = get_option('pd_ajax_style');
-		wp_localize_script('poll-dude', 'pollsL10n', array(
+		wp_localize_script('poll-dude', 'pdPublicL10n', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'poll-dude'),
 			'text_valid' => __('Please choose a valid poll answer.', 'poll-dude'),

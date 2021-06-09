@@ -162,7 +162,7 @@ class Poll_Dude_Shortcode {
 	
 	### Function: Display Voting Form
 	public function display_pollvote($poll_id, $display_loading = true, $recaptcha = true) { 
-		//do_action('wp_polls_display_pollvote');
+		do_action('wp_polls_display_pollvote');
 		global $wpdb, $poll_dude;
 		
 		// Temp Poll Result
@@ -194,10 +194,8 @@ class Poll_Dude_Shortcode {
 		
 		$template_question = "";
 		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
-		//$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
-		//$template_question .="<ul class=\"wp-polls-ul\">";
-		$template_question .="<div id=\"polls-$poll_question_id-ans\" >";
-		$template_question .="<ul class=\"wp-polls-ul\">";
+		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
+		$template_question .="<ul class=\"poll-dude-ul\">";
 
 
 		// Get Poll Answers Data
@@ -208,11 +206,11 @@ class Poll_Dude_Shortcode {
 		
 		if($poll_question && $poll_answers) {
 			// Display Poll Voting Form
-			//$temp_pollvote .= "<div id=\"polls-$poll_question_id\" class=\"wp-polls\">\n";
-			//$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" class=\"wp-polls-form\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
+			//$temp_pollvote .= "<div id=\"polls-$poll_question_id\" class=\"poll-dude\">\n";
+			//$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" class=\"poll-dude-form\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
 			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
 			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
-			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"wp-polls-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
+			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
 			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" name=\"poll_id\" value=\"$poll_question_id\" /></p>\n";
 			if($poll_question->pollq_multiple > 0) {
 				$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_multiple_ans_$poll_question_id\" name=\"poll_multiple_ans_$poll_question_id\" value=\"$poll_multiple_ans\" /></p>\n";
@@ -234,13 +232,13 @@ class Poll_Dude_Shortcode {
 			}
 			
 			// Determine Poll Result URL
-			$poll_result_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
-			$poll_result_url = preg_replace('/pollresult=(\d+)/i', 'pollresult='.$poll_question_id, $poll_result_url);
+			$polldude_result_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
+			$polldude_result_url = preg_replace('/pollresult=(\d+)/i', 'pollresult='.$poll_question_id, $polldude_result_url);
 			if(isset($_GET['pollresult']) && (int) $_GET['pollresult'] === 0) {
-				if(strpos($poll_result_url, '?') !== false) {
-					$poll_result_url = "$poll_result_url&amp;pollresult=$poll_question_id";
+				if(strpos($polldude_result_url, '?') !== false) {
+					$polldude_result_url = "$polldude_result_url&amp;pollresult=$poll_question_id";
 				} else {
-					$poll_result_url = "$poll_result_url?pollresult=$poll_question_id";
+					$polldude_result_url = "$polldude_result_url?pollresult=$poll_question_id";
 				}
 			}
 
@@ -254,7 +252,7 @@ class Poll_Dude_Shortcode {
 			}
 			
 			if($recaptcha){
-				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"poll_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
+				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"polldude_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
 				if($poll_recaptcha){
 					$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\"></div>";
 				}
@@ -272,7 +270,7 @@ class Poll_Dude_Shortcode {
 				$pd_ajax_style = get_option('pd_ajax_style');
 				/*
 				if((int) $pd_ajax_style['loading'] === 1) {
-					$temp_pollvote .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
+					$temp_pollvote .= "<div id=\"polls-$poll_question_id-loading\" class=\"poll-dude-loading\"><img src=\"".plugins_url('poll-dude/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'poll-dude')." ...\" title=\"".__('Loading', 'poll-dude')." ...\" class=\"poll-dude-image\" />&nbsp;".__('Loading', 'poll-dude')." ...</div>\n";
 				}
 				*/
 			}
@@ -332,8 +330,8 @@ class Poll_Dude_Shortcode {
 		$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
 
 		$template_question  = "<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
-		$template_question .= "<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
-		$template_question .= "<ul class=\"wp-polls-ul\">";
+		$template_question .= "<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
+		$template_question .= "<ul class=\"poll-dude-ul\">";
 
 		// Get Poll Answers Data
 		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes, polla_colors FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
@@ -347,7 +345,7 @@ class Poll_Dude_Shortcode {
 			$poll_totalvotes_zero = $poll_question_totalvotes <= 0;
 			$poll_totalvoters_zero = $poll_question_totalvoters <= 0;
 			// Print Out Result Header Template
-			$temp_pollresult .= "<div id=\"polls-$poll_question_id\" class=\"wp-polls\">\n";
+			$temp_pollresult .= "<div id=\"polls-$poll_question_id\" class=\"poll-dude\">\n";
 			$temp_pollresult .= "\t\t$template_question\n";
 			foreach ( $poll_answers as $poll_answer ) {
 				// Poll Answer Variables
@@ -386,10 +384,10 @@ class Poll_Dude_Shortcode {
 				// Let User See What Options They Voted
 				if ( in_array( $poll_answer_id, $user_voted, true ) ) {
 					// Results Body Variables
-					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small></i></strong><div class=\"wp-polls-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
+					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small></i></strong><div class=\"poll-dude-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 				} else {
 					// Results Body Variables
-					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small><div class=\"wp-polls-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
+					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small><div class=\"poll-dude-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 					
 				}
 
@@ -418,18 +416,18 @@ class Poll_Dude_Shortcode {
 				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p></div>";
 			}else{
 				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p>";
-				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"poll_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude-domain')."</a></p></div>";
+				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"polldude_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude-domain')."</a></p></div>";
 			}
 
 			// Print Out Results Footer Template
 			$temp_pollresult .= "\t\t$template_footer\n";
-			$temp_pollresult .= "\t\t<input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"wp-polls-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" />\n";
+			$temp_pollresult .= "\t\t<input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" />\n";
 			$temp_pollresult .= "</div>\n";
 			
 			if ( $display_loading ) { $pd_ajax_style = get_option( 'pd_ajax_style' );
 				/*
 				if ( (int) $pd_ajax_style['loading'] === 1 ) {
-					$temp_pollresult .= "<div id=\"polls-$poll_question_id-loading\" class=\"wp-polls-loading\"><img src=\"".plugins_url('wp-polls/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'wp-polls')." ...\" title=\"".__('Loading', 'wp-polls')." ...\" class=\"wp-polls-image\" />&nbsp;".__('Loading', 'wp-polls')." ...</div>\n";
+					$temp_pollresult .= "<div id=\"polls-$poll_question_id-loading\" class=\"poll-dude-loading\"><img src=\"".plugins_url('poll-dude/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'poll-dude')." ...\" title=\"".__('Loading', 'poll-dude')." ...\" class=\"poll-dude-image\" />&nbsp;".__('Loading', 'poll-dude')." ...</div>\n";
 				}
 				*/
 			}
@@ -554,16 +552,12 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Please click <I am not a robot>.', 'poll-dude')));
 		}
 		if(isset($captcha)){
-			//echo "$captcha".$captcha."\n";
 			$secretKey = get_option('pd_recaptcha_secretkey');
-			//echo "$secretKey".$secretKey."\n";
 			$ip = $_SERVER['REMOTE_ADDR'];
-			//echo "$ip".$ip."\n";
 			// post request to server
 			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
 			$response = file_get_contents($url);
 			$responseKeys = json_decode($response,true);
-			//var_dump($responseKeys);
 			// should return JSON with success as true
 			if($responseKeys["success"]) {
 				_e('Recaptcha verify passed.', 'poll-dude');
