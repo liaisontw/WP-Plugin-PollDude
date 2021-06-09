@@ -162,7 +162,7 @@ class Poll_Dude_Shortcode {
 	
 	### Function: Display Voting Form
 	public function display_pollvote($poll_id, $display_loading = true, $recaptcha = true) { 
-		do_action('wp_polls_display_pollvote');
+		//do_action('wp_polls_display_pollvote');
 		global $wpdb, $poll_dude;
 		
 		// Temp Poll Result
@@ -194,7 +194,9 @@ class Poll_Dude_Shortcode {
 		
 		$template_question = "";
 		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
-		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
+		//$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"wp-polls-ans\">";
+		//$template_question .="<ul class=\"wp-polls-ul\">";
+		$template_question .="<div id=\"polls-$poll_question_id-ans\" >";
 		$template_question .="<ul class=\"wp-polls-ul\">";
 
 
@@ -206,8 +208,10 @@ class Poll_Dude_Shortcode {
 		
 		if($poll_question && $poll_answers) {
 			// Display Poll Voting Form
-			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" class=\"wp-polls\">\n";
-			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" class=\"wp-polls-form\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
+			//$temp_pollvote .= "<div id=\"polls-$poll_question_id\" class=\"wp-polls\">\n";
+			//$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" class=\"wp-polls-form\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
+			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
+			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
 			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"wp-polls-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
 			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" name=\"poll_id\" value=\"$poll_question_id\" /></p>\n";
 			if($poll_question->pollq_multiple > 0) {
@@ -559,7 +563,7 @@ class Poll_Dude_Shortcode {
 			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
 			$response = file_get_contents($url);
 			$responseKeys = json_decode($response,true);
-			var_dump($responseKeys);
+			//var_dump($responseKeys);
 			// should return JSON with success as true
 			if($responseKeys["success"]) {
 				_e('Recaptcha verify passed.', 'poll-dude');
