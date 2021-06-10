@@ -4,7 +4,6 @@ pdPublicL10n.show_fading = parseInt(pdPublicL10n.show_fading);
 
 function polldude_recaptcha(current_poll_id) {
 	jQuery(document).ready(function ($) {
-		//console.log('captcha response: ' + grecaptcha.getResponse());
 		poll_nonce = $('#poll_' + current_poll_id + '_nonce').val();
 		$.ajax({
 			type: 'POST',
@@ -17,8 +16,6 @@ function polldude_recaptcha(current_poll_id) {
 			}
 		});
 	});
-	/*
-	*/
 }
 
 // When User Vote For Poll

@@ -6,7 +6,6 @@ class Poll_Dude_Shortcode {
     {
 		$this->utility = $utility;
 		add_shortcode('poll_dude'                             , array($this, 'poll_dude_shortcode'));
-		//add_shortcode('page_polls'                            , array($this, 'poll_dude_page_shortcode'));
 		add_action(   'wp_ajax_poll-dude'                     , array($this, 'poll_dude_vote'));
 		add_action(   'wp_ajax_nopriv_poll-dude'              , array($this, 'poll_dude_vote'));
     }
@@ -26,13 +25,6 @@ class Poll_Dude_Shortcode {
 	public function poll_template_vote_markup( $template, $object, $variables ) {
 		return str_replace( array_keys( $variables ), array_values( $variables ), $template ) ;
 	}
-
-	/*
-    ### Function: Short Code For Inserting Polls Archive Into Page
-	public function poll_page_shortcode($atts) {
-		return $this->polls_archive();
-	}
-	*/
 
 	### Function: Short Code For Inserting Polls Into Posts
 	public function poll_dude_shortcode( $atts ) {
@@ -206,8 +198,6 @@ class Poll_Dude_Shortcode {
 		
 		if($poll_question && $poll_answers) {
 			// Display Poll Voting Form
-			//$temp_pollvote .= "<div id=\"polls-$poll_question_id\" class=\"poll-dude\">\n";
-			//$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" class=\"poll-dude-form\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
 			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
 			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
 			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
@@ -416,7 +406,7 @@ class Poll_Dude_Shortcode {
 				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p></div>";
 			}else{
 				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p>";
-				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"polldude_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude-domain')."</a></p></div>";
+				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"polldude_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude')."</a></p></div>";
 			}
 
 			// Print Out Results Footer Template

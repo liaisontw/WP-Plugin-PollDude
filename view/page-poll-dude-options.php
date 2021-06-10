@@ -65,11 +65,6 @@ if( isset($_POST['Submit']) ) {
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade"><p>'.$text.'</p></div>'; } ?>
 <h2><?php _e('Poll Options', 'poll-dude'); ?></h2>
 <div class="wrap">
-<!--
-    <input type="checkbox" name="enable_recaptcha" value="1" onclick="pd_check_recaptcha();" />
-    <?php _e('Enable reCaptcha', 'poll-dude'); ?>
-    <br style="clear" />
--->
     <form  id="recaptcha_key" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
         <?php wp_nonce_field('polldude_recaptcha'); ?>
         <table class="form-table">

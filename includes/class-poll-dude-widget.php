@@ -14,7 +14,6 @@
 
 		$title = apply_filters( 'widget_title', esc_attr( $instance['title'] ) );
 		$poll_id = (int) $instance['poll_id'];
-		//$display_pollarchive = (int) $instance['display_pollarchive'];
 		echo $args['before_widget'];
 		if( ! empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
@@ -31,11 +30,10 @@
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['poll_id'] = (int) $new_instance['poll_id'];
-		//$instance['display_pollarchive'] = (int) $new_instance['display_pollarchive'];
 		return $instance;
 	}
 
-	// DIsplay Widget Control Form
+	// Display Widget Control Form
 	public function form($instance) {
 		global $wpdb, $poll_dude;
 		
