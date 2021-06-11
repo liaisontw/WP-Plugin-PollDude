@@ -1,12 +1,11 @@
 <?php
-//namespace poll_dude;
 /**
  * The file that defines the core plugin class
  *
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       http://example.com
+ * @link       https://github.com/liaisontw/poll-dude
  * @since      1.0.0
  *
  * @package    poll-dude
@@ -25,7 +24,7 @@
  * @since      1.0.0
  * @package    poll-dude
  * @subpackage poll-dude/includes
- * @author     Your Name <email@example.com>
+ * @author     Liaison Chang
  */
 class Poll_Dude {
 
@@ -44,7 +43,7 @@ class Poll_Dude {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string    $name    The string used to uniquely identify this plugin.
 	 */
 	protected $name;
 
@@ -56,9 +55,24 @@ class Poll_Dude {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $version;
+	/**
+	 * The utility of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @var      string    $utility    The instance of Poll_Dude_Utility Class of the plugin.
+	 */
 	public $utility;
+	/**
+	 * The shortcode of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @var      string    $shortcode    The instance of Poll_Dude_Shortcode Class of the plugin.
+	 */
 	public $shortcode;
 	public $admin;
+	public $public;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -124,22 +138,7 @@ class Poll_Dude {
 
 	}
 
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Plugin_Name_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function set_locale() {
-
-		$plugin_i18n = new Poll_Dude_i18n($this->get_plugin_name(), $this->get_version() );
-
-	}
-
-	/**
+		/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
@@ -161,20 +160,10 @@ class Poll_Dude {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Poll_Dude_Public( $this->get_plugin_name(), $this->get_version() );
+		$this->public = new Poll_Dude_Public( $this->get_plugin_name(), $this->get_version() );
 
 	}
 
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	/*
-	public function run() {
-		$this->loader->run();
-	}
-	*/
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
@@ -187,23 +176,11 @@ class Poll_Dude {
 		return $this->name;
 	}
 
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Plugin_Name_Loader    Orchestrates the hooks of the plugin.
-	 */
-	/*
-	public function get_loader() {
-		return $this->loader;
-	}
-	*/
-
-	public function admin() {
+	public function get_admin() {
 		return $this->admin;
 	}
 
-	public function shortcode() {
+	public function get_shortcode() {
 		return $this->shortcode;
 	}
 

@@ -1,4 +1,3 @@
-# Changelog
 * fba3b6c liaison.tw@gmail.com (Thu Jun 10 14:45:36 2021 +0800). Fix missing ')' when onclock open/close poll. Get default color setting when add answer instead of hard code color.
 * 6c25eb7 liaison.tw@gmail.com (Wed Jun 9 15:54:05 2021 +0800). Unify js function prefix in poll-dude-public/admin.js and related php
 * c63e805 liaison.tw@gmail.com (Wed Jun 9 11:45:21 2021 +0800). Unify function prefix in poll-dude-public.js
@@ -81,4 +80,3 @@
 * a8079d9 liaison.tw@gmail.com (Thu Nov 19 12:34:32 2020 +0800). firt commit
 * 3a75c82 liaison.tw@gmail.com (Thu Nov 19 12:20:25 2020 +0800). first commit
 * 6e6ed3f liaison.tw@gmail.com (Thu Nov 19 11:37:14 2020 +0800). Initial commit
-

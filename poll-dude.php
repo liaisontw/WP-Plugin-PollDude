@@ -15,7 +15,9 @@
  * @wordpress-plugin
  * Plugin Name:       Poll Dude
  * Plugin URI:        https://github.com/liaisontw/poll-dude
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Create the polls by generating shortcodes embedded in your posts. 
+ *                    With reCaptcha to prevent robots accessing. 
+ *                    The color of voted bar can be set for each answer.
  * Version:           1.0.0
  * Author:            Liaison Chang
  * Author URI:        https://github.com/liaisontw/
@@ -32,15 +34,7 @@ if(!defined('ABSPATH')){
 }
  
 
-/**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
- */
 define( 'POLL_DUDE_VERSION', '1.0.0' );
-//define( 'POLL_DUDE_DOMAIN', 'POLL-DUDE' );
-//define( 'POLL_DUDE_NAME_SPACE', 'POLL_DUDE' );
-
 
 
 // polldude Table Name
@@ -49,19 +43,14 @@ $wpdb->polldude_q   = $wpdb->prefix.'polldude_q';
 $wpdb->polldude_a   = $wpdb->prefix.'polldude_a';
 $wpdb->polldude_ip  = $wpdb->prefix.'polldude_ip';
 
-require_once plugin_dir_path(__FILE__) . '/includes/class-poll-dude.php';
-global $poll_dude;
-$poll_dude = new Poll_Dude();
-
-
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
+require_once plugin_dir_path(__FILE__) . '/includes/class-poll-dude.php';
+global $poll_dude;
+$poll_dude = new Poll_Dude();
 
-### Function: Poll Administration Menu
-
-### Function: Manage Polls
 
 /**
  * The code that runs during plugin activation.
