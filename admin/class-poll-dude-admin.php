@@ -1,14 +1,28 @@
 <?php
-//namespace POLL_DUDE_NAME_SPACE;
 
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       https://github.com/liaisontw/poll-dude
  * @since      1.0.0
  *
  * @package    poll-dude
- * @subpackage poll-dude/admin
+ * @subpackage poll-dude/includes
+ */
+
+/**
+ * The core plugin class.
+ *
+ * This is used to define internationalization, admin-specific hooks, and
+ * public-facing site hooks.
+ *
+ * Also maintains the unique identifier of this plugin as well as the current
+ * version of the plugin.
+ *
+ * @since      1.0.0
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
  */
 
 /**
@@ -17,9 +31,10 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
+ * @since      1.0.0
  * @package    poll-dude
- * @subpackage poll-dude/admin
- * @author     Your Name <email@example.com>
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
  */
 class Poll_Dude_Admin {
 
@@ -56,18 +71,6 @@ class Poll_Dude_Admin {
 		add_action( 'admin_enqueue_scripts',     	array($this, 'admin_scripts') );
 		add_action( 'wp_ajax_poll-dude-control', 	array($this, 'control_panel') );
 		add_action(	'poll_dude_cron', 				array($this, 'cron_update') );
-		add_action( 'plugins_loaded',  				array($this, 'set_textdomain') );
-		add_action( 'widgets_init', 				array($this, 'widget_init') );
-	}
-
-	### Function: Init Widget
-	public function widget_init() {
-		$this->set_textdomain();
-		register_widget('WP_Widget_Polldude');
-	}
-
-	public function set_textdomain() {
-		load_plugin_textdomain( 'poll-dude' );
 	}
 
 	public function admin_scripts($hook_suffix){
@@ -102,20 +105,6 @@ class Poll_Dude_Admin {
 	 */
 	public function enqueue_styles() {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/poll-dude-admin.css', array(), $this->version, 'all' );
-		//wp_enqueue_style('poll-dude-admin',   plugin_dir_url( dirname( __FILE__ ) ) . 'admin/css/poll-dude-admin-css.css', false, POLL_DUDE_VERSION, 'all');
-	
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Plugin_Name_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Plugin_Name_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */		
-
 	}
 
 	/**
@@ -124,21 +113,7 @@ class Poll_Dude_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Plugin_Name_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Plugin_Name_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-admin.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( 'jquery-ui-sortable' );
-		//wp_enqueue_script('poll-dude-admin',   plugin_dir_url( dirname( __FILE__ ) ) . 'admin/js/poll-dude-admin.js', array( 'jquery' ), POLL_DUDE_VERSION, true);
 	}
 
 	public function admin_menu() {
@@ -176,41 +151,12 @@ class Poll_Dude_Admin {
 		
 		### Form Processing
 		if( isset( $_POST['action'] ) && sanitize_key( $_POST['action'] ) === 'poll-dude-control' ) {
-		//if( isset( $_POST['action'] ) && sanitize_key( $_POST['action'] ) === 'poll-dude' ) {
 			if( ! empty( $_POST['do'] ) ) {
 				// Set Header
 				header('Content-Type: text/html; charset='.get_option('blog_charset').'');
 
 				// Decide What To Do
 				switch($_POST['do']) {
-					/*
-					// Delete Polls Logs
-					case __('Delete All Logs', 'poll-dude'):
-						check_ajax_referer('polldude_delete-polls-logs');
-						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->query("DELETE FROM $wpdb->polldude_ip");
-							if($delete_logs) {
-								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude').'</p>';
-							} else {
-								echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'poll-dude').'</p>';
-							}
-						}
-						break;
-					// Delete Poll Logs For Individual Poll
-					case __('Delete Logs For This Poll Only', 'poll-dude'):
-						check_ajax_referer('polldude_delete-poll-logs');
-						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
-						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
-						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
-							if( $delete_logs ) {
-								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
-							} else {
-								echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
-							}
-						}
-						break;
-					*/
 					// Delete Poll's Answer
 					case __('Delete Poll Answer', 'poll-dude'):
 						check_ajax_referer('polldude_delete-poll-answer');
@@ -283,7 +229,6 @@ class Poll_Dude_Admin {
 					// Delete Poll
 					case __('Delete Poll', 'poll-dude'):
 						check_ajax_referer('polldude_delete-poll');
-						//echo 'Delete Poll';
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
 						$delete_poll_question = $wpdb->delete( $wpdb->polldude_q, array( 'pollq_id' => $pollq_id ), array( '%d' ) );
@@ -395,7 +340,6 @@ class Poll_Dude_Admin {
 				}
 				$polla_answers_new = isset( $_POST['polla_answers'] ) ? $_POST['polla_answers'] : array();
 				
-
 				$polla_qid = (int) $wpdb->insert_id;
 				if(empty($polla_answers_new)) {
 					$text .= '<p style="color: red;">' . __( 'Poll\'s Answer is empty.', 'poll-dude' ) . '</p>';

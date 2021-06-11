@@ -100,10 +100,8 @@ class Poll_Dude {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Plugin_Name_Loader. Orchestrates the hooks of the plugin.
-	 * - Plugin_Name_i18n. Defines internationalization functionality.
-	 * - Plugin_Name_Admin. Defines all hooks for the admin area.
-	 * - Plugin_Name_Public. Defines all hooks for the public side of the site.
+	 * - Poll_Dude_Admin. Defines all hooks for the admin area.
+	 * - Poll_Dude_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -135,10 +133,23 @@ class Poll_Dude {
 		if(isset($this->utility)){
 			$this->shortcode = new Poll_Dude_Shortcode($this->utility);
 		}
-
+		add_action( 'plugins_loaded',  	array($this, 'set_textdomain') );
+		add_action( 'widgets_init', 	array($this, 'widget_init') );
 	}
 
-		/**
+	### Function: Set Text Domain
+	public function set_textdomain() {
+		load_plugin_textdomain( 'poll-dude' );
+	}
+	
+	### Function: Init Widget
+	public function widget_init() {
+		$this->set_textdomain();
+		register_widget('WP_Widget_Polldude');
+	}
+
+	
+	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
