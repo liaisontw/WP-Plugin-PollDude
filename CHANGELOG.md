@@ -1,4 +1,5 @@
 # Changelog
+* (Tue Jun 15 11:17:08 2021 +0800)5c088f6 liaison.tw@gmail.com public.js: enable vote button after recaptcha cliced. Remove useless legacy in some files.
 * (Fri Jun 11 14:43:29 2021 +0800)3d5df3d liaison.tw@gmail.com. Move text domain & widget init from admin to core class. Refine the header & clean unused code in admin. --pretty= (%cd) %h %ae. %s
 * (Fri Jun 11 11:23:46 2021 +0800)c86e7b4 liaison.tw@gmail.com. Update CHANGELOG.md & header, comment of poll-dude.php, class-poll-dude.php
 * (Thu Jun 10 14:45:36 2021 +0800)fba3b6c liaison.tw@gmail.com. Fix missing ')' when onclock open/close poll. Get default color setting when add answer instead of hard code color.
