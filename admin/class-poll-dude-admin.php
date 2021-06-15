@@ -243,7 +243,6 @@ class Poll_Dude_Admin {
 						}
 								
 						update_option( 'pd_latestpoll', $poll_dude->utility->latest_poll() );
-						do_action( 'wp_polls_delete_poll', $pollq_id );
 						
 						break;
 				}
@@ -462,16 +461,14 @@ class Poll_Dude_Admin {
 				$base_page = 'admin.php?page='.$base_name;
 				// If poll starts in the future use the correct poll ID
 				$latest_pollid = ( $latest_pollid < $polla_qid ) ? $polla_qid : $latest_pollid;
-				//$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
+				
 				if ( empty( $text ) ) {
 					$text = '<p style="color: green;">' . sprintf( __( 'Poll \'%s\' (ID: %s) added successfully. Embed this poll with the shortcode: %s or go back to <a href="%s">Manage Polls</a>', 'poll-dude' ), $pollq_question, $latest_pollid, '<input type="text" value=\'[poll_dude id="' . $latest_pollid . '"]\' readonly="readonly" size="20" />', $base_page ) . '</p>';
 				} 
-				do_action( 'wp_polls_add_poll', $latest_pollid );
 			} else {
 				if(empty($text)) {
 					$text = '<p style="color: green">'.sprintf(__('Poll \'%s\' Edited Successfully.', 'poll-dude'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 				}
-				do_action( 'wp_polls_update_poll', $pollq_id );
 			}
 			
 			$this->cron_activate();

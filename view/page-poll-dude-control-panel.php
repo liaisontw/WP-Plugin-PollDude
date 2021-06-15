@@ -55,7 +55,6 @@ if (isset($_POST['bulk_delete'])) {
         }
                 
         update_option( 'pd_latestpoll', $poll_dude->utility->latest_poll() );
-        //do_action( 'wp_polls_delete_poll', $pollq_id );
     }
 
 }
@@ -217,4 +216,4 @@ switch($mode) {
         </div>
         <p>&nbsp;</p>
 <?php
-} // End switch($mode)
+} 

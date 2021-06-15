@@ -191,7 +191,7 @@ class Poll_Dude_Utility {
     }
 
     public function hash_ipaddr() {
-        return apply_filters( 'wp_polls_ipaddress', wp_hash( $this->get_ipaddr() ) );
+        return wp_hash( $this->get_ipaddr() );
     }
 
     public function get_hostname() {
@@ -204,7 +204,7 @@ class Poll_Dude_Utility {
             $hostname = substr( $hostname, strpos( $hostname, '.' ) + 1 );
         }
 
-        return apply_filters( 'wp_polls_hostname', $hostname );
+        return $hostname;
     }
 
     ### Check If In Poll Archive Page

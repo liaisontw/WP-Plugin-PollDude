@@ -2,6 +2,14 @@
 pdPublicL10n.show_loading = parseInt(pdPublicL10n.show_loading);
 pdPublicL10n.show_fading = parseInt(pdPublicL10n.show_fading);
 
+function polldude_button_enable() {
+	jQuery(document).ready(function (a) {
+		a("form").each(function () {
+			a(this).find(':input[type="button"]').prop('disabled', false);
+		});
+	});
+}
+
 function polldude_recaptcha(current_poll_id) {
 	jQuery(document).ready(function ($) {
 		poll_nonce = $('#poll_' + current_poll_id + '_nonce').val();
