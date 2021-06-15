@@ -9,8 +9,9 @@ global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basename(__FILE__);
-$pd_recaptcha_sitekey   = get_option('pd_recaptcha_sitekey');
-$pd_recaptcha_secretkey = get_option('pd_recaptcha_secretkey');
+//$pd_recaptcha_sitekey   = sanitize_key( get_option('pd_recaptcha_sitekey'));
+$pd_recaptcha_sitekey   = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_sitekey') );
+$pd_recaptcha_secretkey = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
 $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
 $pd_default_color       = get_option('$pd_default_color');
 
@@ -34,8 +35,8 @@ if( isset($_POST['Submit']) ) {
 	    case __('Set Keys', 'poll-dude'):
             check_admin_referer('polldude_recaptcha');
             
-            $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? $poll_dude->utility->removeslashes( $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
-            $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? $poll_dude->utility->removeslashes( $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
+            $pd_recaptcha_sitekey   = isset( $_POST['sitekey'] ) ? preg_replace( '/[^a-zA-Z0-9_\-]/', '',  $_POST['sitekey'] ) : $pd_recaptcha_sitekey;
+            $pd_recaptcha_secretkey = isset( $_POST['secretkey'] ) ? preg_replace( '/[^a-zA-Z0-9_\-]/', '',  $_POST['secretkey'] ) : $pd_recaptcha_secretkey;
             $update_pd_options[]    = update_option('pd_recaptcha_sitekey', $pd_recaptcha_sitekey);
             $update_pd_options[]    = update_option('pd_recaptcha_secretkey', $pd_recaptcha_secretkey);
             $update_pd_text[]       = __('reCaptcha Sitekey', 'poll-dude');
