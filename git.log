@@ -1,3 +1,4 @@
+* (Wed Jun 16 15:04:20 2021 +0800)728aa28 liaison.tw@gmail.com Remove trial of get post ID in widget
 * (Tue Jun 15 11:58:38 2021 +0800)798345c liaison.tw@gmail.com options.php: preg_replace sitekey & secretkey
 * (Tue Jun 15 11:23:21 2021 +0800)f33d74b liaison.tw@gmail.com update CHANGELOG.md
 * (Tue Jun 15 11:17:08 2021 +0800)5c088f6 liaison.tw@gmail.com public.js: enable vote button after recaptcha cliced. Remove useless legacy in some files.
