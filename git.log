@@ -1,3 +1,5 @@
+* (Tue Jun 15 11:58:38 2021 +0800)798345c liaison.tw@gmail.com options.php: preg_replace sitekey & secretkey
+* (Tue Jun 15 11:23:21 2021 +0800)f33d74b liaison.tw@gmail.com update CHANGELOG.md
 * (Tue Jun 15 11:17:08 2021 +0800)5c088f6 liaison.tw@gmail.com public.js: enable vote button after recaptcha cliced. Remove useless legacy in some files.
 * (Fri Jun 11 14:45:31 2021 +0800)bedc9d4 liaison.tw@gmail.com update CHANGELOG.md
 * (Fri Jun 11 14:43:29 2021 +0800)3d5df3d liaison.tw@gmail.com Move text domain & widget init from admin to core class. Refine the header & clean unused code in admin. --pretty= (%cd) %h %ae. %s

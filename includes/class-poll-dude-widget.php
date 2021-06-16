@@ -5,7 +5,7 @@
 	// Constructor
 	public function __construct() {
 		$widget_ops = array('description' => __('Poll Dude', 'poll-dude'));
-		parent::__construct('polls-widget', __('Polls', 'poll-dude'), $widget_ops);
+		parent::__construct('polldude-widget', __('Poll Dude', 'poll-dude'), $widget_ops);
 	}
 
 	// Display Widget
@@ -37,7 +37,7 @@
 	public function form($instance) {
 		global $wpdb, $poll_dude;
 		
-		$instance = wp_parse_args((array) $instance, array('title' => __('Polls', 'poll-dude'), 'poll_id' => 0, 'display_pollarchive' => 1));
+		$instance = wp_parse_args((array) $instance, array('title' => __('Poll Dude', 'poll-dude'), 'poll_id' => 0, 'display_pollarchive' => 1));
 		$title = esc_attr($instance['title']);
 		$poll_id = (int) $instance['poll_id'];
 ?>
