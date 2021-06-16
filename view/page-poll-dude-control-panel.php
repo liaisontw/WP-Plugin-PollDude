@@ -94,8 +94,7 @@ switch($mode) {
 
         <!-- Manage Polls -->
         <div class="wrap">
-            <h2><?php _e('Manage Polls', 'poll-dude'); ?></h2>
-            <h3><?php _e('Polls', 'poll-dude'); ?></h3>
+            <h2><?php _e('Control Panel', 'poll-dude'); ?></h2>
             <br style="clear" />
             <form action="" method="post">
             <table class="widefat">
@@ -167,15 +166,6 @@ switch($mode) {
                                 echo "<td><input id=\"cb-select-$poll_id\" type=\"checkbox\" name=\"pollq[]\" value=\"$poll_id\"  style=\"width:10px; height:15px;\"></td>\n";
                                 echo '<td><strong>'.number_format_i18n($poll_id).'</strong></td>'."\n";
                                 echo '<td>';
-                                if($current_poll > 0) {
-                                    if($current_poll === $poll_id) {
-                                        echo '<strong>'.__('Displayed:', 'poll-dude').'</strong> ';
-                                    }
-                                } elseif($current_poll === 0) {
-                                    if($poll_id === $latest_poll) {
-                                        echo '<strong>'.__('Displayed:', 'poll-dude').'</strong> ';
-                                    }
-                                }
                                 echo wp_kses_post( $poll_question )."</td>\n";
                                 echo '<td>'.number_format_i18n($poll_totalvoters)."</td>\n";
                                 ($poll_recaptcha)? $recaptcha_status = 'Enable' : $recaptcha_status = 'Disable';

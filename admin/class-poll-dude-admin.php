@@ -129,16 +129,16 @@ class Poll_Dude_Admin {
 
 		add_submenu_page( 
 			/* $parent_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
-			/* $page_title  */ __( 'Add Poll', 'poll-dude' ), 
-			/* $menu_title  */ __( 'Add Poll', 'poll-dude' ), 
+			/* $page_title  */ __( 'New Poll', 'poll-dude' ), 
+			/* $menu_title  */ __( 'New Poll', 'poll-dude' ), 
 			/* $capability  */ 'manage_options', 
 			/* $menu_slug   */ plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-add-form.php'
 		);
 
 		add_submenu_page( 
 			/* $parent_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
-			/* $page_title  */ __( 'Poll Control', 'poll-dude' ), 
-			/* $menu_title  */ __( 'Poll Control', 'poll-dude' ), 
+			/* $page_title  */ __( 'Control Panel', 'poll-dude' ), 
+			/* $menu_title  */ __( 'Control Panel', 'poll-dude' ), 
 			/* $capability  */ 'manage_options', 
 			/* $menu_slug   */ plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-control-panel.php'
 		);

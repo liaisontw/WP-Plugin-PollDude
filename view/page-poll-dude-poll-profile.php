@@ -8,7 +8,7 @@
 <input type="hidden" name="pollq_active" value="<?php echo $poll_active; ?>" />
 <input type="hidden" name="poll_timestamp_old" value="<?php echo $poll_timestamp; ?>" />
 <div class="wrap">
-	<h2><?php ('edit' == $mode)? _e('Edit Poll', 'poll-dude'): _e('Add Poll', 'poll-dude'); ?></h2>
+	<h2><?php ('edit' == $mode)? _e('Edit Poll', 'poll-dude'): _e('New Poll', 'poll-dude'); ?></h2>
 	<!-- Poll Question -->
 	<h3><?php _e('Poll Question', 'poll-dude'); ?></h3>
 	<input type="hidden" name="polldude_recaptcha" id="polldude_recaptcha" value="0"/>
@@ -94,11 +94,11 @@
             </tr>
 		</tfoot>
 	</table>
-	<!-- Poll Multiple Answers -->
-	<h3><?php _e('Poll Multiple Answers', 'poll-dude') ?></h3>
+	<!-- Multiple Answers -->
+	<h3><?php _e('Multiple Answers', 'poll-dude') ?></h3>
 	<table class="form-table">
 		<tr>
-			<th width="40%" scope="row" valign="top"><?php _e('Allows Users To Select More Than One Answer?', 'poll-dude'); ?></th>
+			<th width="40%" scope="row" valign="top"><?php _e('Multiple Answers Allowed?', 'poll-dude'); ?></th>
 			<td width="60%">
 				<select name="pollq_multiple_yes" id="pollq_multiple_yes" size="1" onchange="pd_is_multiple_answer();">
 					<option value="0"<?php if('edit'==$mode) { selected('0', $poll_multiple); }?>><?php _e('No', 'poll-dude'); ?></option>
@@ -107,7 +107,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th width="40%" scope="row" valign="top"><?php _e('Maximum Number Of Selected Answers Allowed?', 'poll-dude') ?></th>
+			<th width="40%" scope="row" valign="top"><?php _e('Maximum Selected Answers Allowed by a User?', 'poll-dude') ?></th>
 			<td width="60%">
 				<select name="pollq_multiple" id="pollq_multiple" size="1" <?php if(('edit'!=$mode)||($poll_multiple == 0)) { echo 'disabled="disabled"'; } ?>>
 					<?php
@@ -123,8 +123,8 @@
 			</td>
 		</tr>
 	</table>
-	<!-- Poll Start/End Date -->
-	<h3><?php _e('Poll Start/End Date', 'poll-dude'); ?></h3>
+	<!-- Start/End Date -->
+	<h3><?php _e('Start/End Date', 'poll-dude'); ?></h3>
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Start Date/Time', 'poll-dude') ?></th>

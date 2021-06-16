@@ -23,7 +23,7 @@ if ( ! empty($_POST['do'] ) ) {
 	// Decide What To Do
 	switch ( $_POST['do'] ) {
 		// Add Poll
-		case __( 'Add Poll', 'poll-dude' ):
+		case __( 'New Poll', 'poll-dude' ):
 			check_admin_referer( 'polldude_add-poll' );
 			
 			$text = $poll_dude->admin->poll_config('add', $base_name);
