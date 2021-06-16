@@ -1,4 +1,5 @@
 # Changelog
+* (Wed Jun 16 15:54:34 2021 +0800)729d60b liaison.tw@gmail.com Refine showing text on admin control pages
 * (Wed Jun 16 15:04:20 2021 +0800)728aa28 liaison.tw@gmail.com Remove trial of get post ID in widget
 * (Tue Jun 15 11:17:08 2021 +0800)5c088f6 liaison.tw@gmail.com public.js: enable vote button after recaptcha cliced. Remove useless legacy in some files.
 * (Fri Jun 11 14:43:29 2021 +0800)3d5df3d liaison.tw@gmail.com. Move text domain & widget init from admin to core class. Refine the header & clean unused code in admin. --pretty= (%cd) %h %ae. %s

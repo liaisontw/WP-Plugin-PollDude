@@ -1,3 +1,5 @@
+* (Wed Jun 16 15:54:34 2021 +0800)729d60b liaison.tw@gmail.com Refine showing text on admin control pages
+* (Wed Jun 16 15:16:04 2021 +0800)e085216 liaison.tw@gmail.com Update CHANGELOG.md
 * (Wed Jun 16 15:04:20 2021 +0800)728aa28 liaison.tw@gmail.com Remove trial of get post ID in widget
 * (Tue Jun 15 11:58:38 2021 +0800)798345c liaison.tw@gmail.com options.php: preg_replace sitekey & secretkey
 * (Tue Jun 15 11:23:21 2021 +0800)f33d74b liaison.tw@gmail.com update CHANGELOG.md
