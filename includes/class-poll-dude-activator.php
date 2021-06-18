@@ -104,13 +104,13 @@ class Poll_Dude_Activator {
 		// If Install, Insert 1st Poll Question With 5 Poll Answers
 		if ( empty( $first_poll ) ) {
 			// Insert Poll Question (1 Record)
-			$insert_pollq = $wpdb->insert( $wpdb->polldude_q, array( 'pollq_question' => __( 'How Is My Site?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
+			$insert_pollq = $wpdb->insert( $wpdb->polldude_q, array( 'pollq_question' => __( 'What weather do you like?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
 			if ( $insert_pollq ) {
 				// Insert Poll Answers  (5 Records)
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Good', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Excellent', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Bad', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Can Be Improved', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Sunny', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Rainy', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Cloudy', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Snowy', 'poll-dude' ) ), array( '%d', '%s' ) );
 				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
 			}
 		}

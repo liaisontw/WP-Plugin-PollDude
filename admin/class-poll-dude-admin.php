@@ -416,7 +416,6 @@ class Poll_Dude_Admin {
 					if ( ! empty( $polla_answer_new ) ) {
 						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
 						$polla_color = $_POST['color_picker'][$i];
-						//$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 							
 						$add_poll_answers = $wpdb->insert(
 							$wpdb->polldude_a,

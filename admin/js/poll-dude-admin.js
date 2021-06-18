@@ -155,3 +155,12 @@ function pd_checkall_bottom() {
 	}) 
 };
 
+function pd_select_action(value) {
+	var selectBox = document.getElementById("selectBox");
+	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+	if (selectedValue === "shortcode") {
+		prompt("Please press ctrl+c to copy the shortcode", "[poll_dude id=\"" + value + "\"]")
+	} else {
+		location.href = selectedValue;
+	} 
+}

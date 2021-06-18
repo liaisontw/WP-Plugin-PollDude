@@ -89,9 +89,13 @@ switch($mode) {
         $total_votes = 0;
         $total_voters = 0;
 ?>
+        <script type="text/javascript">
+            
+        </script>
         <!-- Last Action -->
-        <div id="message" class="updated" style="display: none;"></div>
-
+        <div id="message" class="updated" style="display: none;">
+        
+        </div>
         <!-- Manage Polls -->
         <div class="wrap">
             <h2><?php _e('Control Panel', 'poll-dude'); ?></h2>
@@ -181,7 +185,11 @@ switch($mode) {
                                     _e('Closed', 'poll-dude');
                                 }
                                 echo "</td>\n";
-                                echo "<td><a href=\"$base_page&amp;mode=edit&amp;id=$poll_id\" class=\"edit\">".__('Edit', 'poll-dude')."</a></td>\n";
+                                echo "<td><select id=\"selectBox\" name=\"forma\" onchange=\"pd_select_action($poll_id); \">";
+                                echo "<option value=\"#\">".__('-Select-', 'poll-dude')."</option>\n";
+                                echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\">".__('Edit', 'poll-dude')."</option>";
+                                echo "<option value=\"shortcode\" class=\"button\">".__('Shortcode', 'poll-dude')."</option>\n";
+                                echo "</select></td>";
                                 echo '</tr>';
                                 $i++;
                                 $total_votes+= $poll_totalvotes;

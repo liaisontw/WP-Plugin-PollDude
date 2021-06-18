@@ -14,10 +14,54 @@
 	<input type="hidden" name="polldude_recaptcha" id="polldude_recaptcha" value="0"/>
 	<input type="checkbox" name="polldude_recaptcha" id="polldude_recaptcha" value="1" <?php echo ($poll_recaptcha)? "checked":""; ?>/>
 	<strong><?php _e('Enable reCaptcha', 'poll-dude'); ?></strong>
+	
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Question', 'poll-dude') ?></th>
 			<td width="80%"><input type="text" size="70" name="pollq_question" value="<?php echo ('edit' != $mode) ? '': esc_attr( $poll_question_text ); ?>" /></td>
+		</tr>
+	</table>
+	<!-- Start/End Date -->
+	<h3><?php _e('Start/End Date', 'poll-dude'); ?></h3>
+	<table class="form-table">
+		<tr>
+			<th width="20%" scope="row" valign="top"><?php _e('Start Date', 'poll-dude') ?></th>
+			<td width="80%">
+				<?php 
+					if ('edit'!==$mode) {
+						$poll_timestamp = current_time('timestamp');					
+					}
+					echo mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('time_format'), get_option('date_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)).'<br />';
+					echo '<input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="pd_check_timestamp()" />&nbsp;<label for="edit_polltimestamp">';
+					_e('Edit Start Date', 'poll-dude'); 
+					echo '</label><br />';
+					$poll_dude->utility->time_select($poll_timestamp, 'pollq_timestamp', 'none');
+				?>
+			</td>
+		</tr>
+		<tr>
+			<th width="20%" scope="row" valign="top"><?php _e('End Date', 'poll-dude') ?></th>
+			<td width="80%">
+				<?php
+					if('edit'==$mode){
+						if( empty($poll_expiry)) {
+							_e('This Poll Will Not Expire', 'poll-dude');
+						} else {
+							echo mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
+						}
+						echo '<br />';
+					}
+                ?>
+				<input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" onclick="pd_check_expiry();" <?php if(('edit'!=$mode) || empty($poll_expiry)) { echo 'checked="checked"'; } ?> />
+                <label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'poll-dude'); ?></label><br />
+                <?php
+					if(('edit'!=$mode) || empty($poll_expiry)) {
+						$poll_dude->utility->time_select(current_time('timestamp'), 'pollq_expiry', 'none');
+					} else {
+						$poll_dude->utility->time_select($poll_expiry, 'pollq_expiry');
+					}
+                ?>
+			</td>
 		</tr>
 	</table>
 	<!-- Poll Answers -->
@@ -123,51 +167,9 @@
 			</td>
 		</tr>
 	</table>
-	<!-- Start/End Date -->
-	<h3><?php _e('Start/End Date', 'poll-dude'); ?></h3>
-	<table class="form-table">
-		<tr>
-			<th width="20%" scope="row" valign="top"><?php _e('Start Date/Time', 'poll-dude') ?></th>
-			<td width="80%">
-				<?php 
-					if ('edit'!==$mode) {
-						$poll_timestamp = current_time('timestamp');					
-					}
-					echo mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('time_format'), get_option('date_format')), gmdate('Y-m-d H:i:s', $poll_timestamp)).'<br />';
-					echo '<input type="checkbox" name="edit_polltimestamp" id="edit_polltimestamp" value="1" onclick="pd_check_timestamp()" />&nbsp;<label for="edit_polltimestamp">';
-					_e('Edit Start Date/Time', 'poll-dude'); 
-					echo '</label><br />';
-					$poll_dude->utility->time_select($poll_timestamp, 'pollq_timestamp', 'none');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<th width="20%" scope="row" valign="top"><?php _e('End Date/Time', 'poll-dude') ?></th>
-			<td width="80%">
-				<?php
-					if('edit'==$mode){
-						if( empty($poll_expiry)) {
-							_e('This Poll Will Not Expire', 'poll-dude');
-						} else {
-							echo mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_expiry));
-						}
-						echo '<br />';
-					}
-                ?>
-				<input type="checkbox" name="pollq_expiry_no" id="pollq_expiry_no" value="1" onclick="pd_check_expiry();" <?php if(('edit'!=$mode) || empty($poll_expiry)) { echo 'checked="checked"'; } ?> />
-                <label for="pollq_expiry_no"><?php _e('Do NOT Expire This Poll', 'poll-dude'); ?></label><br />
-                <?php
-					if(('edit'!=$mode) || empty($poll_expiry)) {
-						$poll_dude->utility->time_select(current_time('timestamp'), 'pollq_expiry', 'none');
-					} else {
-						$poll_dude->utility->time_select($poll_expiry, 'pollq_expiry');
-					}
-                ?>
-			</td>
-		</tr>
-	</table>
+	
 	<p style="text-align: center;">
-	<input id="add_edit" type="submit" name="do" value="<?php ('edit' != $mode)? _e('Add Poll', 'poll-dude'): _e('Edit Poll', 'poll-dude'); ?>"  class="button-primary" />&nbsp;&nbsp;
+	<input id="add_edit" type="submit" name="do" value="<?php ('edit' != $mode)? _e('New Poll', 'poll-dude'): _e('Edit Poll', 'poll-dude'); ?>"  class="button-primary" />&nbsp;&nbsp;
 	<?php
 		if('edit'==$mode) {
 			if($poll_active == 1) {

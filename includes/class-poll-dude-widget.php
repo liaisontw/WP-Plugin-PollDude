@@ -18,7 +18,7 @@
 		if( ! empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
-		$poll_dude->shortcode->get_poll( $poll_id, true, false );
+		$poll_dude->shortcode->get_poll( $poll_id, true, true );
 		echo $args['after_widget'];
 	}
 
