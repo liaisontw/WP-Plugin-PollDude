@@ -1,4 +1,5 @@
 # Changelog
+* (Sat Jun 19 10:47:42 2021 +0800)2d4a38c liaison.tw@gmail.com Finish file header for all php files
 * (Fri Jun 18 15:11:55 2021 +0800)717cdda liaison.tw@gmail.com Add shortcode prompt in control-panel page action-select-option
 * (Wed Jun 16 15:54:34 2021 +0800)729d60b liaison.tw@gmail.com Refine showing text on admin control pages
 * (Wed Jun 16 15:04:20 2021 +0800)728aa28 liaison.tw@gmail.com Remove trial of get post ID in widget
