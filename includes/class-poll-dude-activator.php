@@ -1,24 +1,14 @@
 <?php
-
-/**
- * Fired during plugin activation
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- */
-
 /**
  * Fired during plugin activation.
  *
  * This class defines all code necessary to run during the plugin's activation.
  *
+ * @link       https://github.com/liaisontw/poll-dude
  * @since      1.0.0
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- * @author     Your Name <email@example.com>
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
  */
 class Poll_Dude_Activator {
 
@@ -122,7 +112,6 @@ class Poll_Dude_Activator {
 		add_option('pd_latestpoll', 1);
 		add_option('pd_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
 		add_option('pd_close', 1);
-		add_option('pd_ajax_style', array('loading' => 1, 'fading' => 1));
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->polldude_q" );
 		if ( 0 === $pollq_totalvoters ) {
 			$wpdb->query( "UPDATE $wpdb->polldude_q SET pollq_totalvoters = pollq_totalvotes" );

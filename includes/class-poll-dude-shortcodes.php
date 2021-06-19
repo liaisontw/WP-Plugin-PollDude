@@ -1,4 +1,14 @@
 <?php
+/**
+ *
+ * This class defines all code necessary to run for the plugin's shortcode display.
+ *
+ * @link       https://github.com/liaisontw/poll-dude
+ * @since      1.0.0
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
+ */
 
 class Poll_Dude_Shortcode {
 
@@ -249,18 +259,8 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
 			if($poll_recaptcha && $recaptcha){
-				$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js' async defer></script>";
+				$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js?hl=en' ></script>";
 			}
-			
-			if($display_loading) {
-				$pd_ajax_style = get_option('pd_ajax_style');
-				/*
-				if((int) $pd_ajax_style['loading'] === 1) {
-					$temp_pollvote .= "<div id=\"polls-$poll_question_id-loading\" class=\"poll-dude-loading\"><img src=\"".plugins_url('poll-dude/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'poll-dude')." ...\" title=\"".__('Loading', 'poll-dude')." ...\" class=\"poll-dude-image\" />&nbsp;".__('Loading', 'poll-dude')." ...</div>\n";
-				}
-				*/
-			}
-			
 		} else {
 			$temp_pollvote .= $this->removeslashes(get_option('poll_template_disable'));
 		}
@@ -394,14 +394,6 @@ class Poll_Dude_Shortcode {
 			$temp_pollresult .= "\t\t$template_footer\n";
 			$temp_pollresult .= "\t\t<input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" />\n";
 			$temp_pollresult .= "</div>\n";
-			
-			if ( $display_loading ) { $pd_ajax_style = get_option( 'pd_ajax_style' );
-				/*
-				if ( (int) $pd_ajax_style['loading'] === 1 ) {
-					$temp_pollresult .= "<div id=\"polls-$poll_question_id-loading\" class=\"poll-dude-loading\"><img src=\"".plugins_url('poll-dude/images/loading.gif')."\" width=\"16\" height=\"16\" alt=\"".__('Loading', 'poll-dude')." ...\" title=\"".__('Loading', 'poll-dude')." ...\" class=\"poll-dude-image\" />&nbsp;".__('Loading', 'poll-dude')." ...</div>\n";
-				}
-				*/
-			}
 			
 		} else {
 			$temp_pollresult .= $this->removeslashes( get_option ('poll_template_disable' ) );

@@ -1,24 +1,15 @@
 <?php
-
-/**
- * The public-facing functionality of the plugin.
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/public
- */
-
 /**
  * The public-facing functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/public
- * @author     Your Name <email@example.com>
+ * @link       https://github.com/liaisontw/poll-dude
+ * @since      1.0.0
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
  */
 class Poll_Dude_Public {
 
@@ -57,14 +48,11 @@ class Poll_Dude_Public {
 		$this->enqueue_styles();
 		$this->enqueue_scripts();
 		
-		$pd_ajax_style = get_option('pd_ajax_style');
 		wp_localize_script('poll-dude', 'pdPublicL10n', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'text_wait' => __('Your last request is still being processed. Please wait a while ...', 'poll-dude'),
 			'text_valid' => __('Please choose a valid poll answer.', 'poll-dude'),
 			'text_multiple' => __('Maximum number of choices allowed: ', 'poll-dude'),
-			'show_loading' => (int) $pd_ajax_style['loading'],
-			'show_fading' => (int) $pd_ajax_style['fading'],
 			'g_recaptcha'=>__('Google reCaptcha V2', 'poll-dude')
 		));
 	}

@@ -1,4 +1,15 @@
 <?php
+/**
+ *
+ * This class defines common utilities used in other classes.
+ *
+ * @link       https://github.com/liaisontw/poll-dude
+ * @since      1.0.0
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
+ */
+
 namespace poll_dude;
 
 class Poll_Dude_Utility {
@@ -205,21 +216,5 @@ class Poll_Dude_Utility {
         }
 
         return $hostname;
-    }
-
-    ### Check If In Poll Archive Page
-    function in_pollarchive() {
-        $poll_archive_url = get_option('poll_archive_url');
-        $poll_archive_url_array = explode('/', $poll_archive_url);
-        $poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-1];
-        if(empty($poll_archive_url)) {
-            $poll_archive_url = $poll_archive_url_array[count($poll_archive_url_array)-2];
-        }
-        $current_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
-        if(strpos($current_url, $poll_archive_url) === false) {
-            return false;
-        }
-
-        return true;
     }
 }

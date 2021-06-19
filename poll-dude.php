@@ -16,8 +16,9 @@
  * Plugin Name:       Poll Dude
  * Plugin URI:        https://github.com/liaisontw/poll-dude
  * Description:       Create the polls by generating shortcodes embedded in your posts. 
- *                    With reCaptcha to prevent robots accessing. 
- *                    The color of voted bar can be set for each answer.
+ *                    Showing one selected poll as a widget.
+ *                    With reCaptchaV2 to prevent robots accessing. 
+ *                    The color of each answer voted-bar can be set differently.
  * Version:           1.0.0
  * Author:            Liaison Chang
  * Author URI:        https://github.com/liaisontw/

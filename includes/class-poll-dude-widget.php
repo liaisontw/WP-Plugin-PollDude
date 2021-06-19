@@ -1,4 +1,14 @@
 <?php
+/**
+ *
+ * This class defines all code related to the plugin's widget class (extends WP_Widget).
+ *
+ * @link       https://github.com/liaisontw/poll-dude
+ * @since      1.0.0
+ * @package    poll-dude
+ * @subpackage poll-dude/includes
+ * @author     Liaison Chang
+ */
 
 ### Class: WP Widget
  class WP_Widget_Polldude extends WP_Widget {

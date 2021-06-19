@@ -1,36 +1,11 @@
 <?php
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://github.com/liaisontw/poll-dude
- * @since      1.0.0
- *
- * @package    poll-dude
- * @subpackage poll-dude/includes
- */
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    poll-dude
- * @subpackage poll-dude/includes
- * @author     Liaison Chang
- */
-
 /**
  * The admin-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
+ * @link       https://github.com/liaisontw/poll-dude
  * @since      1.0.0
  * @package    poll-dude
  * @subpackage poll-dude/includes
