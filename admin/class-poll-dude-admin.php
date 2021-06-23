@@ -98,7 +98,7 @@ class Poll_Dude_Admin {
 			/* $capability */'manage_options',
 			/* $menu_slug  */plugin_dir_path( dirname( __FILE__ ) ) . '/view/page-poll-dude-options.php',
 			/* $function   */'',
-			'dashicons-forms'
+			'dashicons-yes'
 		);
 
 
