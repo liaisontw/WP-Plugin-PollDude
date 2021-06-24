@@ -17,7 +17,7 @@
  * Plugin URI:        https://github.com/liaisontw/poll-dude
  * Description:       Create the polls by generating shortcodes embedded in your posts. 
  *                    Showing one selected poll as a widget.
- *                    With reCaptchaV2 to prevent robots accessing. 
+ *                    With reCaptchaV2 client side to prevent robots accessing. 
  *                    The color of each answer voted-bar can be set differently.
  * Version:           1.0.0
  * Author:            Liaison Chang

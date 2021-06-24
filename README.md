@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 ## Description  
 Create the polls by generating shortcodes embedded in your posts.   
 Showing one selected poll as a widget.  
-With reCaptchaV2 to prevent robots accessing.   
+With reCaptchaV2 client side to prevent robots accessing.   
 The color of each answer voted-bar can be set differently.  
 
 ### Build Status  
@@ -68,17 +68,20 @@ The color of each answer voted-bar can be set differently.
 
 == Screenshots ==  
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from  
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Dashboard - Poll Dude Option (`/assets/1_Poll-Dude-Option.png`)
+2. Dashboard - New Poll Page (`/assets/2_New-Poll.png`)
+3. Dashboard - Control Panel Page, Get Shortcode (`/assets/3_Control-Panel-Get-Shortcode.png`)
+4. Dashboard - Edit Poll (`/assets/4_Edit-Poll.png`)
+5. Poll Display - with reCaptcha, Single Answer (`/assets/5-Poll-Display-reCaptcha-Single-Answer.png`)
+6. Poll Display - with reCaptcha, Multiple Answers (`/assets/6-Poll-Display-reCaptcha-Multiple-Answers.png`)
+7. Poll Display - No reCaptcha, Single Answer (`/assets/7-Poll-Display-No-reCaptcha-Single-Answer.png`)
+8. Poll Display - Poll Results (`/assets/8-Poll-Display-Poll-Results.png`)
 
 == Changelog ==
 
 = 1.0 =
-* A change since the previous version.
-* Another change.
+* First release
+
 
 == Upgrade Notice ==
 
