@@ -1,4 +1,3 @@
-// Variables
 pdPublicL10n.show_loading = parseInt(pdPublicL10n.show_loading);
 pdPublicL10n.show_fading = parseInt(pdPublicL10n.show_fading);
 
@@ -19,7 +18,7 @@ function polldude_recaptcha(current_poll_id) {
 			data: 'action=poll-dude&view=recaptcha&poll_id=' + current_poll_id + '&poll_' + current_poll_id + '_nonce=' + poll_nonce + "&g-recaptcha-response=" + grecaptcha.getResponse(),
 			cache: false,
 			success: function (data) {
-				alert(data);
+				//alert(data);
 				polldude_vote(current_poll_id);
 			}
 		});

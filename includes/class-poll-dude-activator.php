@@ -110,6 +110,8 @@ class Poll_Dude_Activator {
 		add_option('pd_default_color', '#b0c3d4');
 		add_option('pd_currentpoll', 0);
 		add_option('pd_latestpoll', 1);
+		add_option('pd_logging_method', '0');
+		add_option('pd_allowtovote', '2');
 		add_option('pd_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
 		add_option('pd_close', 1);
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->polldude_q" );

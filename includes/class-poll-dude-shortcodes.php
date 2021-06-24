@@ -221,7 +221,7 @@ class Poll_Dude_Shortcode {
 				$poll_answer_percentage = $poll_question_totalvotes > 0 ? round( ( $poll_answer_votes / $poll_question_totalvotes ) * 100 ) : 0;
 				$poll_multiple_answer_percentage = $poll_question_totalvoters > 0 ? round( ( $poll_answer_votes / $poll_question_totalvoters ) * 100 ) : 0;
 
-				$template_answer = "<li><input type=\"$ans_select\" id=\"poll-answer-$poll_answer_id\" name=\"poll_$poll_question_id\" value=\"$poll_answer_id\" /> <label for=\"poll-answer-$poll_answer_id\">$poll_answer_text</label></li>";
+				$template_answer = "<li><input type=\"$ans_select\" id=\"poll-answer-$poll_answer_id\" name=\"poll_$poll_question_id\" value=\"$poll_answer_id\" /><label for=\"poll-answer-$poll_answer_id\">$poll_answer_text</label></li>";
 
 				// Print Out Voting Form Body Template
 				$temp_pollvote .= "\t\t$template_answer\n";
@@ -384,9 +384,9 @@ class Poll_Dude_Shortcode {
 			}
 			// Results Footer Variables
 			if ( ! empty( $user_voted ) || $poll_question_active === 0 || ! $this->vote_allow() ) {
-				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p></div>";
+				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Votes', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvotes )."</strong></p></div>";
 			}else{
-				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Voters', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvoters )."</strong></p>";
+				$template_footer  = "</ul><p style=\"text-align: center;\">".__('Total Votes', 'poll-dude').": <strong>".number_format_i18n( $poll_question_totalvotes )."</strong></p>";
 				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#VotePoll\" onclick=\"polldude_booth($poll_question_id); return false;\" title=\"".__('Vote For This Poll', 'poll-dude')."">"".__('Vote', 'poll-dude')."</a></p></div>";
 			}
 
@@ -414,7 +414,7 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Invalid Answer to Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
-		if (!$poll_dude->utility->vote_allow()) {
+		if (!$this->vote_allow()) {
 			throw new InvalidArgumentException(sprintf(__('User is not allowed to vote for Poll ID #%s', 'poll-dude'), $poll_id));
 		}
 
@@ -433,7 +433,7 @@ class Poll_Dude_Shortcode {
 		}
 
 		//$check_voted = check_voted($poll_id);
-		$is_voted = $poll_dude->utility->is_voted($poll_id);
+		$is_voted = $this->is_voted($poll_id);
 		if ( !empty( $is_voted ) ) {
 			throw new InvalidArgumentException(sprintf(__('You Had Already Voted For This Poll. Poll ID #%s', 'poll-dude'), $poll_id));
 		}
@@ -513,18 +513,44 @@ class Poll_Dude_Shortcode {
 			throw new InvalidArgumentException(sprintf(__('Please click <I am not a robot>.', 'poll-dude')));
 		}
 		if(isset($captcha)){
+			
 			$secretKey = get_option('pd_recaptcha_secretkey');
-			$ip = $_SERVER['REMOTE_ADDR'];
 			// post request to server
+			/*
 			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
+			
+			$ip = $_SERVER['REMOTE_ADDR'];
+			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha);
 			$response = file_get_contents($url);
-			$responseKeys = json_decode($response,true);
+			*/
+
+			/*
+			$url = 'https://www.google.com/recaptcha/api/siteverify';
+			$data = ['secret' => $secretKey,
+					'response' => $captcha];
+
+			$options = [
+				'http' => [
+					'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+					'method' => 'POST',
+					'content' => http_build_query($data)
+				]
+			];
+			
+			$context = stream_context_create($options);
+			$result = file_get_contents($url, false, $context);
+			
+			$responseKeys = json_decode($result,true);
+			//var_dump($ip);
+			var_dump($responseKeys);
+			
 			// should return JSON with success as true
 			if($responseKeys["success"]) {
 				_e('Recaptcha verify passed.', 'poll-dude');
 			} else {
 				_e('Recaptcha verify failed.', 'poll-dude');
 			}
+			*/
 			unset($_POST['g-recaptcha-response']);
 		}
 	}

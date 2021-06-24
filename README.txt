@@ -68,6 +68,16 @@ The color of each answer voted-bar can be set differently.
 
 == Screenshots ==  
 
+1. Admin - Poll Dude Option
+2. Admin - New Poll Page
+3. Admin - Control Panel Page
+5. Admin - Shortcode
+
+7. Poll - Single Poll Answer
+8. Poll - Mutiple Poll Answers
+9. Poll - Results
+10. Poll - Archive
+
 1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from  
 the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
 directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`

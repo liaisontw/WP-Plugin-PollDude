@@ -82,9 +82,14 @@ class Poll_Dude_Utility {
 
     ### Function: Check Who Is Allow To Vote
     public function vote_allow() {
+        
+
+        return true;
+        /*
         global $user_ID;
         $user_ID = (int) $user_ID;
         $allow_to_vote = (int) get_option( 'poll_allowtovote' );
+
         switch($allow_to_vote) {
             // Guests Only
             case 0:
@@ -105,11 +110,15 @@ class Poll_Dude_Utility {
             default:
                 return true;
         }
+        */
     }
 
     ### Funcrion: Check Voted By Cookie Or IP
     public function is_voted($poll_id) {
-        $poll_logging_method = (int) get_option( 'poll_logging_method' );
+
+        return 0;
+        /*
+        $poll_logging_method = (int) get_option( 'pd_logging_method' );
         switch($poll_logging_method) {
             // Do Not Log
             case 0:
@@ -136,6 +145,7 @@ class Poll_Dude_Utility {
                 return $this->voted_username($poll_id);
                 break;
         }
+        */
     }
 
     ### Function: Check Voted By Cookie

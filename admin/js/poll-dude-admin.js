@@ -1,18 +1,5 @@
 
 var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, count_poll_answer_new = 0, count_poll_answer = 3; 
-
-/*
-function delete_poll_ans(a, c, d, b, e) {
-	if (delete_poll_ans_confirm = confirm(b)) global_poll_id = a, global_poll_aid = c, global_poll_aid_votes = d, temp_vote_count = 0, jQuery(document).ready(function (b) {
-		b.ajax({
-			type: "POST", url: pdAdminL10n.admin_ajax_url, data: "do=" + pdAdminL10n.text_delete_poll_ans + "&pollq_id=" + a + "&polla_aid=" + c + "&action=poll-dude-control&_ajax_nonce=" + e, cache: !1, success: function (a) {
-				b("#message").html(a); b("#message").show(); b("#poll_total_votes").html(parseInt(b("#poll_total_votes").html()) - parseInt(global_poll_aid_votes));
-				b("#pollq_totalvotes").val(temp_vote_count); b("#poll-answer-" + global_poll_aid).remove(); pd_totalvotes(); pd_reorder_answer()
-			}
-		})
-	})
-}
-*/
 function pd_open_poll(a, c, d) { 
 	if (open_poll_confirm = confirm(c)) 
 	global_poll_id = a, 
@@ -45,7 +32,7 @@ function pd_close_poll(a, c, d) {
 }
 function pd_reorder_answer() { jQuery(document).ready(function (a) { var c = a("#pollq_multiple"), d = c.val(), b = a("> option", c).size(); c.empty(); a("#poll_answers tr > th").each(function (b) { a(this).text(pdAdminL10n.text_answer + " " + (b + 1)); a(c).append('<option value="' + (b + 1) + '">' + (b + 1) + "</option>") }); if (1 < d) { var e = a("> option", c).size(); d <= e ? a("> option", c).eq(d - 1).attr("selected", "selected") : d == b && a("> option", c).eq(e - 1).attr("selected", "selected") } }) }
 function pd_totalvotes() { temp_vote_count = 0; jQuery(document).ready(function (a) { a("#poll_answers tr td input[size=4]").each(function (c) { temp_vote_count = isNaN(a(this).val()) ? temp_vote_count + 0 : temp_vote_count + parseInt(a(this).val()) }); a("#pollq_totalvotes").val(temp_vote_count) }) }
-// Add Poll's Answer In Add Poll Page
+
 function pd_add_answer_add_form() {
 	jQuery(document).ready(function ($) {
 		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '">\
