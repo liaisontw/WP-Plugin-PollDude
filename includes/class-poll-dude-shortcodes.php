@@ -145,6 +145,7 @@ class Poll_Dude_Shortcode {
 				}
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				$disable_poll_js = '<script type="text/javascript">jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")});</script>';
+				wp_add_inline_script('jquery', $disable_poll_js);
 				if($display) {
 					echo $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 				} else {
@@ -259,7 +260,9 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
 			if($poll_recaptcha && $recaptcha){
-				$temp_pollvote .= "<script src='https://www.google.com/recaptcha/api.js?hl=en' ></script>";
+				$script = 'https://www.google.com/recaptcha/api.js?hl=en';
+				wp_add_inline_script('jquery', $script);
+				$temp_pollvote .= "<script src=".$script." ></script>";
 			}
 		} else {
 			$temp_pollvote .= $this->removeslashes(get_option('poll_template_disable'));
@@ -516,41 +519,7 @@ class Poll_Dude_Shortcode {
 			
 			$secretKey = get_option('pd_recaptcha_secretkey');
 			// post request to server
-			/*
-			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
 			
-			$ip = $_SERVER['REMOTE_ADDR'];
-			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha);
-			$response = file_get_contents($url);
-			*/
-
-			/*
-			$url = 'https://www.google.com/recaptcha/api/siteverify';
-			$data = ['secret' => $secretKey,
-					'response' => $captcha];
-
-			$options = [
-				'http' => [
-					'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-					'method' => 'POST',
-					'content' => http_build_query($data)
-				]
-			];
-			
-			$context = stream_context_create($options);
-			$result = file_get_contents($url, false, $context);
-			
-			$responseKeys = json_decode($result,true);
-			//var_dump($ip);
-			var_dump($responseKeys);
-			
-			// should return JSON with success as true
-			if($responseKeys["success"]) {
-				_e('Recaptcha verify passed.', 'poll-dude');
-			} else {
-				_e('Recaptcha verify failed.', 'poll-dude');
-			}
-			*/
 			unset($_POST['g-recaptcha-response']);
 		}
 	}

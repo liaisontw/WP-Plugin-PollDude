@@ -24,9 +24,9 @@
 
 		$title = apply_filters( 'widget_title', esc_attr( $instance['title'] ) );
 		$poll_id = (int) $instance['poll_id'];
-		echo $args['before_widget'];
+		echo esc_html($args['before_widget']);
 		if( ! empty( $title ) ) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo esc_html( $args['before_title'] . $title . $args['after_title'] );
 		}
 		$poll_dude->shortcode->get_poll( $poll_id, true, true );
 		echo $args['after_widget'];
@@ -52,12 +52,12 @@
 		$poll_id = (int) $instance['poll_id'];
 ?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'poll-dude'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:', 'poll-dude'); ?> <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" /></label>
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('poll_id'); ?>"><?php _e('Poll To Display:', 'poll-dude'); ?>
-				<select name="<?php echo $this->get_field_name('poll_id'); ?>" id="<?php echo $this->get_field_id('poll_id'); ?>" class="widefat">
+			<label for="<?php echo esc_attr($this->get_field_id('poll_id')); ?>"><?php _e('Poll To Display:', 'poll-dude'); ?>
+				<select name="<?php echo esc_attr($this->get_field_name('poll_id')); ?>" id="<?php echo esc_attr($this->get_field_id('poll_id')); ?>" class="widefat">
 					<option value="-1"<?php selected(-1, $poll_id); ?>><?php _e('Do NOT Display Poll (Disable)', 'poll-dude'); ?></option>
 					<option value="-2"<?php selected(-2, $poll_id); ?>><?php _e('Display Random Poll', 'poll-dude'); ?></option>
 					<option value="0"<?php selected(0, $poll_id); ?>><?php _e('Display Latest Poll', 'poll-dude'); ?></option>
@@ -69,9 +69,9 @@
 							$pollq_question = wp_kses_post( $poll_dude->utility->removeslashes( $poll->pollq_question ) );
 							$pollq_id = (int) $poll->pollq_id;
 							if($pollq_id === $poll_id) {
-								echo "<option value=\"$pollq_id\" selected=\"selected\">$pollq_question</option>\n";
+								echo "<option value=\"$pollq_id\" selected=\"selected\">".esc_attr($pollq_question)."</option>\n";
 							} else {
-								echo "<option value=\"$pollq_id\">$pollq_question</option>\n";
+								echo "<option value=\"$pollq_id\">".esc_attr($pollq_question)."</option>\n";
 							}
 						}
 					}

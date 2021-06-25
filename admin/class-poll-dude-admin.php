@@ -341,7 +341,7 @@ class Poll_Dude_Admin {
 					foreach($polla_aids as $polla_aid) {
 						$polla_answers = wp_kses_post( trim( $_POST['polla_aid-'.$polla_aid] ) );
 						$polla_votes = (int) sanitize_key($_POST['polla_votes-'.$polla_aid]);
-						$polla_color = $_POST['color_picker'][$i];
+						$polla_color = sanitize_hex_color($_POST['color_picker'][$i]);
 						$text .= '<p style="color: green;">'.sprintf(__('Poll\'s Color \'%s\' Picked Successfully.', 'poll-dude'), $polla_color).'</p>';
 
 						$edit_poll_answer = $wpdb->update(
@@ -375,7 +375,7 @@ class Poll_Dude_Admin {
 				} else {
 					$text .= '<p style="color: red">'.sprintf(__('Invalid Poll \'%s\'.', 'poll-dude'), $poll_dude->utility->removeslashes($pollq_question)).'</p>';
 				}
-				$polla_answers_new = isset($_POST['polla_answers_new']) ? $_POST['polla_answers_new'] : array();
+				$polla_answers_new = isset($_POST['polla_answers_new']) ? wp_kses_post( trim($_POST['polla_answers_new'])) : array();
 				$polla_qid = $pollq_id;
 			}
 			
@@ -384,13 +384,13 @@ class Poll_Dude_Admin {
 			
 			if(!empty($polla_answers_new)) {
 				$i = 0;
-				$polla_answers_new_votes = isset($_POST['polla_answers_new_votes'])? $_POST['polla_answers_new_votes'] : array();
+				$polla_answers_new_votes = isset($_POST['polla_answers_new_votes'])? (int) sanitize_key($_POST['polla_answers_new_votes']) : array();
 				
 				foreach($polla_answers_new as $polla_answer_new) {
 					$polla_answer_new = wp_kses_post( trim( $polla_answer_new ) );
 					if ( ! empty( $polla_answer_new ) ) {
 						$polla_answer_new_vote = ('edit' !== $mode)? 0 : (int) sanitize_key( $polla_answers_new_votes[$i] );
-						$polla_color = $_POST['color_picker'][$i];
+						$polla_color = sanitize_hex_color($_POST['color_picker'][$i]);
 							
 						$add_poll_answers = $wpdb->insert(
 							$wpdb->polldude_a,
