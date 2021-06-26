@@ -36,7 +36,7 @@ if (isset($_POST['bulk_delete'])) {
 
     check_admin_referer( 'polldude_bulk-delete' );
     for($i=0; $i<count($_POST['pollq']); $i++){
-        $pollq_id = $_POST['pollq'][$i];
+        $pollq_id = (int) sanitize_key($_POST['pollq'][$i]);
         
         $pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
         $poll_question_text = wp_kses_post( $poll_dude->utility->removeslashes($pollq_question));        

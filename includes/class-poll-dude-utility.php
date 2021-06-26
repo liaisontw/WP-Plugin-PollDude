@@ -153,7 +153,7 @@ class Poll_Dude_Utility {
         $get_voted_aids = 0;
         if ( ! empty( $_COOKIE[ 'voted_' . $poll_id ] ) ) {
             $get_voted_aids = explode( ',', $_COOKIE[ 'voted_' . $poll_id ] );
-            $get_voted_aids = array_map( 'intval', array_map( 'sanitize_key', $get_voted_aids ) );
+            $get_voted_aids = array_map( 'intval',  $get_voted_aids );
         }
         return $get_voted_aids;
     }

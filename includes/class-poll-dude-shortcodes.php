@@ -561,7 +561,7 @@ class Poll_Dude_Shortcode {
 				// Poll Vote
 				case 'process':			
 					try {
-						$poll_aid_array = array_unique( array_map('intval', array_map('sanitize_key', explode( ',', $_POST["poll_$poll_id"] ) ) ) );
+						$poll_aid_array = array_unique( array_map('intval', explode( ',', $_POST["poll_$poll_id"] ) ) );
 						echo $this->vote_polldude_process($poll_id, $poll_aid_array);
 					} catch (Exception $e) {
 						echo $e->getMessage();

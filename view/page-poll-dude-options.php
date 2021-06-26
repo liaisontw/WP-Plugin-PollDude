@@ -27,7 +27,7 @@ if( isset($_POST['Submit']) ) {
         case __('Set Color', 'poll-dude'):
             check_admin_referer('polldude_color');
 
-            $pd_default_color   = isset( $_POST['default_color'] ) ? $_POST['default_color'] : $pd_default_color;
+            $pd_default_color   = isset( $_POST['default_color'] ) ? sanitize_hex_color($_POST['default_color']) : $pd_default_color;
             $update_pd_options[]    = update_option('pd_default_color', $pd_default_color);
             $update_pd_text[]       = __('Default Voted Bar Color', 'poll-dude');
         
