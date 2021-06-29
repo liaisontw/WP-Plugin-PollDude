@@ -180,7 +180,6 @@ class Poll_Dude_Shortcode {
 		// If There Is Poll Question With Answers
 		
 		if($poll_question && $poll_answers) {
-			/*
 			// Display Poll Voting Form
 			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
 			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
@@ -236,7 +235,7 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
-			*/
+			
 			if($poll_recaptcha && $recaptcha){
 				$script = 'https://www.google.com/recaptcha/api.js?hl=en';
 				wp_add_inline_script('jquery', $script);
