@@ -131,32 +131,16 @@ class Poll_Dude_Shortcode {
 				$pd_close = (int) get_option( 'pd_close' );
 			}
 			if( $pd_close === 2 ) {
-				if( $display ) {
-					echo '';
-				} else {
-					return '';
-				}
+				return '';
 			}
 			if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
-				if($display) {
-					echo $this->display_pollresult($poll_id, $is_voted);
-				} else {
-					return $this->display_pollresult($poll_id, $is_voted);
-				}
+				return $this->display_pollresult($poll_id, $is_voted);
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				$disable_poll_js = '<script type="text/javascript">jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")});</script>';
 				wp_add_inline_script('jquery', $disable_poll_js);
-				if($display) {
-					echo $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
-				} else {
-					return $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
-				}
+				return $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 			} elseif( $poll_active === 1 ) {
-				if($display) {
-					echo $this->display_pollvote($poll_id, $display, $recaptcha);
-				} else {
-					return $this->display_pollvote($poll_id, $display, $recaptcha);
-				}
+				return $this->display_pollvote($poll_id, $display, $recaptcha);
 			}
 		}
 	}
@@ -555,25 +539,25 @@ class Poll_Dude_Shortcode {
 					try {
 						$this->polldude_recaptcha();
 					} catch (Exception $e) {
-						echo $e->getMessage();
+						echo wp_kses_post($e->getMessage());
 					}
 					break;
 				// Poll Vote
 				case 'process':			
 					try {
 						$poll_aid_array = array_unique( array_map('intval', explode( ',', $_POST["poll_$poll_id"] ) ) );
-						echo $this->vote_polldude_process($poll_id, $poll_aid_array);
+						echo wp_kses_post($this->vote_polldude_process($poll_id, $poll_aid_array));
 					} catch (Exception $e) {
-						echo $e->getMessage();
+						echo wp_kses_post($e->getMessage());
 					}
 					break;
 				// Poll Result
 				case 'result':					
-					echo $this->display_pollresult($poll_id, 0, false);
+					echo wp_kses_post($this->display_pollresult($poll_id, 0, false));
 					break;
 				// Poll Booth Aka Poll Voting Form
 				case 'booth':
-					echo $this->display_pollvote($poll_id, false);
+					echo wp_kses_post($this->display_pollvote($poll_id, false));
 					break;
 			} 
 		} 

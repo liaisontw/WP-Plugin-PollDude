@@ -27,9 +27,9 @@
 		
 		echo $args['before_widget'];
 		if( ! empty( $title ) ) {
-			echo  $args['before_title'] . esc_attr($title) . $args['after_title'];
+			echo  $args['before_title'].esc_attr($title) . $args['after_title'];
 		}
-		$poll_dude->shortcode->get_poll( $poll_id, true, true );
+		echo wp_kses_post($poll_dude->shortcode->get_poll( $poll_id, true, true ));
 		echo $args['after_widget'];
 	}
 

@@ -180,8 +180,8 @@
 				$pd_close_display = 'none';
 			}
 	?>
-    <input type="button" class="button" name="do" id="close_poll" value="<?php _e('Close Poll', 'poll-dude'); ?>" onclick="pd_close_poll(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to CLOSE this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('polldude_close-poll'); ?>');" style="display: <?php echo $pd_close_display; ?>;" />    
-	<input type="button" class="button" name="do" id="open_poll" value="<?php _e('Open Poll', 'poll-dude'); ?>" onclick="pd_open_poll(<?php echo $poll_id; ?>, '<?php printf(esc_js(__('You are about to OPEN this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('polldude_open-poll'); ?>');" style="display: <?php echo $pd_open_display; ?>;" />
+    <input type="button" class="button" name="do" id="close_poll" value="<?php _e('Close Poll', 'poll-dude'); ?>" onclick="pd_close_poll(<?php echo esc_attr($poll_id); ?>, '<?php printf(esc_js(__('You are about to CLOSE this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('polldude_close-poll'); ?>');" style="display: <?php echo esc_attr($pd_close_display); ?>;" />    
+	<input type="button" class="button" name="do" id="open_poll" value="<?php _e('Open Poll', 'poll-dude'); ?>" onclick="pd_open_poll(<?php echo esc_attr($poll_id); ?>, '<?php printf(esc_js(__('You are about to OPEN this poll \'%s\'.', 'poll-dude')), esc_attr( esc_js( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('polldude_open-poll'); ?>');" style="display: <?php echo esc_attr($pd_open_display); ?>;" />
 	<?php
 		}
 	?>		

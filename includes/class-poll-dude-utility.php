@@ -52,7 +52,7 @@ class Poll_Dude_Utility {
             '_year'   => array('unit'=>'Y', 'min'=>2010, 'max'=>2030, 'padding'=>'Y')
         );
 
-        echo '<div id="'.$fieldname.'" style="display: '.$display.'">'."\n";
+        echo '<div id="'.esc_attr($fieldname).'" style="display: '.esc_attr($display).'">'."\n";
         echo '<span dir="ltr">'."\n";
 
         foreach($time_select as $key => $value) {
