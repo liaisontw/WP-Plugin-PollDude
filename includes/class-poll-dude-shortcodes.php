@@ -66,10 +66,6 @@ class Poll_Dude_Shortcode {
 		$temp_poll_id = (int) $temp_poll_id;
 		// Check Whether Poll Is Disabled
 		if((int) get_option('pd_currentpoll') === -1) {
-			if($display) {
-				echo $this->removeslashes(get_option('poll_template_disable'));
-				return '';
-			}
 
 			return $this->removeslashes(get_option('poll_template_disable'));
 		// Poll Is Enabled
@@ -116,11 +112,7 @@ class Poll_Dude_Shortcode {
 
 		// User Click on View Results Link
 		if($pollresult_id === $poll_id) {
-			if($display) {
-				echo $this->display_pollresult($poll_id);
-			} else {
-				return $this->display_pollresult($poll_id);
-			}
+			return $this->display_pollresult($poll_id);
 		// Check Whether User Has Voted
 		} else {
 			$poll_active = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_active FROM $wpdb->polldude_q WHERE pollq_id = %d", $poll_id ) );
@@ -178,7 +170,7 @@ class Poll_Dude_Shortcode {
 		$poll_recaptcha = $poll_question->pollq_recaptcha;
 		
 		$template_question = "";
-		$template_question .="<p style=\"text-align: center;\"><strong>$poll_question_text</strong></p>";
+		$template_question .="<p style=\"text-align: center;\"><strong>".$poll_question_text."</strong></p>";
 		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
 		$template_question .="<ul class=\"poll-dude-ul\">";
 
@@ -188,6 +180,7 @@ class Poll_Dude_Shortcode {
 		// If There Is Poll Question With Answers
 		
 		if($poll_question && $poll_answers) {
+			/*
 			// Display Poll Voting Form
 			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
 			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
@@ -243,6 +236,7 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
+			*/
 			if($poll_recaptcha && $recaptcha){
 				$script = 'https://www.google.com/recaptcha/api.js?hl=en';
 				wp_add_inline_script('jquery', $script);

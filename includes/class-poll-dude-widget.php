@@ -25,7 +25,7 @@
 		$title = apply_filters( 'widget_title', esc_attr( $instance['title'] ) );
 		$poll_id = (int) $instance['poll_id'];
 		
-		echo $args['before_widget'];
+		echo esc_html($args['before_widget']);
 		if( ! empty( $title ) ) {
 			echo  $args['before_title'].esc_attr($title) . $args['after_title'];
 		}
