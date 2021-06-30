@@ -112,7 +112,11 @@ class Poll_Dude_Shortcode {
 
 		// User Click on View Results Link
 		if($pollresult_id === $poll_id) {
-			return $this->display_pollresult($poll_id);
+			if($display) {
+				echo wp_kses_post($this->display_pollresult($poll_id));
+			} else {
+				return $this->display_pollresult($poll_id);
+			}
 		// Check Whether User Has Voted
 		} else {
 			$poll_active = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_active FROM $wpdb->polldude_q WHERE pollq_id = %d", $poll_id ) );
@@ -126,11 +130,17 @@ class Poll_Dude_Shortcode {
 				return '';
 			}
 			if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
-				return $this->display_pollresult($poll_id, $is_voted);
+				if($display) {
+					echo wp_kses_post($this->display_pollresult($poll_id, $is_voted));
+				} else {
+					return $this->display_pollresult($poll_id, $is_voted);
+				}
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				wp_add_inline_script('jquery', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
+
 				return $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 			} elseif( $poll_active === 1 ) {
+				
 				return $this->display_pollvote($poll_id, $display, $recaptcha);
 			}
 		}
@@ -141,8 +151,6 @@ class Poll_Dude_Shortcode {
 	public function display_pollvote($poll_id, $display_loading = true, $recaptcha = true) { 
 		global $wpdb, $poll_dude;
 		
-		// Temp Poll Result
-		$temp_pollvote = '';
 		// Get Poll Question Data
 		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d LIMIT 1", $poll_id ) );
 
@@ -167,18 +175,22 @@ class Poll_Dude_Shortcode {
 		}
 		//$poll_multiple_ans = (int) $poll_question->pollq_multiple > 0 ? $poll_question->pollq_multiple : 1;
 		$poll_recaptcha = $poll_question->pollq_recaptcha;
-		
-		$template_question = "";
-		$template_question .="<p style=\"text-align: center;\"><strong>".$poll_question_text."</strong></p>";
-		$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
-		$template_question .="<ul class=\"poll-dude-ul\">";
-
+		if($poll_recaptcha && $recaptcha){
+			wp_add_inline_script('jquery', 'https://www.google.com/recaptcha/api.js');
+		}
 
 		// Get Poll Answers Data
 		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
-		// If There Is Poll Question With Answers
+		
 		
 		if($poll_question && $poll_answers) {
+			// Temp Poll Result
+			$temp_pollvote = '';
+			$template_question = "";
+			$template_question .="<p style=\"text-align: center;\"><strong>".$poll_question_text."</strong></p>";
+			$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
+			$template_question .="<ul class=\"poll-dude-ul\">";
+			// If There Is Poll Question With Answers
 			// Display Poll Voting Form
 			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
 			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
@@ -203,16 +215,6 @@ class Poll_Dude_Shortcode {
 				$temp_pollvote .= "\t\t$template_answer\n";
 			}
 			
-			// Determine Poll Result URL
-			$polldude_result_url = esc_url_raw( $_SERVER['REQUEST_URI'] );
-			$polldude_result_url = preg_replace('/pollresult=(\d+)/i', 'pollresult='.$poll_question_id, $polldude_result_url);
-			if(isset($_GET['pollresult']) && (int) $_GET['pollresult'] === 0) {
-				if(strpos($polldude_result_url, '?') !== false) {
-					$polldude_result_url = "$polldude_result_url&amp;pollresult=$poll_question_id";
-				} else {
-					$polldude_result_url = "$polldude_result_url?pollresult=$poll_question_id";
-				}
-			}
 
 			$template_footer = "";
 			if($poll_recaptcha){         
@@ -234,13 +236,7 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp_pollvote .= "\t</form>\n";
 			$temp_pollvote .= "</div>\n";
-			
-			if($poll_recaptcha && $recaptcha){
-				wp_add_inline_script('jquery', 'https://www.google.com/recaptcha/api.js');
-			}
-		} else {
-			$temp_pollvote .= $this->removeslashes(get_option('poll_template_disable'));
-		}
+		} 
 		
 		// Return Poll Vote Template
 		return $temp_pollvote;
