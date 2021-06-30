@@ -61,12 +61,12 @@ class Poll_Dude_Utility {
             echo "<select name=\"$time_stamp\" size=\"1\">"."\n";
             for($i = $value['min']; $i < $value['max']; $i++) {
                 if($time_value === $i) {
-                    echo "<option value=\"$i\" selected=\"selected\">$i</option>\n";
+                    echo "<option value=\"".esc_attr($i)."\" selected=\"selected\">".esc_attr($i)."</option>\n";
                 } else {
-                    echo "<option value=\"$i\">$i</option>\n";
+                    echo "<option value=\"".esc_attr($i)."\">".esc_attr($i)."</option>\n";
                 }
             }
-            echo '</select>&nbsp;'.$value['padding']."\n";		
+            echo '</select>&nbsp;'.esc_attr($value['padding'])."\n";		
         }
 
         echo '</span>'."\n";
@@ -152,8 +152,7 @@ class Poll_Dude_Utility {
     public function voted_cookie($poll_id ) {
         $get_voted_aids = 0;
         if ( ! empty( $_COOKIE[ 'voted_' . $poll_id ] ) ) {
-            $get_voted_aids = explode( ',', $_COOKIE[ 'voted_' . $poll_id ] );
-            $get_voted_aids = array_map( 'intval',  $get_voted_aids );
+            $get_voted_aids = array_map( 'intval', explode( ',', $_COOKIE[ 'voted_' . $poll_id ] ));
         }
         return $get_voted_aids;
     }

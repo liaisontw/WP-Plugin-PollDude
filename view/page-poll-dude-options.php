@@ -63,7 +63,7 @@ if( isset($_POST['Submit']) ) {
 ?>
 
 
-<?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade"><p>'.$text.'</p></div>'; } ?>
+<?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade"><p>'.wp_kses_data($text).'</p></div>'; } ?>
 <h2><?php _e('Poll Options', 'poll-dude'); ?></h2>
 <div class="wrap">
     <form  id="recaptcha_key" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">

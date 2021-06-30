@@ -5,8 +5,8 @@
 ?>">
 <?php ('edit' == $mode)? wp_nonce_field('polldude_edit-poll') : wp_nonce_field('polldude_add-poll');?>
 <input type="hidden" name="pollq_id" value="<?php echo $poll_id; ?>" />
-<input type="hidden" name="pollq_active" value="<?php echo $poll_active; ?>" />
-<input type="hidden" name="poll_timestamp_old" value="<?php echo $poll_timestamp; ?>" />
+<input type="hidden" name="pollq_active" value="<?php echo esc_attr($poll_active); ?>" />
+<input type="hidden" name="poll_timestamp_old" value="<?php echo esc_attr($poll_timestamp); ?>" />
 <div class="wrap">
 	<h2><?php ('edit' == $mode)? _e('Edit Poll', 'poll-dude'): _e('New Poll', 'poll-dude'); ?></h2>
 	<!-- Poll Question -->
@@ -18,7 +18,7 @@
 	<table class="form-table">
 		<tr>
 			<th width="20%" scope="row" valign="top"><?php _e('Question', 'poll-dude') ?></th>
-			<td width="80%"><input type="text" size="70" name="pollq_question" value="<?php echo ('edit' != $mode) ? '': esc_attr( $poll_question_text ); ?>" /></td>
+			<td width="80%"><input type="text" size="70" name="pollq_question" value="<?php echo ('edit' != $mode) ? '': esc_textarea( $poll_question_text ); ?>" /></td>
 		</tr>
 	</table>
 	<!-- Start/End Date -->
