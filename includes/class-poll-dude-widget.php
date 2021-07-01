@@ -12,10 +12,17 @@
 
 ### Class: WP Widget
  class WP_Widget_Polldude extends WP_Widget {
+	//private $wpdb, $poll_dude, $polls;
+
 	// Constructor
 	public function __construct() {
+		global $wpdb, $poll_dude;
+
+		//$this->wpdb = &$wpdb;
+		//$this->poll_dude = &$poll_dude;
 		$widget_ops = array('description' => __('Poll Dude', 'poll-dude'));
 		parent::__construct('polldude-widget', __('Poll Dude', 'poll-dude'), $widget_ops);
+		//$this->$polls = $this->$wpdb->get_results( "SELECT * FROM $this->$wpdb->polldude_q  ORDER BY pollq_timestamp DESC" );
 	}
 
 	// Display Widget
@@ -29,7 +36,9 @@
 		if( ! empty( $title ) ) {
 			echo  $args['before_title'].esc_attr($title) . $args['after_title'];
 		}
-		echo wp_kses_post($poll_dude->shortcode->get_poll( $poll_id, true, true ));
+		//echo wp_kses_post($poll_dude->shortcode->get_poll( $poll_id, true, true ));
+		$poll_dude->shortcode->get_poll( $poll_id, true, true );
+		
 		echo $args['after_widget'];
 	}
 

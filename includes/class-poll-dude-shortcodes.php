@@ -146,10 +146,18 @@ class Poll_Dude_Shortcode {
 		}
 	}
 
+	public function echo_or_aggregate($echo, $html){
+		if($echo & ($html !== '')){
+			echo wp_kses_post($html);
+		}else{
+			return $html;
+		}
+	}
 	
 	### Function: Display Voting Form
-	public function display_pollvote($poll_id, $display_loading = true, $recaptcha = true) { 
+	public function display_pollvote($poll_id, $display = true, $recaptcha = true) { 
 		global $wpdb, $poll_dude;
+		//require_once('page-poll-dude-display-vote.php');
 		
 		// Get Poll Question Data
 		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d LIMIT 1", $poll_id ) );
@@ -182,24 +190,23 @@ class Poll_Dude_Shortcode {
 		// Get Poll Answers Data
 		$poll_answers = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY 'polla_aid' 'desc'", $poll_question_id ) );
 		
-		
 		if($poll_question && $poll_answers) {
 			// Temp Poll Result
-			$temp_pollvote = '';
-			$template_question = "";
-			$template_question .="<p style=\"text-align: center;\"><strong>".$poll_question_text."</strong></p>";
-			$template_question .="<div id=\"polls-$poll_question_id-ans\" class=\"poll-dude-ans\">";
-			$template_question .="<ul class=\"poll-dude-ul\">";
+			$temp = '';
 			// If There Is Poll Question With Answers
 			// Display Poll Voting Form
-			$temp_pollvote .= "<div id=\"polls-$poll_question_id\" >\n";
-			$temp_pollvote .= "\t<form id=\"polls_form_$poll_question_id\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
-			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{$poll_question_id}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
-			$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" name=\"poll_id\" value=\"$poll_question_id\" /></p>\n";
+			$temp_pollvote =  $this->echo_or_aggregate($display, $temp); $temp = "<div id=\"polls-".esc_attr($poll_question_id)."\" >\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t<form id=\"polls_form_".esc_attr($poll_question_id)."\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{".esc_attr($poll_question_id)."}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" name=\"poll_id\" value=\"".esc_attr($poll_question_id)."\" /></p>\n";
 			if($poll_question->pollq_multiple > 0) {
-				$temp_pollvote .= "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_multiple_ans_$poll_question_id\" name=\"poll_multiple_ans_$poll_question_id\" value=\"$poll_multiple_ans\" /></p>\n";
+				$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_multiple_ans_".esc_attr($poll_question_id)."\" name=\"poll_multiple_ans_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_multiple_ans)."\" /></p>\n";
 			}
 			// Print Out Voting Form Header Template
+			$temp = '';
+			$template_question =  $this->echo_or_aggregate($display, $temp); $temp = "<p style=\"text-align: center;\"><strong>".esc_attr($poll_question_text)."</strong></p>";
+			$template_question .= $this->echo_or_aggregate($display, $temp); $temp = "<div id=\"polls-".esc_attr($poll_question_id)."-ans\" class=\"poll-dude-ans\">";
+			$template_question .= $this->echo_or_aggregate($display, $temp); $temp = "<ul class=\"poll-dude-ul\">";
 			$temp_pollvote .= "\t\t$template_question\n";
 			foreach ( $poll_answers as $poll_answer ) {
 				// Poll Answer Variables
@@ -209,34 +216,40 @@ class Poll_Dude_Shortcode {
 				$poll_answer_percentage = $poll_question_totalvotes > 0 ? round( ( $poll_answer_votes / $poll_question_totalvotes ) * 100 ) : 0;
 				$poll_multiple_answer_percentage = $poll_question_totalvoters > 0 ? round( ( $poll_answer_votes / $poll_question_totalvoters ) * 100 ) : 0;
 
-				$template_answer = "<li><input type=\"$ans_select\" id=\"poll-answer-$poll_answer_id\" name=\"poll_$poll_question_id\" value=\"$poll_answer_id\" /><label for=\"poll-answer-$poll_answer_id\">$poll_answer_text</label></li>";
+				$temp = "<li><input type=\"".esc_attr($ans_select)."\" id=\"poll-answer-".esc_attr($poll_answer_id)."\" name=\"poll_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_answer_id)."\" /><label for=\"poll-answer-".esc_attr($poll_answer_id)."\">".esc_textarea($poll_answer_text)."</label></li>";
+				$template_answer = $this->echo_or_aggregate($display, $temp); 
 
 				// Print Out Voting Form Body Template
 				$temp_pollvote .= "\t\t$template_answer\n";
 			}
 			
-
-			$template_footer = "";
 			if($poll_recaptcha){         
 				if($recaptcha){
-					$template_footer .= "</ul><p style=\"text-align: center;\"><input id=\"vote_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" disabled/></p>";
+					$temp = "</ul><p style=\"text-align: center;\"><input id=\"vote_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_recaptcha($poll_question_id);\" disabled/></p>";
+					$template_footer =  $this->echo_or_aggregate($display, $temp); 
 				}
 			}else{
-				$template_footer .= "</ul><p style=\"text-align: center;\"><input id=\"vote_no_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" /></p>";
+				$temp = "</ul><p style=\"text-align: center;\"><input id=\"vote_no_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" /></p>";
+				$template_footer =  $this->echo_or_aggregate($display, $temp); 
 			}
 			
 			if($recaptcha){
-				$template_footer .= "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"polldude_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
+				$temp = "<p style=\"text-align: center;\"><a href=\"#ViewPollResults\" onclick=\"polldude_result($poll_question_id); return false;\" title=\"'.__('View Results Of This Poll', 'poll-dude').'\">".__('View Results', 'poll-dude')."</a></p></div>";
+				$template_footer .= $this->echo_or_aggregate($display, $temp); 
 				if($poll_recaptcha){
-					$template_footer .= "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\" data-callback=\"polldude_button_enable\"></div>";
+					$temp = "<div class=\"g-recaptcha\" data-sitekey=\"".get_option('pd_recaptcha_sitekey')."\" data-callback=\"polldude_button_enable\"></div>";
+					$template_footer .=  $this->echo_or_aggregate($display, $temp); 
 				}
 			}
 
 			// Print Out Voting Form Footer Template
 			$temp_pollvote .= "\t\t$template_footer\n";
-			$temp_pollvote .= "\t</form>\n";
-			$temp_pollvote .= "</div>\n";
+			$temp = "\t</form>\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "</div>\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp);
+			
 		} 
+		
 		
 		// Return Poll Vote Template
 		return $temp_pollvote;
