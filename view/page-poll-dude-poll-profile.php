@@ -4,7 +4,7 @@
 					 : admin_url($current_page);
 ?>">
 <?php ('edit' == $mode)? wp_nonce_field('polldude_edit-poll') : wp_nonce_field('polldude_add-poll');?>
-<input type="hidden" name="pollq_id" value="<?php echo $poll_id; ?>" />
+<input type="hidden" name="pollq_id" value="<?php echo esc_attr($poll_id); ?>" />
 <input type="hidden" name="pollq_active" value="<?php echo esc_attr($poll_active); ?>" />
 <input type="hidden" name="poll_timestamp_old" value="<?php echo esc_attr($poll_timestamp); ?>" />
 <div class="wrap">
@@ -70,7 +70,7 @@
 		<thead>
             <tr>
                 <th width="60%" scope="row" valign="top" style="text-align: left"><?php _e('Answers and Colors', 'poll-dude') ?></th>
-                <td width="20%" scope="row" valign="top" style="text-align: <?php echo $last_col_align; ?>;"><?php ('edit' != $mode)? _e('', 'poll-dude'): _e('No. Of Votes', 'poll-dude'); ?></td>
+                <td width="20%" scope="row" valign="top" style="text-align: <?php echo esc_attr($last_col_align); ?>;"><?php ('edit' != $mode)? _e('', 'poll-dude'): _e('No. Of Votes', 'poll-dude'); ?></td>
             </tr>
         </thead>
 		<tbody id="poll_answers">
@@ -81,7 +81,7 @@
 					echo "<tr id=\"poll-answer-$i\">\n";
 					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\""; 
 					echo get_option('pd_default_color');
-					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_remove_answer_add_form(".$i.");\" class=\"button\" /></td>\n";
+					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_remove_answer_add_form(".esc_attr($i).");\" class=\"button\" /></td>\n";
 					echo "</tr>\n";
 				}
 			} else {
@@ -96,13 +96,13 @@
                         $polla_votes = (int) $poll_answer->polla_votes;
                         $pollip_answers[$polla_aid] = $polla_answers;
 						$poll_colors = $poll_answer->polla_colors;
-                        echo "<tr id=\"poll-answer-$polla_aid\">\n";
+                        echo "<tr id=\"poll-answer-".esc_attr($polla_aid)."\">\n";
                         echo "<td width=\"60%\">";
 						echo "<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
 						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\"$poll_colors\">";
 						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_delete_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('polldude_delete-poll-answer')."');\" class=\"button\" />";
 						echo "</td>\n";
-                        echo "<td width=\"20%\" align=\"'.$last_col_align.'\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-$polla_aid\" name=\"polla_votes-$polla_aid\" value=\"$polla_votes\" onblur=\"pd_totalvotes();\" /></td>\n</tr>\n";
+                        echo "<td width=\"20%\" align=\"".esc_attr($last_col_align)."\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-".esc_attr($polla_aid)."\" name=\"polla_votes-".esc_attr($polla_aid)."\" value=\"".esc_attr($polla_votes)."\" onblur=\"pd_totalvotes();\" /></td>\n</tr>\n";
                         $poll_actual_totalvotes += $polla_votes;
                         $i++;
                     }
@@ -122,7 +122,7 @@
 					</strong> 
 						<?php if ('edit' == $mode) { 
 							echo '<input type="text" size="4" readonly="readonly" id="pollq_totalvotes" name="pollq_totalvotes" value="';
-                            echo $poll_actual_totalvotes.'" onblur="pd_totalvotes();" />';
+                            echo number_format_i18n($poll_actual_totalvotes).'" onblur="pd_totalvotes();" />';
 						} ?>
 				</td>
 				<td width="30%" align="<?php ('edit' != $mode)? '': $last_col_align; ?>">
@@ -132,7 +132,7 @@
 								}
 					?></strong> 
 					<?php if ('edit' == $mode) { 
-						echo '<input type="text" size="4" name="pollq_totalvoters" value="'.$poll_totalvoters.'" />';
+						echo '<input type="text" size="4" name="pollq_totalvoters" value="'.number_format_i18n($poll_totalvoters).'" />';
 					}?>
 				</td>
             </tr>
@@ -157,9 +157,9 @@
 					<?php
 						for($i = 1; $i <= $poll_noquestion; $i++) {
 							if(isset($poll_multiple) && $poll_multiple > 0 && $poll_multiple == $i) {
-                                echo "<option value=\"$i\" selected=\"selected\">".number_format_i18n($i)."</option>\n";
+                                echo "<option value=\"".esc_attr($i)."\" selected=\"selected\">".number_format_i18n($i)."</option>\n";
                             } else {
-								echo "<option value=\"$i\">".number_format_i18n($i)."</option>\n";
+								echo "<option value=\"".esc_attr($i)."\">".number_format_i18n($i)."</option>\n";
 							}
 						}
 					?>
