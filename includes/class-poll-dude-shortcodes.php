@@ -246,10 +246,8 @@ class Poll_Dude_Shortcode {
 			$temp_pollvote .= "\t\t$template_footer\n";
 			$temp = "\t</form>\n";
 			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "</div>\n";
-			$temp_pollvote .= $this->echo_or_aggregate($display, $temp);
-			
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp);			
 		} 
-		
 		
 		// Return Poll Vote Template
 		return $temp_pollvote;
