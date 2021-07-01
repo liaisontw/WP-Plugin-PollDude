@@ -148,7 +148,7 @@ class Poll_Dude_Shortcode {
 
 	public function echo_or_aggregate($echo, $html){
 		if($echo & ($html !== '')){
-			echo wp_kses_post($html);
+			echo $html;
 		}else{
 			return $html;
 		}
