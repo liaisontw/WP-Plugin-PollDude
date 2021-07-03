@@ -68,14 +68,14 @@ The color of each answer voted-bar can be set differently.
 
 == Screenshots ==  
 
-1. Dashboard - Poll Dude Option (`/assets/1_Poll-Dude-Option.png`)
-2. Dashboard - New Poll Page (`/assets/2_New-Poll.png`)
-3. Dashboard - Control Panel Page, Get Shortcode (`/assets/3_Control-Panel-Get-Shortcode.png`)
-4. Dashboard - Edit Poll (`/assets/4_Edit-Poll.png`)
-5. Poll Display - with reCaptcha, Single Answer (`/assets/5-Poll-Display-reCaptcha-Single-Answer.png`)
-6. Poll Display - with reCaptcha, Multiple Answers (`/assets/6-Poll-Display-reCaptcha-Multiple-Answers.png`)
-7. Poll Display - No reCaptcha, Single Answer (`/assets/7-Poll-Display-No-reCaptcha-Single-Answer.png`)
-8. Poll Display - Poll Results (`/assets/8-Poll-Display-Poll-Results.png`)
+1. Dashboard - Poll Dude Option 
+2. Dashboard - New Poll Page 
+3. Dashboard - Control Panel Page, Get Shortcode 
+4. Dashboard - Edit Poll 
+5. Poll Display - with reCaptcha, Single Answer 
+6. Poll Display - with reCaptcha, Multiple Answers 
+7. Poll Display - No reCaptcha, Single Answer 
+8. Poll Display - Poll Results 
 
 == Changelog ==
 
