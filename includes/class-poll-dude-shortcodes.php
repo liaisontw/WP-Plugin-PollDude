@@ -154,6 +154,7 @@ class Poll_Dude_Shortcode {
 		}
 	}
 	
+	
 	### Function: Display Voting Form
 	public function display_pollvote($poll_id, $display = true, $recaptcha = true) { 
 		global $wpdb, $poll_dude;
@@ -197,7 +198,7 @@ class Poll_Dude_Shortcode {
 			// Display Poll Voting Form
 			$temp_pollvote =  $this->echo_or_aggregate($display, $temp); $temp = "<div id=\"polls-".esc_attr($poll_question_id)."\" >\n";
 			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t<form id=\"polls_form_".esc_attr($poll_question_id)."\" action=\"" . sanitize_text_field( $_SERVER['SCRIPT_NAME'] ) ."\" method=\"post\">\n";
-			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_{".esc_attr($poll_question_id)."}_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
+			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_".esc_attr($poll_question_id)."_nonce\" name=\"poll-dude-nonce\" value=\"".wp_create_nonce('poll_'.$poll_question_id.'-nonce')."\" /></p>\n";
 			$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" name=\"poll_id\" value=\"".esc_attr($poll_question_id)."\" /></p>\n";
 			if($poll_question->pollq_multiple > 0) {
 				$temp_pollvote .= $this->echo_or_aggregate($display, $temp); $temp = "\t\t<p style=\"display: none;\"><input type=\"hidden\" id=\"poll_multiple_ans_".esc_attr($poll_question_id)."\" name=\"poll_multiple_ans_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_multiple_ans)."\" /></p>\n";

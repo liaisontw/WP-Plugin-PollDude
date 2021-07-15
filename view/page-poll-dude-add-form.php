@@ -4,7 +4,6 @@ if(!current_user_can('manage_options')) {
 	die('Access Denied');
 }
 
-### Poll Manager
 global $poll_dude;
 $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
@@ -26,7 +25,8 @@ if ( ! empty($_POST['do'] ) ) {
 		case __( 'New Poll', 'poll-dude' ):
 			check_admin_referer( 'polldude_add-poll' );
 			
-			$text = $poll_dude->admin->poll_config('add', $base_name);
+			$page = $poll_dude->get_plugin_name().'/view/page-poll-dude-control-panel.php';
+			$text = $poll_dude->admin->poll_config('add', $page);
 			break;
 	}
 }
