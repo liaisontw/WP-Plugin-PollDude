@@ -1,4 +1,6 @@
 # Changelog
+[1.0.1]
+Fix "failed to verify referrer" when voting
 [1.0.0]First release
 Create the polls by generating shortcodes embedded in your posts. 
 Showing one selected poll as a widget.
