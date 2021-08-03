@@ -1,4 +1,6 @@
 # Changelog
+[1.0.2]
+Verified recaptchaV2 server side verification on Heroku
 [1.0.1]
 Fix "failed to verify referrer" when voting
 [1.0.0]First release

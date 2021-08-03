@@ -4,7 +4,7 @@ Donate link:
 Tags: poll, polls, vote, post, page, shortcode, widget    
 Requires at least: 5.7.2  
 Tested up to: 5.7.2  
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -78,7 +78,8 @@ The color of each answer voted-bar can be set differently.
 8. Poll Display - Poll Results 
 
 == Changelog ==
-
+= 1.0.2 =
+* Verified recaptchaV2 server side verification on Heroku
 = 1.0.1 =
 * Fix "failed to verify referrer" when voting
 = 1.0 =

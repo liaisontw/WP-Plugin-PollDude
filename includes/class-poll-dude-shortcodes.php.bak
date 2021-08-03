@@ -138,7 +138,7 @@ class Poll_Dude_Shortcode {
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				wp_add_inline_script('jquery', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
 
-				return $this->display_pollvote($poll_id, $display, $recaptcha);
+				return $this->display_pollvote($poll_id, $display, $recaptcha).$disable_poll_js;
 			} elseif( $poll_active === 1 ) {
 				
 				return $this->display_pollvote($poll_id, $display, $recaptcha);
@@ -499,23 +499,8 @@ class Poll_Dude_Shortcode {
 		if(isset($captcha)){
 			
 			$secretKey = get_option('pd_recaptcha_secretkey');
-			$ip = $_SERVER['REMOTE_ADDR'];
 			// post request to server
 			
-			$url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($secretKey).'&response='.urlencode($captcha)."&remoteip=".urlencode($ip);
-			
-			$response = wp_remote_get($url);
-			$body     = wp_remote_retrieve_body( $response );
-			var_dump($body);
-			$responseKeys = json_decode($body,true);
-
-			// should return JSON with success as true
-			if($responseKeys["success"]) {
-				_e('Recaptcha verify passed.', 'poll-dude');
-			} else {
-				_e('Recaptcha verify failed.', 'poll-dude');
-			}
-
 			unset($_POST['g-recaptcha-response']);
 		}
 	}
