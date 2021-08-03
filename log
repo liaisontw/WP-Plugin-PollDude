@@ -5,6 +5,25 @@
 * (Sat Jul 3 09:58:54 2021 +0800)c8bb384 liaison.tw@gmail.com Update screenshot in readme & assets folder
 * (Thu Jul 1 18:22:38 2021 +0800)04cdc4f liaison.tw@gmail.com found a inperfect solution for widget display with escape in shortcode.php
 * (Thu Jul 1 18:20:39 2021 +0800)eccba07 liaison.tw@gmail.com found a inperfect solution for widget display with escape in shortcode.php
+* (Thu Jul 1 18:20:20 2021 +0800)1165fba liaison.tw@gmail.com found a inperfect solution for widget display with escape in shortcode.php
+* (Thu Jul 1 10:19:46 2021 +0800)83fd9db liaison.tw@gmail.com add escape function for each echo in profile.php
+* (Thu Jul 1 00:34:40 2021 +0800)2f8cc0d liaison.tw@gmail.com tring make display-vote in html style, not php
+* (Wed Jun 30 11:04:08 2021 +0800)219a8fe liaison.tw@gmail.com add more sanitize input, escape output, enqueue inline js
+* (Tue Jun 29 23:46:48 2021 +0800)03c656d liaison.tw@gmail.com fix without escape before echo in shortcode,  widget. But widget input removed now.
+* (Tue Jun 29 23:44:39 2021 +0800)4acae42 liaison.tw@gmail.com fix without escape before echo in shortcode,  widget. But widget input removed now.
+* (Tue Jun 29 18:19:52 2021 +0800)eefa263 liaison.tw@gmail.com fix without escape before echo in shortcode(most), utility, widget, profile. But widget input removed now.
+* (Sat Jun 26 17:27:19 2021 +0800)73eaef8 liaison.tw@gmail.com fix widget title escape
+* (Sat Jun 26 12:26:14 2021 +0800)b942bec liaison.tw@gmail.com fix miss & duplicate sanitize_key usage
+* (Fri Jun 25 15:22:43 2021 +0800)364f1e2 liaison.tw@gmail.com remove zip file
+* (Fri Jun 25 15:19:40 2021 +0800)622b7bd liaison.tw@gmail.com attach zip file
+* (Fri Jun 25 15:02:28 2021 +0800)09cf01f liaison.tw@gmail.com  'Stable Tag' does not match the Plugin Version
+* (Thu Jun 24 23:34:56 2021 +0800)41308ac liaison.tw@gmail.com Finish readme with screenshot
+* (Thu Jun 24 16:23:35 2021 +0800)3e57775 liaison.tw@gmail.com fix error on awardspace: remove recaptcha server site & user_ID check
+* (Thu Jun 24 16:22:51 2021 +0800)e185678 liaison.tw@gmail.com fix error on awardspace: remove recaptcha server site & user_ID check
+* (Wed Jun 23 14:32:09 2021 +0800)8a8b0af liaison.tw@gmail.com Update icon in asset folder & set dashicon-yes in admin menu
+* (Wed Jun 23 14:15:26 2021 +0800)9051624 liaison.tw@gmail.com Write readme file
+* (Wed Jun 23 14:10:50 2021 +0800)0cdf72f liaison.tw@gmail.com Write readme file
+* (Sat Jun 19 10:48:47 2021 +0800)2fd395f liaison.tw@gmail.com Update CHANGELOG.md
 * (Sat Jun 19 10:47:42 2021 +0800)2d4a38c liaison.tw@gmail.com Finish file header for all php files
 * (Fri Jun 18 15:17:12 2021 +0800)d8833e2 liaison.tw@gmail.com Update CHANGELOG.md
 * (Fri Jun 18 15:11:55 2021 +0800)717cdda liaison.tw@gmail.com Add shortcode prompt in control-panel page action-select-option
@@ -99,4 +118,4 @@
 * (Thu Nov 19 12:39:02 2020 +0800)e4cc082 liaison.tw@gmail.com first commit
 * (Thu Nov 19 12:34:32 2020 +0800)a8079d9 liaison.tw@gmail.com firt commit
 * (Thu Nov 19 12:20:25 2020 +0800)3a75c82 liaison.tw@gmail.com first commit
-* (Thu Nov 19 11:37:14 2020 +0800)6e6ed3f liaison.tw@gmail.com Initial commit
+* (Thu Nov 19 11:37:14 2020 +0800)6e6ed3f noreply@github.com Initial commit
