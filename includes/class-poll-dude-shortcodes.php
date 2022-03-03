@@ -136,7 +136,7 @@ class Poll_Dude_Shortcode {
 					return $this->display_pollresult($poll_id, $is_voted);
 				}
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
-				wp_add_inline_script('jquery', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
+				wp_add_inline_script('disable_poll_js', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
 
 				return $this->display_pollvote($poll_id, $display, $recaptcha);
 			} elseif( $poll_active === 1 ) {

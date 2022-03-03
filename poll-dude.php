@@ -34,7 +34,7 @@ if(!defined('ABSPATH')){
 }
  
 
-define( 'POLL_DUDE_VERSION', '1.0.1' );
+define( 'POLL_DUDE_VERSION', '1.0.2' );
 
 
 // polldude Table Name
