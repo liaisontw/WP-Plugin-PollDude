@@ -43,6 +43,14 @@ if( isset($_POST['Submit']) ) {
             $update_pd_text[]       = __('reCaptcha Secretkey', 'poll-dude');
         
             break;
+        case __('Set Close Poll', 'poll-dude'):
+            check_admin_referer('polldude_close');
+
+            $pd_default_close   = isset( $_POST['default_close'] ) ? absint($_POST['default_close']) : $pd_close;
+            $update_pd_options[]    = update_option('pd_close', $pd_close);
+            $update_pd_text[]       = __('Show Close Poll', 'poll-dude');
+        
+            break;
     }
 
     $i=0;
@@ -114,6 +122,30 @@ if( isset($_POST['Submit']) ) {
         </table>
         <p class="submit">
             <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Color', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
+    <form  id="default_close" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+        <?php wp_nonce_field('polldude_close'); ?>
+        <table class="form-table">
+            <tbody>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="default_close">
+                        Close Poll Display
+                        </label>
+                    </th>
+                    <td>
+                        <select name="pd_close" size="1">
+                            <option value="1"<?php selected(1, get_option('pd_close')); ?>><?php _e('Show Poll\'s Results', 'poll-dude'); ?></option>
+                            <option value="2"<?php selected(2, get_option('pd_close')); ?>><?php _e('Not Show Poll In Post/Sidebar', 'poll-dude'); ?></option>
+                            <option value="3"<?php selected(3, get_option('pd_close')); ?>><?php _e('Show Disabled Poll\'s Voting Form', 'poll-dude'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Close Poll', 'poll-dude'); ?>"/>
         </p>        
     </form>
 </div>

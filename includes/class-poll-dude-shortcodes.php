@@ -125,7 +125,10 @@ class Poll_Dude_Shortcode {
 			$pd_close = 0;
 			if( $poll_active === 0 ) {
 				$pd_close = (int) get_option( 'pd_close' );
+			} else {
+				return $this->display_pollvote($poll_id, $display, $recaptcha, $poll_active);
 			}
+
 			if( $pd_close === 2 ) {
 				return '';
 			}
@@ -136,13 +139,29 @@ class Poll_Dude_Shortcode {
 					return $this->display_pollresult($poll_id, $is_voted);
 				}
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
-				wp_add_inline_script('disable_poll_js', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
+				return $this->display_pollvote($poll_id, $display, $recaptcha, $poll_active);
+			} 
+			
+			// if( $poll_active === 0 ) {
+			// 	$pd_close = (int) get_option( 'pd_close' );
+			// }
+			// if( $pd_close === 2 ) {
+			// 	return '';
+			// }
+			// if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
+			// 	if($display) {
+			// 		echo wp_kses_post($this->display_pollresult($poll_id, $is_voted));
+			// 	} else {
+			// 		return $this->display_pollresult($poll_id, $is_voted);
+			// 	}
+			// } elseif( $pd_close === 3 || ! $this->vote_allow() ) {
+			// 	//wp_add_inline_script('disable_poll_js', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
 
-				return $this->display_pollvote($poll_id, $display, $recaptcha);
-			} elseif( $poll_active === 1 ) {
+			// 	return $this->display_pollvote($poll_id, $display, $recaptcha);
+			// } elseif( $poll_active === 1 ) {
 				
-				return $this->display_pollvote($poll_id, $display, $recaptcha);
-			}
+			// 	return $this->display_pollvote($poll_id, $display, $recaptcha);
+			// }
 		}
 	}
 
@@ -156,7 +175,7 @@ class Poll_Dude_Shortcode {
 	
 	
 	### Function: Display Voting Form
-	public function display_pollvote($poll_id, $display = true, $recaptcha = true) { 
+	public function display_pollvote($poll_id, $display = true, $recaptcha = true, $poll_active) { 
 		global $wpdb, $poll_dude;
 		//require_once('page-poll-dude-display-vote.php');
 		
@@ -230,7 +249,11 @@ class Poll_Dude_Shortcode {
 					$template_footer =  $this->echo_or_aggregate($display, $temp); 
 				}
 			}else{
-				$temp = "</ul><p style=\"text-align: center;\"><input id=\"vote_no_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" /></p>";
+				if ( 1 === $poll_active ) {
+					$temp = "</ul><p style=\"text-align: center;\"><input id=\"vote_no_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" /></p>";
+				} else {
+					$temp = "</ul><p style=\"text-align: center;\"><input id=\"vote_no_recaptcha\" type=\"button\" name=\"vote\" value=\"   ".__('Vote', 'poll-dude')."   \" class=\"Buttons\" onclick=\"polldude_vote($poll_question_id);\" disabled/></p>";
+				}
 				$template_footer =  $this->echo_or_aggregate($display, $temp); 
 			}
 			
@@ -577,4 +600,3 @@ class Poll_Dude_Shortcode {
 	}
 
 }
-

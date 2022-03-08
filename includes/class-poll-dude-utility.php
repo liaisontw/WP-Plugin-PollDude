@@ -83,6 +83,7 @@ class Poll_Dude_Utility {
     ### Function: Check Who Is Allow To Vote
     public function vote_allow() {
         //return true;
+        //return false;
         
         global $user_ID;
         $user_ID = (int) $user_ID;
