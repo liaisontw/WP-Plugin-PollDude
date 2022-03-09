@@ -123,6 +123,7 @@ class Poll_Dude_Shortcode {
 			$poll_active = (int) $poll_active;
 			$is_voted = $this->is_voted( $poll_id );
 			$pd_close = 0;
+
 			if( $poll_active === 0 ) {
 				$pd_close = (int) get_option( 'pd_close' );
 			} else {
@@ -141,27 +142,6 @@ class Poll_Dude_Shortcode {
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
 				return $this->display_pollvote($poll_id, $display, $recaptcha, $poll_active);
 			} 
-			
-			// if( $poll_active === 0 ) {
-			// 	$pd_close = (int) get_option( 'pd_close' );
-			// }
-			// if( $pd_close === 2 ) {
-			// 	return '';
-			// }
-			// if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
-			// 	if($display) {
-			// 		echo wp_kses_post($this->display_pollresult($poll_id, $is_voted));
-			// 	} else {
-			// 		return $this->display_pollresult($poll_id, $is_voted);
-			// 	}
-			// } elseif( $pd_close === 3 || ! $this->vote_allow() ) {
-			// 	//wp_add_inline_script('disable_poll_js', 'jQuery("#polls_form_'.$poll_id.' :input").each(function (i){jQuery(this).attr("disabled","disabled")})');
-
-			// 	return $this->display_pollvote($poll_id, $display, $recaptcha);
-			// } elseif( $poll_active === 1 ) {
-				
-			// 	return $this->display_pollvote($poll_id, $display, $recaptcha);
-			// }
 		}
 	}
 

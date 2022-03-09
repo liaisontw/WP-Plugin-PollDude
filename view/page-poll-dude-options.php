@@ -13,7 +13,8 @@ $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basenam
 $pd_recaptcha_sitekey   = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_sitekey') );
 $pd_recaptcha_secretkey = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
 $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
-$pd_default_color       = get_option('$pd_default_color');
+$pd_default_color       = get_option('pd_default_color');
+$pd_close               = get_option('pd_close');
 
 
 
@@ -46,8 +47,8 @@ if( isset($_POST['Submit']) ) {
         case __('Set Close Poll', 'poll-dude'):
             check_admin_referer('polldude_close');
 
-            $pd_default_close   = isset( $_POST['default_close'] ) ? absint($_POST['default_close']) : $pd_close;
-            $update_pd_options[]    = update_option('pd_close', $pd_close);
+            $pd_default_close   = isset( $_POST['pd_close'] ) ? absint($_POST['pd_close']) : $pd_close;
+            $update_pd_options[]    = update_option('pd_close', $pd_default_close);
             $update_pd_text[]       = __('Show Close Poll', 'poll-dude');
         
             break;
