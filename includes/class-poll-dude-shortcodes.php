@@ -48,14 +48,14 @@ class Poll_Dude_Shortcode {
 		}
 
 		if( $attributes['type'] === 'vote' ) {
-			return $this->get_poll( $id, false, true );
+			return $this->poll_query( $id, false, true );
 		} elseif( $attributes['type'] === 'result' ) {
-			return $this->display_pollresult( $id );
+			return $this->show_vote_result( $id );
 		}	
 	}
 
-	### Function: Get Poll
-	public function get_poll($temp_poll_id = 0, $display = true, $recaptcha = true) {
+	### Function: Poll Query
+	public function poll_query($temp_poll_id = 0, $display = true, $recaptcha = true) {
 		global $wpdb, $polls_loaded;
 		// Poll Result Link
 		if(isset($_GET['pollresult'])) {
@@ -113,9 +113,9 @@ class Poll_Dude_Shortcode {
 		// User Click on View Results Link
 		if($pollresult_id === $poll_id) {
 			if($display) {
-				echo wp_kses_post($this->display_pollresult($poll_id));
+				echo wp_kses_post($this->show_vote_result($poll_id));
 			} else {
-				return $this->display_pollresult($poll_id);
+				return $this->show_vote_result($poll_id);
 			}
 		// Check Whether User Has Voted
 		} else {
@@ -127,7 +127,7 @@ class Poll_Dude_Shortcode {
 			if( $poll_active === 0 ) {
 				$pd_close = (int) get_option( 'pd_close' );
 			} else {
-				return $this->display_pollvote($poll_id, $display, $recaptcha, $poll_active);
+				return $this->show_vote_form($poll_id, $display, $recaptcha, $poll_active);
 			}
 
 			if( $pd_close === 2 ) {
@@ -135,12 +135,12 @@ class Poll_Dude_Shortcode {
 			}
 			if( $pd_close === 1 || (int) $is_voted > 0 || ( is_array( $is_voted ) && count( $is_voted ) > 0 ) ) {
 				if($display) {
-					echo wp_kses_post($this->display_pollresult($poll_id, $is_voted));
+					echo wp_kses_post($this->show_vote_result($poll_id, $is_voted));
 				} else {
-					return $this->display_pollresult($poll_id, $is_voted);
+					return $this->show_vote_result($poll_id, $is_voted);
 				}
 			} elseif( $pd_close === 3 || ! $this->vote_allow() ) {
-				return $this->display_pollvote($poll_id, $display, $recaptcha, $poll_active);
+				return $this->show_vote_form($poll_id, $display, $recaptcha, $poll_active);
 			} 
 		}
 	}
@@ -154,10 +154,9 @@ class Poll_Dude_Shortcode {
 	}
 	
 	
-	### Function: Display Voting Form
-	public function display_pollvote($poll_id, $display = true, $recaptcha = true, $poll_active) { 
+	### Function: Show Vote Form
+	public function show_vote_form($poll_id, $display = true, $recaptcha = true, $poll_active) { 
 		global $wpdb, $poll_dude;
-		//require_once('page-poll-dude-display-vote.php');
 		
 		// Get Poll Question Data
 		$poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_id, pollq_question, pollq_totalvotes, pollq_timestamp, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d LIMIT 1", $poll_id ) );
@@ -257,8 +256,8 @@ class Poll_Dude_Shortcode {
 		return $temp_pollvote;
 	}
 
-	### Function: Display Results Form
-	public function display_pollresult( $poll_id, $user_voted = array(), $display_loading = true ) {
+	### Function: Show Vote Results
+	public function show_vote_result( $poll_id, $user_voted = array(), $display_loading = true ) {
 		global $wpdb;
 		$poll_id = (int) $poll_id;
 
@@ -490,7 +489,7 @@ class Poll_Dude_Shortcode {
 			}
 		}
 
-		return $this->display_pollresult($poll_id, $poll_aid_array, false);
+		return $this->show_vote_result($poll_id, $poll_aid_array, false);
 	}
 
 	public function polldude_recaptcha() {
@@ -568,11 +567,11 @@ class Poll_Dude_Shortcode {
 					break;
 				// Poll Result
 				case 'result':					
-					echo wp_kses_post($this->display_pollresult($poll_id, 0, false));
+					echo wp_kses_post($this->show_vote_result($poll_id, 0, false));
 					break;
-				// Poll Booth Aka Poll Voting Form
+				// Poll Booth
 				case 'booth':
-					echo wp_kses_post($this->display_pollvote($poll_id, false));
+					echo wp_kses_post($this->show_vote_form($poll_id, false));
 					break;
 			} 
 		} 
