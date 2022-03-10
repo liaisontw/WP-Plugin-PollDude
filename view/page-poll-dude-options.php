@@ -15,8 +15,7 @@ $pd_recaptcha_secretkey = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_
 $pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
 $pd_default_color       = get_option('pd_default_color');
 $pd_close               = get_option('pd_close');
-
-
+$pd_allowtovote         = get_option('pd_allowtovote');
 
 
 
@@ -52,6 +51,14 @@ if( isset($_POST['Submit']) ) {
             $update_pd_text[]       = __('Show Close Poll', 'poll-dude');
         
             break;
+        case __('Set Allow to Vote', 'poll-dude'):
+            check_admin_referer('polldude_allowtovote');
+
+            $pd_default_allowtovote   = isset( $_POST['pd_allowtovote'] ) ? absint($_POST['pd_allowtovote']) : $pd_allowtovote;
+            $update_pd_options[]    = update_option('pd_allowtovote', $pd_default_allowtovote);
+            $update_pd_text[]       = __('Set Allow to Vote', 'poll-dude');
+        
+            break;
     }
 
     $i=0;
@@ -82,7 +89,7 @@ if( isset($_POST['Submit']) ) {
                 <tr class="form-field form-required">
                     <th valign="top" scope="row">
                         <label for="sitekey">
-                        reCaptcha Site Key            
+                        <?php _e('reCaptcha Site Key', 'poll-dude'); ?>            
                         </label>
                     </th>
                     <td>
@@ -92,7 +99,7 @@ if( isset($_POST['Submit']) ) {
                 <tr class="form-field form-required">
                     <th valign="top" scope="row">
                         <label for="secretkey">
-                        reCaptcha Secret Key            
+                        <?php _e('reCaptcha Secret Key', 'poll-dude'); ?>            
                         </label>
                     </th>
                     <td>
@@ -112,7 +119,7 @@ if( isset($_POST['Submit']) ) {
                 <tr class="form-field form-required">
                     <th valign="top" scope="row">
                         <label for="default_color">
-                        Default Voted Bar Color
+                        <?php _e('Default Voted Bar Color', 'poll-dude'); ?>
                         </label>
                     </th>
                     <td>
@@ -132,7 +139,7 @@ if( isset($_POST['Submit']) ) {
                 <tr class="form-field form-required">
                     <th valign="top" scope="row">
                         <label for="default_close">
-                        Close Poll Display
+                        <?php _e('How to Show the Close Poll?', 'poll-dude'); ?>
                         </label>
                     </th>
                     <td>
@@ -149,10 +156,33 @@ if( isset($_POST['Submit']) ) {
             <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Close Poll', 'poll-dude'); ?>"/>
         </p>        
     </form>
+    <form  id="default_allowtovote" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+        <?php wp_nonce_field('polldude_allowtovote'); ?>
+        <table class="form-table">
+            <tbody>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="default_allowtovote">
+                        <?php _e('Who Can Vote?', 'poll-dude'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <select name="pd_allowtovote" size="1">
+                            <option value="1"<?php selected('1', get_option('pd_allowtovote')); ?>><?php _e('Guests Only', 'poll-dude'); ?></option>
+                            <option value="2"<?php selected('2', get_option('pd_allowtovote')); ?>><?php _e('Registered Users Only', 'poll-dude'); ?></option>
+                            <option value="3"<?php selected('3', get_option('pd_allowtovote')); ?>><?php _e('Registered Users And Guests', 'poll-dude'); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Allow to Vote', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
 </div>
 
 <p>&nbsp;</p>
-
 
 
 

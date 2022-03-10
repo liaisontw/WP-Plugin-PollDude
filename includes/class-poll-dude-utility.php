@@ -91,21 +91,21 @@ class Poll_Dude_Utility {
 
         switch($allow_to_vote) {
             // Guests Only
-            case 0:
+            case 1:
                 if($user_ID > 0) {
                     return false;
                 }
                 return true;
                 break;
             // Registered Users Only
-            case 1:
+            case 2:
                 if($user_ID === 0) {
                     return false;
                 }
                 return true;
                 break;
             // Registered Users And Guests
-            case 2:
+            case 3:
             default:
                 return true;
         }
