@@ -150,4 +150,55 @@ function pd_select_action(value) {
 	} else {
 		location.href = selectedValue;
 	} 
-}
+};
+
+function chart(label, data, color, question) {
+	jQuery(document).ready(function (a) { 
+		var label_array = label.split(',');
+		var data_array  = data.split(',');
+		var color_array = color.split(',');
+		var ctx = document.getElementById('myChart');
+		var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: label_array,
+			datasets: [{
+			label: question,
+			data: data_array,
+			backgroundColor: color_array,
+			borderColor: color_array,
+			/*
+			backgroundColor: [
+				'rgba(255, 99, 132, 0.2)',
+				'rgba(54, 162, 235, 0.2)',
+				'rgba(255, 206, 86, 0.2)',
+				'rgba(75, 192, 192, 0.2)',
+				'rgba(255, 99, 132, 0.2)',
+			],
+			borderColor: [
+				'rgba(255, 99, 132, 1)',
+				'rgba(54, 162, 235, 1)',
+				'rgba(255, 206, 86, 1)',
+				'rgba(75, 192, 192, 1)',
+				'rgba(255, 99, 132, 1)',
+			],
+			*/
+			borderWidth: 1
+			}]
+		},
+		options: {
+			indexAxis: 'y',
+			responsive: true,
+    		maintainAspectRatio: false,
+			scales: {
+				yAxes: [{
+					ticks: {
+					beginAtZero: true
+					}
+				}]
+			}
+		}
+		}
+		);
+	})
+};

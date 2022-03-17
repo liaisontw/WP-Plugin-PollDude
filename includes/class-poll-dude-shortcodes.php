@@ -385,6 +385,7 @@ class Poll_Dude_Shortcode {
 		} else {
 			$temp_pollresult .= $this->removeslashes( get_option ('poll_template_disable' ) );
 		}
+
 		// Return Poll Result
 		return $temp_pollresult;
 	}

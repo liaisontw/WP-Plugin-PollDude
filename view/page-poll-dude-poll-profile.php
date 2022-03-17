@@ -85,6 +85,10 @@
 					echo "</tr>\n";
 				}
 			} else {
+				$vote_data_array = array();
+				$vote_label_array = array();
+				$vote_color_array = array();
+
 				$i=1;
                 $poll_actual_totalvotes = 0;
                 if($poll_answers) {
@@ -105,6 +109,10 @@
                         echo "<td width=\"20%\" align=\"".esc_attr($last_col_align)."\">".number_format_i18n($polla_votes)." <input type=\"text\" size=\"4\" id=\"polla_votes-".esc_attr($polla_aid)."\" name=\"polla_votes-".esc_attr($polla_aid)."\" value=\"".esc_attr($polla_votes)."\" onblur=\"pd_totalvotes();\" /></td>\n</tr>\n";
                         $poll_actual_totalvotes += $polla_votes;
                         $i++;
+
+						$vote_data_array[]  = $polla_votes;
+						$vote_label_array[] = $polla_answers;
+						$vote_color_array[] = $poll_colors;
                     }
 				}
 			}
@@ -188,3 +196,25 @@
 	<input type="button" name="cancel" value="<?php _e('Cancel', 'poll-dude'); ?>" class="button" onclick="javascript:history.go(-1)" /></p>
 </div>
 </form>
+
+
+<?php 
+	if ('edit' == $mode) {
+		$vote_data_js  = json_encode( rtrim( implode( ', ', $vote_data_array ), ', ' ) );
+		$vote_label_js = json_encode( "'" . rtrim( implode( "', '", $vote_label_array ), ', ' ) . "'" );
+		$vote_color_js = json_encode( rtrim( implode( ', ', $vote_color_array ), ', ' ) );
+		//echo $vote_label_js."<br>";
+		
+		$poll_question_js = json_encode( $poll_question_text );
+		
+		echo "<div class=\"chart-container\" style=\"position: relative; height:50vh; width:60vw\">";
+		echo "<canvas id=\"myChart\" ></canvas>";
+		echo "</div>";
+	}
+?>
+
+
+
+<script type="module">	
+	<?php echo "chart($vote_label_js, $vote_data_js, $vote_color_js, $poll_question_js);"; ?>
+</script>
