@@ -88,12 +88,12 @@ switch($mode) {
         $poll_totalvoters = (int) $poll_question->pollq_totalvoters;
         $poll_multiple = (int) $poll_question->pollq_multiple;
         $poll_registered = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_userid) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_userid > 0", $poll_id ) );
-        $poll_comments = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s AND pollip_userid = 0", $poll_id, __( 'Guest', 'wp-polls' ) ) );
-        $poll_guest = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user = %s", $poll_id, __( 'Guest', 'wp-polls' ) ) );
+        $poll_comments = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s AND pollip_userid = 0", $poll_id, __( 'Guest', 'poll-dude' ) ) );
+        $poll_guest = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user = %s", $poll_id, __( 'Guest', 'poll-dude' ) ) );
         $poll_totalrecorded = ( $poll_registered + $poll_comments + $poll_guest );
-        list( $order_by, $sort_order ) = _polls_get_ans_sort();
+        list( $order_by, $sort_order ) = $poll_dude->utility->get_ans_sorted();
         $poll_answers_data = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_id ) );
-        $poll_voters = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s ORDER BY pollip_user ASC", $poll_id, __( 'Guest', 'wp-polls' ) ) );
+        $poll_voters = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s ORDER BY pollip_user ASC", $poll_id, __( 'Guest', 'poll-dude' ) ) );
         $poll_logs_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_id) FROM $wpdb->polldude_ip WHERE pollip_qid = %d", $poll_id ) );
 
         require_once('page-poll-dude-logs.php');

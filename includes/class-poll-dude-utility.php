@@ -223,4 +223,38 @@ class Poll_Dude_Utility {
 
         return $hostname;
     }
+
+    public function get_ans_sorted() {
+        $order_by = get_option( 'pd_ans_sortby' );
+        switch( $order_by ) {
+            case 'polla_votes':
+            case 'polla_aid':
+            case 'polla_answers':
+            case 'RAND()':
+                break;
+            default:
+                $order_by = 'polla_aid';
+                break;
+        }
+        $sort_order = get_option( 'pd_ans_sortorder' ) === 'desc' ? 'desc' : 'asc';
+        return array( $order_by, $sort_order );
+    }
+    
+    public function get_ans_result_sorted() {
+        $order_by = get_option( 'pd_ans_result_sortby' );
+        switch( $order_by ) {
+            case 'polla_votes':
+            case 'polla_aid':
+            case 'polla_answers':
+            case 'RAND()':
+                break;
+            default:
+                $order_by = 'polla_aid';
+                break;
+        }
+        $sort_order = get_option( 'pd_ans_result_sortorder' ) === 'desc' ? 'desc' : 'asc';
+        return array( $order_by, $sort_order );
+    }
+    
+    
 }

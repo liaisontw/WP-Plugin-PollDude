@@ -59,6 +59,23 @@ if( isset($_POST['Submit']) ) {
             $update_pd_text[]       = __('Set Allow to Vote', 'poll-dude');
         
             break;
+
+        case __('Set Poll Answer Order', 'poll-dude'):
+            check_admin_referer('polldude_sort_poll_answers');
+
+            $pd_default_allowtovote   = isset( $_POST['poll_ans_sortby'] ) ? absint($_POST['poll_ans_sortby']) : $pd_allowtovote;
+            $update_pd_options[]    = update_option('pd_allowtovote', $pd_default_allowtovote);
+            $update_pd_text[]       = __('Set Poll Answer Order', 'poll-dude');
+        
+            break;
+        case __('Set Poll Result Order', 'poll-dude'):
+            check_admin_referer('polldude_allowtovote');
+
+            $pd_default_allowtovote   = isset( $_POST['pd_allowtovote'] ) ? absint($_POST['pd_allowtovote']) : $pd_allowtovote;
+            $update_pd_options[]    = update_option('pd_allowtovote', $pd_default_allowtovote);
+            $update_pd_text[]       = __('Set Poll Result Order', 'poll-dude');
+        
+            break;
     }
 
     $i=0;
@@ -178,6 +195,64 @@ if( isset($_POST['Submit']) ) {
         </table>
         <p class="submit">
             <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Allow to Vote', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
+
+    <!-- Sorting Of Poll Answers -->
+    <form  id="default_sort_poll_answers" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+        <?php wp_nonce_field('polldude_sort_poll_answers'); ?>
+        <table class="form-table">
+            <tr>
+                <th scope="row" valign="top"><?php _e('Sort Poll Answers By:', 'poll-dude'); ?></th>
+                <td>
+                    <select name="poll_ans_sortby" size="1">
+                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_sortby')); ?>><?php _e('Vote', 'poll-dude'); ?></option>
+                        <option value="polla_aid"<?php selected('polla_aid', get_option('pd_ans_sortby')); ?>><?php _e('ID', 'poll-dude'); ?></option>
+                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_sortby')); ?>><?php _e('Name', 'poll-dude'); ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" valign="top"><?php _e('Sort Order Of Poll Answers:', 'poll-dude'); ?></th>
+                <td>
+                    <select name="poll_ans_sortorder" size="1">
+                        <option value="asc"<?php selected('asc', get_option('pd_ans_sortorder')); ?>><?php _e('Ascending', 'poll-dude'); ?></option>
+                        <option value="desc"<?php selected('desc', get_option('pd_ans_sortorder')); ?>><?php _e('Descending', 'poll-dude'); ?></option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Poll Answer Order', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
+
+	<!-- Sorting Of Poll Results -->
+	<form  id="default_sort_poll_answers" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+    <?php wp_nonce_field('polldude_sort_poll_answers_result'); ?>
+        <table class="form-table">
+            <tr>
+                <th scope="row" valign="top"><?php _e('Sort Poll Results By:', 'poll-dude'); ?></th>
+                <td>
+                    <select name="poll_ans_result_sortby" size="1">
+                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_result_sortby')); ?>><?php _e('Vote', 'poll-dude'); ?></option>
+                        <option value="polla_aid"<?php selected('polla_aid', get_option('pd_ans_result_sortby')); ?>><?php _e('ID', 'poll-dude'); ?></option>
+                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_result_sortby')); ?>><?php _e('Name', 'poll-dude'); ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" valign="top"><?php _e('Sort Order Of Poll Results:', 'poll-dude'); ?></th>
+                <td>
+                    <select name="poll_ans_result_sortorder" size="1">
+                        <option value="asc"<?php selected('asc', get_option('pd_ans_result_sortorder')); ?>><?php _e('Ascending', 'poll-dude'); ?></option>
+                        <option value="desc"<?php selected('desc', get_option('pd_ans_result_sortorder')); ?>><?php _e('Descending', 'poll-dude'); ?></option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Poll Result Order', 'poll-dude'); ?>"/>
         </p>        
     </form>
 </div>

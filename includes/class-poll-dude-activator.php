@@ -104,16 +104,21 @@ class Poll_Dude_Activator {
 				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
 			}
 		}
-		add_option('pd_recaptcha_enable', 0);
-		add_option('pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_');
-		add_option('pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_');
-		add_option('pd_default_color', '#b0c3d4');
-		add_option('pd_currentpoll', 0);
-		add_option('pd_latestpoll', 1);
-		add_option('pd_close', 1);
-		add_option('pd_logging_method', '0');
-		add_option('pd_allowtovote', '3');
-		add_option('pd_bar', array('style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8));
+		add_option( 'pd_recaptcha_enable', 0 );
+		add_option( 'pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_' );
+		add_option( 'pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_' );
+		add_option( 'pd_default_color', '#b0c3d4' );
+		add_option( 'pd_currentpoll', 0 );
+		add_option( 'pd_latestpoll', 1 );
+		add_option( 'pd_close', 1 );
+		add_option( 'pd_logging_method', '0' );
+		add_option( 'pd_allowtovote', '3' );
+		add_option( 'pd_bar', array( 'style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8 ) );
+		add_option( 'pd_ans_sortby' );
+		add_option( 'pd_ans_sortorder' );
+		add_option( 'pd_ans_result_sortby' );
+		add_option( 'pd_ans_result_sortorder' );
+
 		
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->polldude_q" );
 		if ( 0 === $pollq_totalvoters ) {
