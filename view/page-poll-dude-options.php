@@ -10,12 +10,16 @@ $base_name = plugin_basename( __FILE__ );
 $base_page = 'admin.php?page='.$base_name;
 $current_page = 'admin.php?page='.$poll_dude->get_plugin_name().'/view/'.basename(__FILE__);
 //$pd_recaptcha_sitekey   = sanitize_key( get_option('pd_recaptcha_sitekey'));
-$pd_recaptcha_sitekey   = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_sitekey') );
-$pd_recaptcha_secretkey = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
-$pd_recaptcha_enable    = get_option('pd_recaptcha_enable');
-$pd_default_color       = get_option('pd_default_color');
-$pd_close               = get_option('pd_close');
-$pd_allowtovote         = get_option('pd_allowtovote');
+$pd_recaptcha_sitekey    = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_sitekey') );
+$pd_recaptcha_secretkey  = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
+$pd_recaptcha_enable     = get_option( 'pd_recaptcha_enable');
+$pd_default_color        = get_option( 'pd_default_color');
+$pd_close                = get_option( 'pd_close');
+$pd_allowtovote          = get_option( 'pd_allowtovote' );
+$pd_ans_sortby           = get_option( 'pd_ans_sortby' );
+$pd_ans_sortorder        = get_option( 'pd_ans_sortorder' );
+$pd_ans_result_sortby    = get_option( 'pd_ans_result_sortby' );
+$pd_ans_result_sortorder = get_option( 'pd_ans_result_sortorder' );
 
 
 
@@ -59,21 +63,24 @@ if( isset($_POST['Submit']) ) {
             $update_pd_text[]       = __('Set Allow to Vote', 'poll-dude');
         
             break;
-
         case __('Set Poll Answer Order', 'poll-dude'):
             check_admin_referer('polldude_sort_poll_answers');
 
-            $pd_default_allowtovote   = isset( $_POST['poll_ans_sortby'] ) ? absint($_POST['poll_ans_sortby']) : $pd_allowtovote;
-            $update_pd_options[]    = update_option('pd_allowtovote', $pd_default_allowtovote);
-            $update_pd_text[]       = __('Set Poll Answer Order', 'poll-dude');
+            $pd_default_ans_sortby    = isset( $_POST['poll_ans_sortby'] ) ? sanitize_text_field($_POST['poll_ans_sortby']) : $pd_ans_sortby;
+            $update_pd_options[]      = update_option('pd_ans_sortby', $pd_default_ans_sortby);
+            $pd_default_ans_sortorder = isset( $_POST['poll_ans_sortorder'] ) ? sanitize_text_field($_POST['poll_ans_sortorder']) : $pd_ans_sortorder;
+            $update_pd_options[]      = update_option('pd_ans_sortorder', $pd_default_ans_sortorder);
+            $update_pd_text[]         = __('Set Poll Answer Order', 'poll-dude');
         
             break;
         case __('Set Poll Result Order', 'poll-dude'):
-            check_admin_referer('polldude_allowtovote');
+            check_admin_referer('polldude_sort_poll_answers_result');
 
-            $pd_default_allowtovote   = isset( $_POST['pd_allowtovote'] ) ? absint($_POST['pd_allowtovote']) : $pd_allowtovote;
-            $update_pd_options[]    = update_option('pd_allowtovote', $pd_default_allowtovote);
-            $update_pd_text[]       = __('Set Poll Result Order', 'poll-dude');
+            $pd_default_ans_result_sortby    = isset( $_POST['poll_ans_result_sortby'] ) ? sanitize_text_field($_POST['poll_ans_result_sortby']) : $pd_ans_result_sortby;
+            $update_pd_options[]             = update_option('pd_ans_result_sortby', $pd_default_ans_result_sortby);
+            $pd_default_ans_result_sortorder = isset( $_POST['poll_ans_result_sortorder'] ) ? sanitize_text_field($_POST['poll_ans_result_sortorder']) : $pd_ans_result_sortorder;
+            $update_pd_options[]             = update_option('pd_ans_result_sortorder', $pd_default_ans_result_sortorder);
+            $update_pd_text[]                = __('Set Poll Result Order', 'poll-dude');
         
             break;
     }
@@ -228,7 +235,7 @@ if( isset($_POST['Submit']) ) {
     </form>
 
 	<!-- Sorting Of Poll Results -->
-	<form  id="default_sort_poll_answers" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+	<form  id="default_sort_poll_result" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
     <?php wp_nonce_field('polldude_sort_poll_answers_result'); ?>
         <table class="form-table">
             <tr>
