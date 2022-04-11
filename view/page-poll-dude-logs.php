@@ -107,7 +107,7 @@ if( ! empty( $_POST['do'] ) ) {
         <?php printf(_n('<strong>&raquo;</strong> <strong>%s</strong> vote is cast by guests', '<strong>&raquo;</strong> <strong>%s</strong> votes are cast by guests', $poll_guest, 'poll-dude'), number_format_i18n($poll_guest)); ?>
     </p>
 </div>
-<?php if($poll_totalrecorded > 0 && apply_filters( 'wp_polls_log_show_log_filter', true )) { ?>
+<?php if($poll_totalrecorded > 0 /* && apply_filters( 'wp_polls_log_show_log_filter', true ) */) { ?>
 <div class="wrap">
     <h3><?php _e('Filter Poll\'s Logs', 'poll-dude') ?></h3>
     <table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -212,7 +212,7 @@ if( ! empty( $_POST['do'] ) ) {
                 <p style="display: none;"><input type="hidden" name="filter" value="3" /></p>
                 <table class="form-table">
                     <tr>
-                        <th scope="row" valign="top"><?php _e('Display What This User Has Voted', 'poll-dude'); ?></th>
+                        <th scope="row" valign="top"><?php _e('What kind of the users voted?', 'poll-dude'); ?></th>
                         <td>
                             <select name="what_user_voted" size="1">
                                 <?php
@@ -297,7 +297,8 @@ if( ! empty( $_POST['do'] ) ) {
                 } else {
                     foreach($poll_ips as $poll_ip) {
                         $pollip_aid = (int) $poll_ip->pollip_aid;
-                        $pollip_user = apply_filters( 'wp_polls_log_secret_ballot', $poll_dude->utility->removeslashes( $poll_ip->pollip_user ) );
+                        //$pollip_user = apply_filters( 'wp_polls_log_secret_ballot', $poll_dude->utility->removeslashes( $poll_ip->pollip_user ) );
+                        $pollip_user = $poll_dude->utility->removeslashes( $poll_ip->pollip_user );
                         $pollip_ip = $poll_ip->pollip_ip;
                         $pollip_host = $poll_ip->pollip_host;
                         $pollip_date = mysql2date(sprintf(__('%s @ %s', 'poll-dude'), get_option('date_format'), get_option('time_format')), gmdate('Y-m-d H:i:s', $poll_ip->pollip_timestamp));
