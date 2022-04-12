@@ -210,17 +210,17 @@ if( isset($_POST['Submit']) ) {
         <?php wp_nonce_field('polldude_sort_poll_answers'); ?>
         <table class="form-table">
             <tr>
-                <th scope="row" valign="top"><?php _e('Sort Poll Answers By:', 'poll-dude'); ?></th>
+                <th scope="row" valign="top"><?php _e('Sort Answers by:', 'poll-dude'); ?></th>
                 <td>
                     <select name="poll_ans_sortby" size="1">
-                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_sortby')); ?>><?php _e('Vote', 'poll-dude'); ?></option>
+                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_sortby')); ?>><?php _e('Number of Votes', 'poll-dude'); ?></option>
                         <option value="polla_aid"<?php selected('polla_aid', get_option('pd_ans_sortby')); ?>><?php _e('ID', 'poll-dude'); ?></option>
-                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_sortby')); ?>><?php _e('Name', 'poll-dude'); ?></option>
+                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_sortby')); ?>><?php _e('Name Alphabetic', 'poll-dude'); ?></option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <th scope="row" valign="top"><?php _e('Sort Order Of Poll Answers:', 'poll-dude'); ?></th>
+                <th scope="row" valign="top"><?php _e('Sort Order of Answers:', 'poll-dude'); ?></th>
                 <td>
                     <select name="poll_ans_sortorder" size="1">
                         <option value="asc"<?php selected('asc', get_option('pd_ans_sortorder')); ?>><?php _e('Ascending', 'poll-dude'); ?></option>
@@ -239,17 +239,17 @@ if( isset($_POST['Submit']) ) {
     <?php wp_nonce_field('polldude_sort_poll_answers_result'); ?>
         <table class="form-table">
             <tr>
-                <th scope="row" valign="top"><?php _e('Sort Poll Results By:', 'poll-dude'); ?></th>
+                <th scope="row" valign="top"><?php _e('Sort Results by:', 'poll-dude'); ?></th>
                 <td>
                     <select name="poll_ans_result_sortby" size="1">
-                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_result_sortby')); ?>><?php _e('Vote', 'poll-dude'); ?></option>
+                        <option value="polla_votes"<?php selected('polla_votes', get_option('pd_ans_result_sortby')); ?>><?php _e('Number of Votes', 'poll-dude'); ?></option>
                         <option value="polla_aid"<?php selected('polla_aid', get_option('pd_ans_result_sortby')); ?>><?php _e('ID', 'poll-dude'); ?></option>
-                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_result_sortby')); ?>><?php _e('Name', 'poll-dude'); ?></option>
+                        <option value="polla_answers"<?php selected('polla_answers', get_option('pd_ans_result_sortby')); ?>><?php _e('Name Alphabetic', 'poll-dude'); ?></option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <th scope="row" valign="top"><?php _e('Sort Order Of Poll Results:', 'poll-dude'); ?></th>
+                <th scope="row" valign="top"><?php _e('Sort Order of Results:', 'poll-dude'); ?></th>
                 <td>
                     <select name="poll_ans_result_sortorder" size="1">
                         <option value="asc"<?php selected('asc', get_option('pd_ans_result_sortorder')); ?>><?php _e('Ascending', 'poll-dude'); ?></option>
