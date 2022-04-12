@@ -26,6 +26,7 @@ if( ! empty( $_POST['do'] ) ) {
     $num_choices_sql = '';
     $num_choices_sign_sql = '';
     $order_by = '';
+    //echo "<pre>".$_POST['filter']."</pre>";
     switch((int) sanitize_key( $_POST['filter'] ) ) {
         case 1:
             $users_voted_for = (int) sanitize_key( $_POST['users_voted_for'] );
@@ -81,7 +82,7 @@ if( ! empty( $_POST['do'] ) ) {
                 }
             }
             $guest_sql  = 'AND pollip_user != \''.__('Guest', 'poll-dude').'\'';
-            $num_choices_query = $wpdb->get_col("SELECT pollip_user, COUNT(pollip_ip) AS num_choices FROM $wpdb->pollsip WHERE pollip_qid = $poll_id GROUP BY pollip_ip, pollip_user HAVING num_choices $num_choices_sign_sql $num_choices");
+            $num_choices_query = $wpdb->get_col("SELECT pollip_user, COUNT(pollip_ip) AS num_choices FROM $wpdb->polldude_ip WHERE pollip_qid = $poll_id GROUP BY pollip_ip, pollip_user HAVING num_choices $num_choices_sign_sql $num_choices");
             $num_choices_sql = 'AND pollip_user IN (\''.implode('\',\'',$num_choices_query).'\')';
             $order_by = 'pollip_user, pollip_ip';
             break;
@@ -91,9 +92,9 @@ if( ! empty( $_POST['do'] ) ) {
             $order_by = 'pollip_user, pollip_ip';
             break;
     }
-    $poll_ips = $wpdb->get_results("SELECT $wpdb->pollsip.* FROM $wpdb->pollsip WHERE pollip_qid = $poll_id $users_voted_for_sql $registered_sql $comment_sql $guest_sql $what_user_voted_sql $num_choices_sql ORDER BY $order_by");
+    $poll_ips = $wpdb->get_results("SELECT $wpdb->polldude_ip.* FROM $wpdb->polldude_ip WHERE pollip_qid = $poll_id $users_voted_for_sql $registered_sql $comment_sql $guest_sql $what_user_voted_sql $num_choices_sql ORDER BY $order_by");
 } else {
-    $poll_ips = $wpdb->get_results( $wpdb->prepare( "SELECT pollip_aid, pollip_ip, pollip_host, pollip_timestamp, pollip_user FROM $wpdb->pollsip WHERE pollip_qid = %d ORDER BY pollip_aid ASC, pollip_user ASC LIMIT %d", $poll_id, $max_records ) );
+    $poll_ips = $wpdb->get_results( $wpdb->prepare( "SELECT pollip_aid, pollip_ip, pollip_host, pollip_timestamp, pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d ORDER BY pollip_aid ASC, pollip_user ASC LIMIT %d", $poll_id, $max_records ) );
 }
 ?>
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.$poll_dude->utility->$poll_dude->utility->removeslashes($text).'</div>'; } else { echo '<div id="message" class="updated" style="display: none;"></div>'; } ?>

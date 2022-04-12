@@ -81,7 +81,7 @@ switch($mode) {
         
         require_once('page-poll-dude-poll-profile.php');
         break;
-    case 'log':
+    case 'logs':
         $pollip_answers = array();
         $poll_question = $wpdb->get_row( $wpdb->prepare( "SELECT pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters, pollq_recaptcha FROM $wpdb->polldude_q WHERE pollq_id = %d", $poll_id ) );
         $poll_question_text = $poll_dude->utility->removeslashes($poll_question->pollq_question);
@@ -91,7 +91,7 @@ switch($mode) {
         $poll_comments = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s AND pollip_userid = 0", $poll_id, __( 'Guest', 'poll-dude' ) ) );
         $poll_guest = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user = %s", $poll_id, __( 'Guest', 'poll-dude' ) ) );
         $poll_totalrecorded = ( $poll_registered + $poll_comments + $poll_guest );
-        //$poll_totalvotes = (int) $poll_question->pollq_totalvotes;
+        $poll_totalvotes = (int) $poll_question->pollq_totalvotes;
         list( $order_by, $sort_order ) = $poll_dude->utility->get_ans_sorted();
         $poll_answers_data = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_id ) );
         $poll_voters = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s ORDER BY pollip_user ASC", $poll_id, __( 'Guest', 'poll-dude' ) ) );
@@ -207,7 +207,7 @@ switch($mode) {
                                 echo "<option value=\"#\">".__('-Select-', 'poll-dude')."</option>\n";
                                 echo "<option value=\"$base_page&amp;mode=edit&amp;id=$poll_id\">".__('Edit', 'poll-dude')."</option>";
                                 echo "<option value=\"shortcode\" class=\"button\">".__('Shortcode', 'poll-dude')."</option>\n";
-                                echo "<option value=\"$base_page&amp;mode=log&amp;id=$poll_id\">".__('Log', 'poll-dude')."</option>";
+                                echo "<option value=\"$base_page&amp;mode=logs&amp;id=$poll_id\">".__('Logs', 'poll-dude')."</option>";
                                 echo "</select></td>";
                                 echo '</tr>';
                                 $i++;
