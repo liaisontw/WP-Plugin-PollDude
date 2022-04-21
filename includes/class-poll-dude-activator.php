@@ -108,6 +108,7 @@ class Poll_Dude_Activator {
 		add_option( 'pd_recaptcha_sitekey',   '__abcdefghijklmnopqrstuvwxyz-0123456789_' );
 		add_option( 'pd_recaptcha_secretkey', '__abcdefghijklmnopqrstuvwxyz-0123456789_' );
 		add_option( 'pd_default_color', '#b0c3d4' );
+		add_option( 'pd_default_color_array', array( '#b0c3d4', '#5dc5c4', '#50bc81', '#f7e3d6', '#f9d978', '#eab28b', '#8797ae', '#dbe1f1', '#4276b1' ) );
 		add_option( 'pd_currentpoll', 0 );
 		add_option( 'pd_latestpoll', 1 );
 		add_option( 'pd_close', 1 );

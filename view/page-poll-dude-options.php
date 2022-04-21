@@ -14,6 +14,7 @@ $pd_recaptcha_sitekey    = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd
 $pd_recaptcha_secretkey  = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
 $pd_recaptcha_enable     = get_option( 'pd_recaptcha_enable');
 $pd_default_color        = get_option( 'pd_default_color');
+//$pd_default_color_array  = get_option( 'pd_default_color_array');
 $pd_close                = get_option( 'pd_close');
 $pd_allowtovote          = get_option( 'pd_allowtovote' );
 $pd_ans_sortby           = get_option( 'pd_ans_sortby' );
@@ -30,9 +31,15 @@ if( isset($_POST['Submit']) ) {
     switch($_POST['Submit']) {
         case __('Set Color', 'poll-dude'):
             check_admin_referer('polldude_color');
-
-            $pd_default_color   = isset( $_POST['default_color'] ) ? sanitize_hex_color($_POST['default_color']) : $pd_default_color;
-            $update_pd_options[]    = update_option('pd_default_color', $pd_default_color);
+            $pd_default_color_array  = get_option( 'pd_default_color_array');
+            if ( isset( $_POST['default_color_array'] ) ) {
+                foreach ( $_POST['default_color_array'] as $default_color ) {
+                    $default_color_array[] = sanitize_hex_color( $default_color );
+                }
+            } else {
+                $default_color_array = $pd_default_color_array;
+            }
+            $update_pd_options[]    = update_option('pd_default_color_array', $default_color_array);
             $update_pd_text[]       = __('Default Voted Bar Color', 'poll-dude');
         
             break;
@@ -138,6 +145,7 @@ if( isset($_POST['Submit']) ) {
     </form>
     <form  id="default_color" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
         <?php wp_nonce_field('polldude_color'); ?>
+        <?php $pd_default_color_array  = get_option( 'pd_default_color_array'); ?>
         <table class="form-table">
             <tbody>
                 <tr class="form-field form-required">
@@ -147,7 +155,23 @@ if( isset($_POST['Submit']) ) {
                         </label>
                     </th>
                     <td>
-                        <input type="color" name="default_color" id="default_color" value="<?php echo get_option('pd_default_color'); ?>" >
+                        1&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_0" value="<?php echo $pd_default_color_array[0]; ?>" >&nbsp;&nbsp;&nbsp;
+                        2&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_1" value="<?php echo $pd_default_color_array[1]; ?>" >&nbsp;&nbsp;&nbsp;
+                        3&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_2" value="<?php echo $pd_default_color_array[2]; ?>" >&nbsp;&nbsp;&nbsp;
+                        4&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_3" value="<?php echo $pd_default_color_array[3]; ?>" >&nbsp;&nbsp;&nbsp;
+                        5&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_4" value="<?php echo $pd_default_color_array[4]; ?>" >&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="form-field form-required">
+                    <th valign="top" scope="row">
+                        <label for="default_color">
+                        </label>
+                    </th>
+                    <td>
+                        6&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_5" value="<?php echo $pd_default_color_array[5]; ?>" >&nbsp;&nbsp;&nbsp;
+                        7&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_6" value="<?php echo $pd_default_color_array[6]; ?>" >&nbsp;&nbsp;&nbsp;
+                        8&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_7" value="<?php echo $pd_default_color_array[7]; ?>" >&nbsp;&nbsp;&nbsp;
+                        9&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_8" value="<?php echo $pd_default_color_array[8]; ?>" >&nbsp;&nbsp;&nbsp;
                     </td>
                 </tr>
             </tbody>
