@@ -102,7 +102,7 @@
 						$poll_colors = $poll_answer->polla_colors;
                         echo "<tr id=\"poll-answer-".esc_attr($polla_aid)."\">\n";
                         echo "<td width=\"60%\">";
-						echo "<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
+						echo "$polla_aid&nbsp;&nbsp;&nbsp;<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
 						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\"$poll_colors\">";
 						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_delete_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('polldude_delete-poll-answer')."');\" class=\"button\" />";
 						echo "</td>\n";
