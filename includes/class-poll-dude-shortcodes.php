@@ -342,10 +342,10 @@ class Poll_Dude_Shortcode {
 				// Let User See What Options They Voted
 				if ( in_array( $poll_answer_id, $user_voted, true ) ) {
 					// Results Body Variables
-					$template_answer .= "<li><strong><i>$poll_answer_id&nbsp;&nbsp;&nbsp;$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small></i></strong><div class=\"poll-dude-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
+					$template_answer .= "<li><strong><i>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small></i></strong><div class=\"poll-dude-pollbar\" style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\"".__('You Have Voted For This Choice', 'poll-dude')." - ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 				} else {
 					// Results Body Variables
-					$template_answer .= "<li>$poll_answer_id&nbsp;&nbsp;&nbsp;$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small><div class=\"poll-dude-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
+					$template_answer .= "<li>$poll_answer_text <small>($poll_answer_percentage %".", ".number_format_i18n( $poll_answer_votes )." ".__('Votes', 'poll-dude').")</small><div class=\"poll-dude-pollbar\"  style=\"background: $poll_answer_color; width: $poll_answer_imagewidth%;\" title=\" ".htmlspecialchars( wp_strip_all_tags( $poll_answer_text ) )." ($poll_answer_percentage % | ".number_format_i18n( $poll_answer_votes ).__('Votes', 'poll-dude').")\"></div></li>";
 					
 				}
 

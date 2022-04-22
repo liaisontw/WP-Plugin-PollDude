@@ -76,11 +76,13 @@
 		<tbody id="poll_answers">
 		<?php
 			if ('edit' != $mode) { 
-				$poll_noquestion = 2;
+				$poll_noquestion = 3;
+				$pd_default_color_array  = get_option( 'pd_default_color_array');
 				for($i = 1; $i <= $poll_noquestion; $i++) {
 					echo "<tr id=\"poll-answer-$i\">\n";
-					echo "<td width=\"60%\"><input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" /><input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\""; 
-					echo get_option('pd_default_color');
+					echo "<td width=\"60%\">$i&nbsp;&nbsp;&nbsp;<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_answers[]\" />&nbsp;&nbsp;&nbsp;<input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\""; 
+					//echo get_option('pd_default_color');
+					echo $pd_default_color_array[$i-1];
 					echo "\" >&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_remove_answer_add_form(".esc_attr($i).");\" class=\"button\" /></td>\n";
 					echo "</tr>\n";
 				}
@@ -102,7 +104,7 @@
 						$poll_colors = $poll_answer->polla_colors;
                         echo "<tr id=\"poll-answer-".esc_attr($polla_aid)."\">\n";
                         echo "<td width=\"60%\">";
-						echo "$polla_aid&nbsp;&nbsp;&nbsp;<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
+						echo "$i&nbsp;&nbsp;&nbsp;<input type=\"text\" size=\"45\" maxlength=\"200\" name=\"polla_aid-$polla_aid\" value=\"". esc_attr( $polla_answers ) . "\" />\n";
 						echo "<input type=\"color\" id=\"color_picker\" name=\"color_picker[]\" value=\"$poll_colors\">";
 						echo "&nbsp;&nbsp;&nbsp;<input type=\"button\" value=\"".__('Delete', 'poll-dude')."\" onclick=\"pd_delete_ans($poll_id, $polla_aid, $polla_votes, '".sprintf(esc_js(__('You are about to delete this poll\'s answer \'%s\'.', 'poll-dude')), esc_js( esc_attr( $polla_answers ) ) ) . "', '".wp_create_nonce('polldude_delete-poll-answer')."');\" class=\"button\" />";
 						echo "</td>\n";
@@ -120,7 +122,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude') ?>" onclick="<?php echo ('edit' != $mode)? 'pd_add_answer_add_form();' : 'pd_add_answer_edit();' ; ?>" class="button" /></td>
+				<td width="60%"><input type="button" value="<?php _e('Add Answer', 'poll-dude') ?>" onclick="<?php if ('edit' != $mode) { echo "pd_add_answer_add_form();"; } else { echo "pd_add_answer_edit($i);"; }  ?>" class="button" /></td>
 			</tr>
 			<tr>
                 <td width="30%" align="<?php ('edit' != $mode)? '': '$last_col_align'; ?>">

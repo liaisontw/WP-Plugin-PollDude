@@ -14,7 +14,6 @@ $pd_recaptcha_sitekey    = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd
 $pd_recaptcha_secretkey  = preg_replace( '/[^a-zA-Z0-9_\-]/', '', get_option('pd_recaptcha_secretkey'));
 $pd_recaptcha_enable     = get_option( 'pd_recaptcha_enable');
 $pd_default_color        = get_option( 'pd_default_color');
-//$pd_default_color_array  = get_option( 'pd_default_color_array');
 $pd_close                = get_option( 'pd_close');
 $pd_allowtovote          = get_option( 'pd_allowtovote' );
 $pd_ans_sortby           = get_option( 'pd_ans_sortby' );
@@ -154,24 +153,27 @@ if( isset($_POST['Submit']) ) {
                         <?php _e('Default Voted Bar Color', 'poll-dude'); ?>
                         </label>
                     </th>
-                    <td>
-                        1&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_0" value="<?php echo $pd_default_color_array[0]; ?>" >&nbsp;&nbsp;&nbsp;
-                        2&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_1" value="<?php echo $pd_default_color_array[1]; ?>" >&nbsp;&nbsp;&nbsp;
-                        3&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_2" value="<?php echo $pd_default_color_array[2]; ?>" >&nbsp;&nbsp;&nbsp;
-                        4&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_3" value="<?php echo $pd_default_color_array[3]; ?>" >&nbsp;&nbsp;&nbsp;
-                        5&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_4" value="<?php echo $pd_default_color_array[4]; ?>" >&nbsp;&nbsp;&nbsp;
+                    <td>    
+                    <?php
+                        for ( $i = 0; $i < 5; $i++ ) {
+                            $j = $i + 1;
+                            echo "$j&nbsp;&nbsp;&nbsp;<input type=\"color\" name=\"default_color_array[]\" id=\"default_color_$i\" value=\"$pd_default_color_array[$i]\" >&nbsp;&nbsp;&nbsp;";
+                        }
+                    ?>
                     </td>
                 </tr>
-                <tr class="form-field form-required">
+                <tr class="form-field form-required">                    
                     <th valign="top" scope="row">
                         <label for="default_color">
                         </label>
                     </th>
                     <td>
-                        6&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_5" value="<?php echo $pd_default_color_array[5]; ?>" >&nbsp;&nbsp;&nbsp;
-                        7&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_6" value="<?php echo $pd_default_color_array[6]; ?>" >&nbsp;&nbsp;&nbsp;
-                        8&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_7" value="<?php echo $pd_default_color_array[7]; ?>" >&nbsp;&nbsp;&nbsp;
-                        9&nbsp;&nbsp;&nbsp;<input type="color" name="default_color_array[]" id="default_color_8" value="<?php echo $pd_default_color_array[8]; ?>" >&nbsp;&nbsp;&nbsp;
+                    <?php
+                        for ( $i = 5; $i < 9; $i++ ) {
+                            $j = $i + 1;
+                            echo "$j&nbsp;&nbsp;&nbsp;<input type=\"color\" name=\"default_color_array[]\" id=\"default_color_$i\" value=\"$pd_default_color_array[$i]\" >&nbsp;&nbsp;&nbsp;";
+                        }
+                    ?>
                     </td>
                 </tr>
             </tbody>

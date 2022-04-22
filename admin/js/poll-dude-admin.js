@@ -1,5 +1,9 @@
 
-var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, count_poll_answer_new = 0, count_poll_answer = 3; 
+var global_poll_id = 0, global_poll_aid = 0, global_poll_aid_votes = 0, 
+    count_poll_answer_new = 0, count_poll_answer = 4, 
+	total_default_color = 9; 
+
+
 function pd_open_poll(a, c, d) { 
 	if (open_poll_confirm = confirm(c)) 
 	global_poll_id = a, 
@@ -36,8 +40,8 @@ function pd_totalvotes() { temp_vote_count = 0; jQuery(document).ready(function 
 function pd_add_answer_add_form() {
 	jQuery(document).ready(function ($) {
 		$('#poll_answers').append('<tr id="poll-answer-' + count_poll_answer + '">\
-			<td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers[]" />\
-			<input type="color" id="color_picker" name="color_picker[]" value="' + pdAdminL10n.default_color + '" >&nbsp;&nbsp;&nbsp;\
+			<td width="60%">' + count_poll_answer + '&nbsp;&nbsp;&nbsp;<input type="text" size="45" maxlength="200" name="polla_answers[]" />&nbsp;&nbsp;\
+			<input type="color" id="color_picker" name="color_picker[]" value="' + pdAdminL10n.default_color_array[ ( count_poll_answer - 1 ) % total_default_color ] + '" >&nbsp;&nbsp;&nbsp;\
 			<input type="button" value="' + pdAdminL10n.text_delete_poll_answer + '" \
 			onclick="pd_remove_answer_add_form(' + count_poll_answer + ');" class="button" /></td></tr>');
 		count_poll_answer++;
@@ -47,11 +51,11 @@ function pd_add_answer_add_form() {
 function pd_remove_answer_add_form(a) { jQuery(document).ready(function (c) { c("#poll-answer-" + a).remove(); pd_reorder_answer(); }) }
 function pd_remove_answer_edit(a) { jQuery(document).ready(function (c) { c("#poll-answer-new-" + a).remove(); pd_totalvotes(); pd_reorder_answer();  }) }
 // Add Poll's Answer In Edit Poll Page
-function pd_add_answer_edit() {
+function pd_add_answer_edit(index) {
 	jQuery(document).ready(function ($) {
 		$('#poll_answers').append('<tr id="poll-answer-new-' + count_poll_answer_new + '">\
-			<td width="60%"><input type="text" size="45" maxlength="200" name="polla_answers_new[]" />\
-			<input type="color" id="color_picker" name="color_picker[]" value="' + pdAdminL10n.default_color + '" >&nbsp;&nbsp;&nbsp;\
+			<td width="60%">' + ( index + count_poll_answer_new ) + '&nbsp;&nbsp;&nbsp;<input type="text" size="45" maxlength="200" name="polla_answers_new[]" />\
+			<input type="color" id="color_picker" name="color_picker[]" value="' + pdAdminL10n.default_color_array[ ( index + count_poll_answer_new - 1 ) % total_default_color ] + '" >&nbsp;&nbsp;&nbsp;\
 			<input type="button" value="' + pdAdminL10n.text_delete_poll_answer + '" \
 			onclick="pd_remove_answer_edit(' + count_poll_answer_new + ');" class="button" /></td>\
 			<td width="20%" align="' + pdAdminL10n.text_direction + '">0 \
@@ -167,22 +171,6 @@ function chart(label, data, color, question) {
 			data: data_array,
 			backgroundColor: color_array,
 			borderColor: color_array,
-			/*
-			backgroundColor: [
-				'rgba(255, 99, 132, 0.2)',
-				'rgba(54, 162, 235, 0.2)',
-				'rgba(255, 206, 86, 0.2)',
-				'rgba(75, 192, 192, 0.2)',
-				'rgba(255, 99, 132, 0.2)',
-			],
-			borderColor: [
-				'rgba(255, 99, 132, 1)',
-				'rgba(54, 162, 235, 1)',
-				'rgba(255, 206, 86, 1)',
-				'rgba(75, 192, 192, 1)',
-				'rgba(255, 99, 132, 1)',
-			],
-			*/
 			borderWidth: 1
 			}]
 		},

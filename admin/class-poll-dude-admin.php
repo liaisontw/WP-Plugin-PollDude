@@ -55,6 +55,7 @@ class Poll_Dude_Admin {
 			$this->enqueue_styles();
 			wp_localize_script('poll-dude', 'pdAdminL10n', array(
 					'default_color' => get_option('pd_default_color'),
+					'default_color_array' => get_option( 'pd_default_color_array'),
 					'admin_ajax_url' => admin_url('admin-ajax.php'),
 					'text_direction' => is_rtl() ? 'right' : 'left',
 					'text_delete_poll' => __('Delete Poll', 'poll-dude'),
