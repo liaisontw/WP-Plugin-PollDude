@@ -97,11 +97,11 @@ class Poll_Dude_Activator {
 			$insert_pollq = $wpdb->insert( $wpdb->polldude_q, array( 'pollq_question' => __( 'What weather do you like?', 'poll-dude' ), 'pollq_timestamp' => current_time( 'timestamp' ) ), array( '%s', '%s' ) );
 			if ( $insert_pollq ) {
 				// Insert Poll Answers  (5 Records)
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Sunny', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Rainy', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Cloudy', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Snowy', 'poll-dude' ) ), array( '%d', '%s' ) );
-				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ) ), array( '%d', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Sunny', 'poll-dude' ),       'polla_colors' => '#b0c3d4' ), array( '%d', '%s', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Rainy', 'poll-dude' ),       'polla_colors' => '#5dc5c4' ), array( '%d', '%s', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Cloudy', 'poll-dude' ),      'polla_colors' => '#50bc81' ), array( '%d', '%s', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'Snowy', 'poll-dude' ),       'polla_colors' => '#f7e3d6' ), array( '%d', '%s', '%s' ) );
+				$wpdb->insert( $wpdb->polldude_a, array( 'polla_qid' => $insert_pollq, 'polla_answers' => __( 'No Comments', 'poll-dude' ), 'polla_colors' => '#f9d978' ), array( '%d', '%s', '%s' ) );
 			}
 		}
 		add_option( 'pd_recaptcha_enable', 0 );

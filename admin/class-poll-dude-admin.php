@@ -90,7 +90,7 @@ class Poll_Dude_Admin {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/poll-dude-admin.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( 'chart_js', "https://cdn.jsdelivr.net/npm/chart.js", array('jquery'), false);
+		wp_enqueue_script( 'chart_js', plugin_dir_url( __FILE__ ) . 'js/lib/chart.min.js', array('jquery'), false);
 	}
 
 	public function admin_menu() {
