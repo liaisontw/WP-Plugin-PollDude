@@ -20,7 +20,8 @@ $pd_ans_sortby           = get_option( 'pd_ans_sortby' );
 $pd_ans_sortorder        = get_option( 'pd_ans_sortorder' );
 $pd_ans_result_sortby    = get_option( 'pd_ans_result_sortby' );
 $pd_ans_result_sortorder = get_option( 'pd_ans_result_sortorder' );
-
+$pd_logging_method       = get_option( 'pd_logging_method' );
+$pd_cookielog_expiry     = get_option( 'pd_cookielog_expiry' );
 
 
 if( isset($_POST['Submit']) ) {
@@ -87,6 +88,16 @@ if( isset($_POST['Submit']) ) {
             $pd_default_ans_result_sortorder = isset( $_POST['poll_ans_result_sortorder'] ) ? sanitize_text_field($_POST['poll_ans_result_sortorder']) : $pd_ans_result_sortorder;
             $update_pd_options[]             = update_option('pd_ans_result_sortorder', $pd_default_ans_result_sortorder);
             $update_pd_text[]                = __('Set Poll Result Order', 'poll-dude');
+        
+            break;
+        case __('Set Logging Method', 'poll-dude'):
+            check_admin_referer('polldude_logging_method');
+
+            $pd_logging_method               = isset( $_POST['poll_logging_method'] ) ? sanitize_text_field($_POST['poll_logging_method']) : $pd_logging_method;
+            $update_pd_options[]             = update_option('pd_logging_method', $pd_logging_method);
+            $pd_cookielog_expiry             = isset( $_POST['poll_cookielog_expiry'] ) ? sanitize_text_field($_POST['poll_cookielog_expiry']) : $pd_cookielog_expiry;
+            $update_pd_options[]             = update_option('poll_cookielog_expiry', $pd_cookielog_expiry);
+            $update_pd_text[]                = __('Set Logging Method', 'poll-dude');
         
             break;
     }
@@ -286,6 +297,32 @@ if( isset($_POST['Submit']) ) {
         </table>
         <p class="submit">
             <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Poll Result Order', 'poll-dude'); ?>"/>
+        </p>        
+    </form>
+
+    <!-- Logging Method -->
+    <form  id="default_logging_method" method="post" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
+        <?php wp_nonce_field('polldude_logging_method'); ?>
+        <table class="form-table">
+            <tr valign="top">
+                <th scope="row" valign="top"><?php _e('Logging Method:', 'poll-dude'); ?></th>
+                <td>
+                    <select name="poll_logging_method" size="1">
+                        <option value="0"<?php selected('0', get_option('pd_logging_method')); ?>><?php _e('Do Not Log', 'poll-dude'); ?></option>
+                        <option value="1"<?php selected('1', get_option('pd_logging_method')); ?>><?php _e('Logged By Cookie', 'poll-dude'); ?></option>
+                        <option value="2"<?php selected('2', get_option('pd_logging_method')); ?>><?php _e('Logged By IP', 'poll-dude'); ?></option>
+                        <option value="3"<?php selected('3', get_option('pd_logging_method')); ?>><?php _e('Logged By Cookie And IP', 'poll-dude'); ?></option>
+                        <option value="4"<?php selected('4', get_option('pd_logging_method')); ?>><?php _e('Logged By Username', 'poll-dude'); ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" valign="top"><?php _e('Expiry Time For Cookie And Log:', 'poll-dude'); ?></th>
+                <td><input type="text" name="poll_cookielog_expiry" value="<?php echo (int) esc_attr( get_option( 'pd_cookielog_expiry' ) ); ?>" size="10" /> <?php _e('seconds (0 to disable)', 'poll-dude'); ?></td>
+            </tr>
+        </table>
+        <p class="submit">
+            <input type="submit" name="Submit" class="button-primary" value="<?php _e('Set Logging Method', 'poll-dude'); ?>"/>
         </p>        
     </form>
 </div>

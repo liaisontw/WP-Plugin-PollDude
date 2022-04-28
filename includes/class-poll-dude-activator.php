@@ -113,12 +113,14 @@ class Poll_Dude_Activator {
 		add_option( 'pd_latestpoll', 1 );
 		add_option( 'pd_close', 1 );
 		add_option( 'pd_logging_method', '0' );
+		add_option( 'pd_cookielog_expiry' );
 		add_option( 'pd_allowtovote', '3' );
 		add_option( 'pd_bar', array( 'style' => 'default', 'background' => 'b0c3d4', 'border' => 'b0c3d4', 'height' => 8 ) );
 		add_option( 'pd_ans_sortby', 'polla_aid' );
 		add_option( 'pd_ans_sortorder', 'asc' );
 		add_option( 'pd_ans_result_sortby', 'polla_aid' );
 		add_option( 'pd_ans_result_sortorder', 'asc' );
+		
 
 		
 		$pollq_totalvoters = (int) $wpdb->get_var( "SELECT SUM(pollq_totalvoters) FROM $wpdb->polldude_q" );

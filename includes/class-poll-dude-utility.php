@@ -114,7 +114,7 @@ class Poll_Dude_Utility {
     ### Funcrion: Check Voted By Cookie Or IP
     public function is_voted($poll_id) {
 
-        //return 0;
+        return 0;
         
         $poll_logging_method = (int) get_option( 'pd_logging_method' );
         switch($poll_logging_method) {
