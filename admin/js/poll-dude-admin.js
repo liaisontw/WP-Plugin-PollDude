@@ -190,3 +190,42 @@ function chart(label, data, color, question) {
 		);
 	})
 };
+
+// Delete Poll Logs
+function pd_delete_poll_logs(poll_confirm, nonce) {
+	delete_poll_logs_confirm = confirm(poll_confirm);
+	if(delete_poll_logs_confirm) {
+		jQuery(document).ready(function($) {
+			if($('#delete_logs_yes').is(':checked')) {
+				$.ajax({type: 'POST', url: pdAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_all_logs + '&delete_logs_yes=yes&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+					$('#message').html(data);
+					$('#message').show();
+					$('#poll_logs').html(pdAdminL10n.text_no_poll_logs);
+				}});
+			} else {
+				alert(pdAdminL10n.text_checkbox_delete_all_logs);
+			}
+		});
+	}
+}
+
+// Delete Individual Poll Logs
+function pd_delete_this_poll_logs(poll_id, poll_confirm, nonce) {
+	delete_poll_logs_confirm = confirm(poll_confirm);
+	if(delete_poll_logs_confirm) {
+		jQuery(document).ready(function($) {
+			if($('#delete_logs_yes').is(':checked')) {
+				global_poll_id = poll_id;
+				$.ajax({type: 'POST', url: pdAdminL10n.admin_ajax_url, data: 'do=' + pollsAdminL10n.text_delete_poll_logs + '&pollq_id=' + poll_id + '&delete_logs_yes=yes&action=polls-admin&_ajax_nonce=' + nonce, cache: false, success: function (data) {
+					$('#message').html(data);
+					$('#message').show();
+					$('#poll_logs').html(pdAdminL10n.text_no_poll_logs);
+					$('#poll_logs_display').hide();
+					$('#poll_logs_display_none').show();
+				}});
+			} else {
+				alert(pdAdminL10n.text_checkbox_delete_poll_logs);
+			}
+		});
+	}
+}

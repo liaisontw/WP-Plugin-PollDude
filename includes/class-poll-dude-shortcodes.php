@@ -465,9 +465,7 @@ class Poll_Dude_Shortcode {
 
 		foreach ($poll_aid_array as $polla_aid) {
 			// Log Ratings In DB If User Choose Logging Method 2, 3 or 4
-			//echo "<br>polla_aid=$polla_aid<br>";
 			if ( $poll_logging_method > 1 ){
-				//echo "<br>poll_logging_method=$poll_logging_method<br>";
 				$wpdb->insert(
 					$wpdb->polldude_ip,
 					array(

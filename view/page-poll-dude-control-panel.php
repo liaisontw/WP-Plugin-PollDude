@@ -90,9 +90,9 @@ switch($mode) {
         $poll_registered = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_userid) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_userid > 0", $poll_id ) );
         $poll_comments = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s AND pollip_userid = 0", $poll_id, __( 'Guest', 'poll-dude' ) ) );
         $poll_guest = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(pollip_user) FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user = %s", $poll_id, __( 'Guest', 'poll-dude' ) ) );
-        $poll_totalrecorded = ( $poll_registered + $poll_comments + $poll_guest );
-        $poll_totalvotes = (int) $poll_question->pollq_totalvotes;
-        //$poll_totalrecorded = (int) $poll_question->pollq_totalvotes;
+        $poll_totalrecorded = ( $poll_registered + $poll_guest );
+        //$poll_totalrecorded = ( $poll_registered + $poll_comments + $poll_guest );
+        //$poll_totalvotes = (int) $poll_question->pollq_totalvotes;
         list( $order_by, $sort_order ) = $poll_dude->utility->get_ans_sorted();
         $poll_answers_data = $wpdb->get_results( $wpdb->prepare( "SELECT polla_aid, polla_answers FROM $wpdb->polldude_a WHERE polla_qid = %d ORDER BY $order_by $sort_order", $poll_id ) );
         $poll_voters = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d AND pollip_user != %s ORDER BY pollip_user ASC", $poll_id, __( 'Guest', 'poll-dude' ) ) );
@@ -108,9 +108,6 @@ switch($mode) {
         $total_votes = 0;
         $total_voters = 0;
 ?>
-        <script type="text/javascript">
-            
-        </script>
         <!-- Last Action -->
         <div id="message" class="updated" style="display: none;">
         
