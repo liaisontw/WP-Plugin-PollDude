@@ -46,76 +46,7 @@ if( ! empty( $_POST['do'] ) ) {
         $guest_sql  = 'AND pollip_user != \''.__('Guest', 'poll-dude').'\'';
     }
     $order_by = 'pollip_timestamp DESC';
-/*
-    switch((int) sanitize_key( $_POST['filter'] ) ) {
-        case 1:
-            $users_voted_for = (int) sanitize_key( $_POST['users_voted_for'] );
-            $exclude_registered = isset( $_POST['exclude_registered'] ) && (int) sanitize_key( $_POST['exclude_registered'] ) === 1;
-            $exclude_comment = isset( $_POST['exclude_comment'] ) && (int) sanitize_key( $_POST['exclude_comment'] ) === 1;
-            $exclude_guest = isset( $_POST['exclude_guest'] ) && (int) sanitize_key( $_POST['exclude_guest'] ) === 1;
-            $users_voted_for_sql = "AND pollip_aid = $users_voted_for";
-            if($exclude_registered) {
-                $registered_sql = 'AND pollip_userid = 0';
-            }
-            if($exclude_comment) {
-                if(!$exclude_registered) {
-                    $comment_sql = 'AND pollip_userid > 0';
-                } else {
-                    $comment_sql = 'AND pollip_user = \''.__('Guest', 'poll-dude').'\'';
-                }
-            }
-            if($exclude_guest) {
-                $guest_sql  = 'AND pollip_user != \''.__('Guest', 'poll-dude').'\'';
-            }
-            $order_by = 'pollip_timestamp DESC';
-            break;
-
-            case 2:
-            $exclude_registered_2 = (int) sanitize_key( $_POST['exclude_registered_2'] );
-            $exclude_comment_2 = (int) sanitize_key( $_POST['exclude_comment_2'] );
-            $num_choices = (int) sanitize_key( $_POST['num_choices']);
-            $num_choices_sign = sanitize_key( $_POST['num_choices_sign'] );
-            switch($num_choices_sign) {
-                case 'more':
-                    $num_choices_sign_sql = '>';
-                    break;
-                case 'more_exactly':
-                    $num_choices_sign_sql = '>=';
-                    break;
-                case 'exactly':
-                    $num_choices_sign_sql = '=';
-                    break;
-                case 'less_exactly':
-                    $num_choices_sign_sql = '<=';
-                    break;
-                case 'less':
-                    $num_choices_sign_sql = '<';
-                    break;
-            }
-            if($exclude_registered_2) {
-                $registered_sql = 'AND pollip_userid = 0';
-            }
-            if($exclude_comment_2) {
-                if(!$exclude_registered_2) {
-                    $comment_sql = 'AND pollip_userid > 0';
-                } else {
-                    $comment_sql = 'AND pollip_user = \''.__('Guest', 'poll-dude').'\'';
-                }
-            }
-            $guest_sql  = 'AND pollip_user != \''.__('Guest', 'poll-dude').'\'';
-            $num_choices_query = $wpdb->get_col("SELECT pollip_user, COUNT(pollip_ip) AS num_choices FROM $wpdb->polldude_ip WHERE pollip_qid = $poll_id GROUP BY pollip_ip, pollip_user HAVING num_choices $num_choices_sign_sql $num_choices");
-            $num_choices_sql = 'AND pollip_user IN (\''.implode('\',\'',$num_choices_query).'\')';
-            $order_by = 'pollip_user, pollip_ip';
-            break;
-        case 3;
-            $what_user_voted = esc_sql( $_POST['what_user_voted'] );
-            $what_user_voted_sql = "AND pollip_user = '$what_user_voted'";
-            $order_by = 'pollip_user, pollip_ip';
-            break;
-
-        }
-*/
-        $poll_ips = $wpdb->get_results("SELECT $wpdb->polldude_ip.* FROM $wpdb->polldude_ip WHERE pollip_qid = $poll_id $users_voted_for_sql $registered_sql $comment_sql $guest_sql $what_user_voted_sql $num_choices_sql ORDER BY $order_by");
+    $poll_ips = $wpdb->get_results("SELECT $wpdb->polldude_ip.* FROM $wpdb->polldude_ip WHERE pollip_qid = $poll_id $users_voted_for_sql $registered_sql $comment_sql $guest_sql $what_user_voted_sql $num_choices_sql ORDER BY $order_by");
 } else {
     $poll_ips = $wpdb->get_results( $wpdb->prepare( "SELECT pollip_aid, pollip_ip, pollip_host, pollip_timestamp, pollip_user FROM $wpdb->polldude_ip WHERE pollip_qid = %d ORDER BY pollip_aid ASC, pollip_user ASC LIMIT %d", $poll_id, $max_records ) );
 }
@@ -234,7 +165,7 @@ if( ! empty( $_POST['do'] ) ) {
         <?php if($poll_logs_count) { ?>
             <strong><?php _e('Are You Sure You Want To Delete Logs For This Poll Only?', 'poll-dude'); ?></strong><br /><br />
             <input type="checkbox" id="delete_logs_yes" name="delete_logs_yes" value="yes" />&nbsp;<label for="delete_logs_yes"><?php _e('Yes', 'poll-dude'); ?></label><br /><br />
-            <input type="button" name="do" value="<?php _e('Delete Logs For This Poll Only', 'poll-dude'); ?>" class="button" onclick="pd_delete_this_poll_logs(<?php echo $poll_id; ?>, '<?php printf( esc_js( __( 'You are about to delete poll logs for this poll \'%s\' ONLY. This action is not reversible.', 'poll-dude' ) ), esc_js( esc_attr( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('poll-dude_delete-poll-logs'); ?>');" />
+            <input type="button" name="do" value="<?php _e('Delete Logs For This Poll Only', 'poll-dude'); ?>" class="button" onclick="pd_delete_one_poll_logs(<?php echo $poll_id; ?>, '<?php printf( esc_js( __( 'You are about to delete poll logs for this poll \'%s\' ONLY. This action is not reversible.', 'poll-dude' ) ), esc_js( esc_attr( $poll_question_text ) ) ); ?>', '<?php echo wp_create_nonce('poll-dude_delete-poll-logs'); ?>');" />
         <?php
             } else {
                 _e('No poll logs available for this poll.', 'poll-dude');

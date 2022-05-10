@@ -135,14 +135,14 @@ class Poll_Dude_Admin {
 				// Decide What To Do
 				switch($_POST['do']) {
 					// Delete Polls Logs
-					case __('Delete All Logs', 'wp-polls'):
-						check_ajax_referer('wp-polls_delete-polls-logs');
+					case __('Delete All Logs', 'poll-dude'):
+						check_ajax_referer('poll-dude_delete-polls-logs');
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
 							$delete_logs = $wpdb->query("DELETE FROM $wpdb->pollsip");
 							if($delete_logs) {
-								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'wp-polls').'</p>';
+								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude').'</p>';
 							} else {
-								echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'wp-polls').'</p>';
+								echo '<p style="color: red;">'.__('An Error Has Occurred While Deleting All Polls Logs.', 'poll-dude').'</p>';
 							}
 						}
 						break;
@@ -151,12 +151,14 @@ class Poll_Dude_Admin {
 						check_ajax_referer('poll-dude_delete-poll-logs');
 						$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 						$pollq_question = $wpdb->get_var( $wpdb->prepare( "SELECT pollq_question FROM $wpdb->polldude_q WHERE pollq_id = %d", $pollq_id ) );
+						
+						//echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->delete( $wpdb->pollsip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
+							$delete_logs = $wpdb->delete( $wpdb->polldude_ip, array( 'pollip_qid' => $pollq_id ), array( '%d' ) );
 							if( $delete_logs ) {
-								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+								echo '<p style="color: green;">'.sprintf(__('All Logs For \'%s\' Has Been Deleted.', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 							} else {
-								echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'wp-polls'), wp_kses_post( removeslashes( $pollq_question ) ) ).'</p>';
+								echo '<p style="color: red;">'.sprintf(__('An Error Has Occurred While Deleting All Logs For \'%s\'', 'poll-dude'), wp_kses_post( $poll_dude->utility->removeslashes( $pollq_question ) ) ).'</p>';
 							}
 						}
 						break;
