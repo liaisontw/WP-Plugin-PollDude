@@ -119,6 +119,7 @@ switch($mode) {
             <form action="" method="post">
             <table class="widefat">
                 <thead>
+                    <form action="" method="post">
                     <tr>
                         <th></th>
                         <th><input id="delete_all" name="delete_all" type="checkbox" value="delete_all" onclick="pd_checkall_top();" style="width:10px; height:15px;" ></th>
@@ -134,6 +135,7 @@ switch($mode) {
                         echo "<a href=\"$base_page&amp;mode=add\" class=\"button-secondary\">".__('Add New Poll', 'poll-dude')."</a>\n";
                         ?></th>
                     </tr>
+                    </form>         
                     <tr>
                         <th></th>
                         <th></th>
@@ -217,6 +219,7 @@ switch($mode) {
                             echo '<tr><td colspan="9" align="center"><strong>'.__('No Polls Found', 'poll-dude').'</strong></td></tr>';
                         }
                     ?>
+                    <form action="" method="post">
                     <tr>
                         <th></th>
                         <th><input id="delete_all2" name="delete_all2" type="checkbox" value="delete_all2" onclick="pd_checkall_bottom();" style="width:10px; height:15px;" ></th>
@@ -226,9 +229,30 @@ switch($mode) {
                             echo "<input class=\"button-secondary\" name=\"bulk_delete\" type=\"submit\" value=\"".__('Bulk Delete', 'poll-dude')." \" />\n";
                         ?></th>
                     </tr>
+                    </form>         
                 </tbody>
-            </form>         
+            </table>
         </div>
         <p>&nbsp;</p>
+
+        <!-- Delete Polls Logs -->
+        <div class="wrap">
+            <h3><?php _e('Polls Logs', 'poll-dude'); ?></h3>
+            <div id="poll_logs">
+            <?php
+                $poll_ips = (int) $wpdb->get_var( "SELECT COUNT(pollip_id) FROM $wpdb->polldude_ip" );
+                if($poll_ips > 0) {
+            ?>
+                <input type="button" value="<?php _e('Delete All Logs', 'poll-dude'); ?>" class="button" onclick="pd_delete_all_poll_logs('<?php echo esc_js(__('You are about to delete all poll logs. This action is not reversible.', 'poll-dude')); ?>', '<?php echo wp_create_nonce('poll-dude_delete-polls-logs'); ?>');" />
+                &nbsp;&nbsp;&nbsp;<strong><?php _e('Are You Sure You Want To Delete All Polls Logs?', 'poll-dude'); ?></strong>
+                &nbsp;&nbsp;&nbsp;<input type="checkbox" name="delete_logs_yes" id="delete_logs_yes" value="yes" />&nbsp;<label for="delete_logs_yes"><?php _e('Yes', 'poll-dude'); ?></label>
+                
+            <?php
+                } else {
+                    _e('No poll logs available.', 'poll-dude');
+                }
+            ?>
+            </div>
+        </div>
 <?php
 } 
