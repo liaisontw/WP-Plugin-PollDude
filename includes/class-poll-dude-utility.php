@@ -15,7 +15,6 @@ namespace poll_dude;
 class Poll_Dude_Utility {
     
 	public function removeslashes( $string ) {
-		//$string = implode( '', explode( '\\', $string ) );
 		return stripslashes( trim( $string ) );
 	}
 
@@ -82,8 +81,6 @@ class Poll_Dude_Utility {
 
     ### Function: Check Who Is Allow To Vote
     public function vote_allow() {
-        //return true;
-        //return false;
         
         global $user_ID;
         $user_ID = (int) $user_ID;
@@ -113,9 +110,6 @@ class Poll_Dude_Utility {
 
     ### Funcrion: Check Voted By Cookie Or IP
     public function is_voted($poll_id) {
-
-        return 0;
-        
         $poll_logging_method = (int) get_option( 'pd_logging_method' );
         switch($poll_logging_method) {
             // Do Not Log
