@@ -268,7 +268,6 @@ class Poll_Dude_Admin {
 			$pollq_id  = (int) sanitize_key( $_POST['pollq_id'] );
 			// Poll Total Votes
 			$pollq_totalvotes = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvotes']) : 0;
-			//echo "<pre>".$pollq_totalvotes."</pre>";
 			// Poll Total Voters
 			$pollq_totalvoters = isset( $_POST['pollq_totalvotes'] ) ? (int) sanitize_key($_POST['pollq_totalvoters']) : 0;
 			// Poll Active

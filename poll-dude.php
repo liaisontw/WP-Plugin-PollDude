@@ -19,7 +19,7 @@
  *                    Showing one selected poll as a widget.
  *                    With reCaptchaV2 client side to prevent robots accessing. 
  *                    The color of each answer voted-bar can be set differently.
- * Version:           1.0.2
+ * Version:           2.0.0
  * Author:            Liaison Chang
  * Author URI:        https://github.com/liaisontw/
  * License:           GPL-2.0+
@@ -34,7 +34,7 @@ if(!defined('ABSPATH')){
 }
  
 
-define( 'POLL_DUDE_VERSION', '1.0.2' );
+define( 'POLL_DUDE_VERSION', '2.0.0' );
 
 
 // polldude Table Name
