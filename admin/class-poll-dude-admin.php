@@ -138,7 +138,7 @@ class Poll_Dude_Admin {
 					case __('Delete All Logs', 'poll-dude'):
 						check_ajax_referer('poll-dude_delete-polls-logs');
 						if( sanitize_key( trim( $_POST['delete_logs_yes'] ) ) === 'yes') {
-							$delete_logs = $wpdb->query("DELETE FROM $wpdb->pollsip");
+							$delete_logs = $wpdb->query("DELETE FROM $wpdb->polldude_ip");
 							if($delete_logs) {
 								echo '<p style="color: green;">'.__('All Polls Logs Have Been Deleted.', 'poll-dude').'</p>';
 							} else {

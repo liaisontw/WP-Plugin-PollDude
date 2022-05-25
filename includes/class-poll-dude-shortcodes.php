@@ -215,7 +215,8 @@ class Poll_Dude_Shortcode {
 				$poll_answer_percentage = $poll_question_totalvotes > 0 ? round( ( $poll_answer_votes / $poll_question_totalvotes ) * 100 ) : 0;
 				$poll_multiple_answer_percentage = $poll_question_totalvoters > 0 ? round( ( $poll_answer_votes / $poll_question_totalvoters ) * 100 ) : 0;
 
-				$temp = "<li>$poll_answer_id&nbsp;&nbsp;&nbsp;<input type=\"".esc_attr($ans_select)."\" id=\"poll-answer-".esc_attr($poll_answer_id)."\" name=\"poll_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_answer_id)."\" /><label for=\"poll-answer-".esc_attr($poll_answer_id)."\">".esc_textarea($poll_answer_text)."</label></li>";
+				$temp = "<li><input type=\"".esc_attr($ans_select)."\" id=\"poll-answer-".esc_attr($poll_answer_id)."\" name=\"poll_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_answer_id)."\" /><label for=\"poll-answer-".esc_attr($poll_answer_id)."\">".esc_textarea($poll_answer_text)."</label></li>";
+				//$temp = "<li>$poll_answer_id&nbsp;&nbsp;&nbsp;<input type=\"".esc_attr($ans_select)."\" id=\"poll-answer-".esc_attr($poll_answer_id)."\" name=\"poll_".esc_attr($poll_question_id)."\" value=\"".esc_attr($poll_answer_id)."\" /><label for=\"poll-answer-".esc_attr($poll_answer_id)."\">".esc_textarea($poll_answer_text)."</label></li>";
 				$template_answer = $this->echo_or_aggregate($display, $temp); 
 
 				// Print Out Voting Form Body Template
